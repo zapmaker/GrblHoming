@@ -6,9 +6,8 @@
  * GPL License (see LICENSE file)
  * Software is provided AS-IS
  ****************************************************************/
-
 #include "timer.h"
-
+#/// <---
 Timer::Timer()
     : timing(false)
 {

@@ -16,10 +16,15 @@ extern Log4Qt::FileAppender *p_fappender;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
+/// LETARTARE
+    axisC(false),
+    open_button_text(tr("Open")),
+    close_button_text(tr("Close / Reset")),
+/// <--
     absoluteAfterAxisAdj(false),
     checkLogWrite(false),
     sliderPressed(false),
-    sliderTo(0),
+    sliderTo(0.0),
     sliderZCount(0)
 {
     // Setup our application information to be used by QSettings
@@ -31,7 +36,6 @@ MainWindow::MainWindow(QWidget *parent) :
     qRegisterMetaType<Coord3D>("Coord3D");
     qRegisterMetaType<PosItem>("PosItem");
     qRegisterMetaType<ControlParams>("ControlParams");
-
 
     ui->setupUi(this);
 
@@ -52,6 +56,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->lcdMachNumberY->setDigitCount(8);
     ui->lcdWorkNumberZ->setDigitCount(8);
     ui->lcdMachNumberZ->setDigitCount(8);
+/// LETARTARE
+	ui->lcdWorkNumberC->setDigitCount(8);
+    ui->lcdMachNumberC->setDigitCount(8);
+// <--
 
     //buttons
     connect(ui->btnOpenPort,SIGNAL(clicked()),this,SLOT(openPort()));
@@ -62,8 +70,15 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->IncXBtn,SIGNAL(clicked()),this,SLOT(incX()));
     connect(ui->IncYBtn,SIGNAL(clicked()),this,SLOT(incY()));
     connect(ui->IncZBtn,SIGNAL(clicked()),this,SLOT(incZ()));
+/// LETARTARE
+	connect(ui->DecCBtn,SIGNAL(clicked()),this,SLOT(decC()));
+    connect(ui->IncCBtn,SIGNAL(clicked()),this,SLOT(incC()));
+/// <--
     connect(ui->btnSetHome,SIGNAL(clicked()),this,SLOT(setHome()));
-    connect(ui->Command,SIGNAL(editingFinished()),this,SLOT(gotoXYZ()));
+/// LETARTARE : Command -> Command->lineEdit()
+ //   connect(ui->Command,SIGNAL(editingFinished()),this,SLOT(gotoXYZ()));
+    connect(ui->Command->lineEdit(),SIGNAL(editingFinished()),this,SLOT(gotoXYZC()));
+/// <--
     connect(ui->Begin,SIGNAL(clicked()),this,SLOT(begin()));
     connect(ui->openFile,SIGNAL(clicked()),this,SLOT(openFile()));
     connect(ui->Stop,SIGNAL(clicked()),this,SLOT(stop()));
@@ -83,8 +98,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(openPort(QString,QString)), &gcode, SLOT(openPort(QString,QString)));
     connect(this, SIGNAL(closePort(bool)), &gcode, SLOT(closePort(bool)));
     connect(this, SIGNAL(sendGcode(QString)), &gcode, SLOT(sendGcode(QString)));
-    connect(this, SIGNAL(gotoXYZ(QString)), &gcode, SLOT(gotoXYZ(QString)));
+    connect(this, SIGNAL(gotoXYZC(QString)), &gcode, SLOT(gotoXYZC(QString)));
+/// -->
     connect(this, SIGNAL(axisAdj(char, float, bool, bool, int)), &gcode, SLOT(axisAdj(char, float, bool, bool, int)));
+//// <---
     connect(this, SIGNAL(setResponseWait(ControlParams)), &gcode, SLOT(setResponseWait(ControlParams)));
     connect(this, SIGNAL(shutdown()), &gcodeThread, SLOT(quit()));
     connect(this, SIGNAL(shutdown()), &timerThread, SLOT(quit()));
@@ -103,7 +120,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&gcode, SIGNAL(addListFull(QStringList)),this,SLOT(receiveListFull(QStringList)));
     connect(&gcode, SIGNAL(addListOut(QString)),this,SLOT(receiveListOut(QString)));
     connect(&gcode, SIGNAL(stopSending()), this, SLOT(stopSending()));
-    connect(&gcode, SIGNAL(setCommandText(QString)), ui->Command, SLOT(setText(QString)));
+/// LETARTARE : Command -> Command->lineEDit()
+   // connect(&gcode, SIGNAL(setCommandText(QString)), ui->Command, SLOT(setText(QString)));
+   connect(&gcode, SIGNAL(setCommandText(QString)), ui->Command->lineEdit(), SLOT(setText(QString)));
+// <--
     connect(&gcode, SIGNAL(setProgress(int)), ui->progressFileSend, SLOT(setValue(int)));
     connect(&gcode, SIGNAL(adjustedAxis()), this, SLOT(adjustedAxis()));
     connect(&gcode, SIGNAL(resetTimer(bool)), &timer, SLOT(resetTimer(bool)));
@@ -124,7 +144,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->comboStep->addItem("0.1");
     ui->comboStep->addItem("1");
     ui->comboStep->addItem("10");
-    ui->comboStep->setCurrentIndex(2);
+/// LETARTARE
+	ui->comboStep->addItem("100");
+/// <--
+    ui->comboStep->setCurrentIndex(3);
 
     ui->statusList->setUniformItemSizes(true);
 	// Does not work correctly for horizontal scrollbar:
@@ -184,6 +207,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->comboBoxBaudRate->setCurrentIndex(baudRateIndex);
 
     ui->tabAxisVisualizer->setEnabled(false);
+/// LETARTARE
+	ui->lcdWorkNumberC->setEnabled(false);;
+    ui->lcdMachNumberC->setEnabled(false);;
+	ui->IncCBtn->setEnabled(false);
+	ui->DecCBtn->setEnabled(false);
+	ui->lblCJog->setEnabled(false);
+/// <--
     ui->groupBoxSendFile->setEnabled(true);
     ui->groupBoxManualGCode->setEnabled(false);
     ui->Begin->setEnabled(false);
@@ -209,7 +239,7 @@ MainWindow::MainWindow(QWidget *parent) :
     if (!controlParams.useAggressivePreload && !promptedAggrPreload)
     {
         QMessageBox msgBox;
-        msgBox.setText("You appear to have upgraded to the latest version of Grbl Controller. "
+        msgBox.setText(tr("You appear to have upgraded to the latest version of Grbl Controller. "
                        "Please be aware that as of version 3.4 the default behavior of sending commands "
                        "to Grbl has been changed to send them as fast as possible (Aggressive preload mode).\n\n"
                        "Your settings have been changed to enable this mode. Why? Because it provides the most "
@@ -217,7 +247,7 @@ MainWindow::MainWindow(QWidget *parent) :
                        "What does this mean to you? "
                        "Arc commands will now run smoother and faster than before, which may "
                        "cause your spindle to work slightly harder, so please run some tests first. "
-                       "Alternately, go to the Options dialog and manually disable Aggressive Preload");
+                       "Alternately, go to the Options dialog and manually disable Aggressive Preload") );
         msgBox.exec();
 
         controlParams.useAggressivePreload = true;
@@ -256,21 +286,37 @@ void MainWindow::begin()
 {
     //receiveList("Starting File Send.");
     resetProgress();
-
-    ui->tabAxisVisualizer->setEnabled(false);
-    ui->groupBoxManualGCode->setEnabled(false);
-
-    ui->Begin->setEnabled(false);
-    ui->Stop->setEnabled(true);
-    ui->progressFileSend->setEnabled(true);
-    ui->outputRuntime->setEnabled(true);
-    ui->labelRuntime->setEnabled(true);
-    ui->openFile->setEnabled(false);
-    ui->btnGRBL->setEnabled(false);
-    ui->btnUnlockGrbl->setEnabled(false);
-    ui->btnSetHome->setEnabled(false);
-    ui->btnGoHomeSafe->setEnabled(false);
-    emit sendFile(ui->filePath->text());
+    int ret = QMessageBox::No;
+    if((ui->lcdWorkNumberX->value()!=0)||(ui->lcdWorkNumberY->value()!=0)||(ui->lcdWorkNumberZ->value()!=0)
+/// LETARTARE
+        || (ui->lcdWorkNumberC->value()!=0)
+/// <--
+        )
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Wish to \"zero position\" before beginning?");
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Yes);
+        ret = msgBox.exec();
+        if(ret ==QMessageBox::Yes)
+            setHome();
+    }
+    if(ret!=QMessageBox::Cancel)
+    {
+        ui->tabAxisVisualizer->setEnabled(false);
+        ui->groupBoxManualGCode->setEnabled(false);
+        ui->Begin->setEnabled(false);
+        ui->Stop->setEnabled(true);
+        ui->progressFileSend->setEnabled(true);
+        ui->outputRuntime->setEnabled(true);
+        ui->labelRuntime->setEnabled(true);
+        ui->openFile->setEnabled(false);
+        ui->btnGRBL->setEnabled(false);
+        ui->btnUnlockGrbl->setEnabled(false);
+        ui->btnSetHome->setEnabled(false);
+        ui->btnGoHomeSafe->setEnabled(false);
+        emit sendFile(ui->filePath->text());
+    }
 }
 
 void MainWindow::stop()
@@ -308,6 +354,13 @@ void MainWindow::goHomeSafe()
 void MainWindow::stopSending()
 {
     ui->tabAxisVisualizer->setEnabled(true);
+/// LETARTARE
+	ui->lcdWorkNumberC->setEnabled(axisC);
+	ui->lcdMachNumberC->setEnabled(axisC);
+	ui->IncCBtn->setEnabled(axisC);
+	ui->DecCBtn->setEnabled(axisC);
+	ui->lblCJog->setEnabled(axisC);
+/// <--
     ui->groupBoxManualGCode->setEnabled(true);
     ui->Begin->setEnabled(true);
     ui->Stop->setEnabled(false);
@@ -326,7 +379,8 @@ void MainWindow::stopSending()
 // User has asked to open the port
 void MainWindow::openPort()
 {
-    info("User clicked Port Open/Close");
+	QString Mes = tr("User clicked Port Open/Close");
+    info(qPrintable(Mes) );
 
     openPortCtl(false);
 }
@@ -351,7 +405,10 @@ void MainWindow::resetProgress()
 // the controller.
 void MainWindow::openPortCtl(bool reopen)
 {
-    if (ui->btnOpenPort->text() == OPEN_BUTTON_TEXT)
+/// LETARTARE
+   // if (ui->btnOpenPort->text() == OPEN_BUTTON_TEXT)
+	if (ui->btnOpenPort->text() == open_button_text)
+/// <--
     {
         // Port is closed if the button says 'Open'
         QString portStr = ui->cmbPort->currentText();
@@ -407,7 +464,10 @@ void MainWindow::portIsClosed(bool reopen)
     ui->cmbPort->setEnabled(true);
     ui->comboBoxBaudRate->setEnabled(true);
     ui->btnOpenPort->setEnabled(true);
-    ui->btnOpenPort->setText(OPEN_BUTTON_TEXT);
+/// LETARTARE
+	// ui->btnOpenPort->setText(OPEN_BUTTON_TEXT);
+    ui->btnOpenPort->setText(open_button_text);
+/// <--
     ui->btnOpenPort->setStyleSheet(styleSheet);
     ui->btnGRBL->setEnabled(false);
     ui->btnSetHome->setEnabled(false);
@@ -473,11 +533,21 @@ void MainWindow::enableGrblDialogButton()
 {
     ui->openFile->setEnabled(true);
     ui->btnOpenPort->setEnabled(true);
-    ui->btnOpenPort->setText(CLOSE_BUTTON_TEXT);
+/// LETARTARE for translation
+   ///  ui->btnOpenPort->setText(CLOSE_BUTTON_TEXT);
+    ui->btnOpenPort->setText(close_button_text);
+/// <--
     ui->btnOpenPort->setStyleSheet("* { background-color: rgb(255,125,100) }");
     ui->cmbPort->setEnabled(false);
     ui->comboBoxBaudRate->setEnabled(false);
     ui->tabAxisVisualizer->setEnabled(true);
+/// LETARTARE
+	ui->lcdWorkNumberC->setEnabled(axisC);
+	ui->lcdMachNumberC->setEnabled(axisC);
+	ui->IncCBtn->setEnabled(axisC);
+	ui->DecCBtn->setEnabled(axisC);
+	ui->lblCJog->setEnabled(axisC);
+/// <--
     ui->groupBoxSendFile->setEnabled(true);
     ui->groupBoxManualGCode->setEnabled(true);
     ui->btnSetHome->setEnabled(true);
@@ -547,20 +617,36 @@ void MainWindow::decZ()
     emit axisAdj('Z', coord, invZ, absoluteAfterAxisAdj, sliderZCount++);
 }
 
+/// LETARTARE
+void MainWindow::decC()
+{
+    float coord = -ui->comboStep->currentText().toFloat();
+    disableAllButtons();
+    emit axisAdj('C', coord, invC, absoluteAfterAxisAdj, 0);
+}
+void MainWindow::incC()
+{
+    float coord = ui->comboStep->currentText().toFloat();
+    disableAllButtons();
+    emit axisAdj('C', coord, invC, absoluteAfterAxisAdj, 0);
+}
+/// <--
+
 void MainWindow::getOptions()
 {
     Options opt(this);
     opt.exec();
 }
 
-void MainWindow::gotoXYZ()
+void MainWindow::gotoXYZC()
 {
-    if (ui->Command->text().length() == 0)
+/// LETARTARE : Command -> Command->lineEDit()
+    if (ui->Command->lineEdit()->text().length() == 0)
         return;
 
-    QString line = ui->Command->text().append("\r");
+    QString line = ui->Command->lineEdit()->text().append("\r");
 
-    emit gotoXYZ(line);
+    emit gotoXYZC(line);
 }
 
 void MainWindow::openFile()
@@ -605,7 +691,10 @@ void MainWindow::openFile()
     }
 
     ui->filePath->setText(fileName);
-    if(ui->filePath->text().length() > 0 && ui->btnOpenPort->text() == CLOSE_BUTTON_TEXT)
+/// LETARTARE for translation
+   // if(ui->filePath->text().length() > 0 && ui->btnOpenPort->text() == CLOSE_BUTTON_TEXT)
+    if(ui->filePath->text().length() > 0 && ui->btnOpenPort->text() == close_button_text)
+/// <--
     {
         ui->Begin->setEnabled(true);
         ui->Stop->setEnabled(false);
@@ -838,7 +927,10 @@ void MainWindow::updateSettingsFromOptionDlg(QSettings& settings)
     QString sinvX = settings.value(SETTINGS_INVERSE_X, "false").value<QString>();
     QString sinvY = settings.value(SETTINGS_INVERSE_Y, "false").value<QString>();
     QString sinvZ = settings.value(SETTINGS_INVERSE_Z, "false").value<QString>();
-
+    //QString smm = settings.value(SETTINGS_USE_MM_FOR_MANUAL_CMDS,"false").value<QString>();
+/// LETARTARE
+	QString sinvC = settings.value(SETTINGS_INVERSE_C, "false").value<QString>();
+/// <--
     QString sdbgLog = settings.value(SETTINGS_ENABLE_DEBUG_LOG, "true").value<QString>();
     g_enableDebugLog.set(sdbgLog == "true");
 
@@ -859,6 +951,9 @@ void MainWindow::updateSettingsFromOptionDlg(QSettings& settings)
     invX = sinvX == "true";
     invY = sinvY == "true";
     invZ = sinvZ == "true";
+/// LETARTARE
+	invC = sinvC == "true";
+/// <--
 
     controlParams.waitTime = settings.value(SETTINGS_RESPONSE_WAIT_TIME, DEFAULT_WAIT_TIME_SEC).value<int>();
     controlParams.zJogRate = settings.value(SETTINGS_Z_JOG_RATE, DEFAULT_Z_JOG_RATE).value<double>();
@@ -1044,6 +1139,14 @@ void MainWindow::toggleRestoreAbsolute()
 
 void MainWindow::updateCoordinates(Coord3D machineCoord, Coord3D workCoord)
 {
+/// LETARTARE
+	axisC = gcode.getNumaxis() == 4 ;
+	ui->lcdWorkNumberC->setEnabled(axisC);
+	ui->lcdMachNumberC->setEnabled(axisC);
+	ui->IncCBtn->setEnabled(axisC);
+	ui->DecCBtn->setEnabled(axisC);
+	ui->lblCJog->setEnabled(axisC);
+/// <--
     machineCoordinates = machineCoord;
     workCoordinates = workCoord;
 /*
@@ -1068,6 +1171,17 @@ void MainWindow::refreshLcd()
     lcdDisplay('X', false, machineCoordinates.x);
     lcdDisplay('Y', false, machineCoordinates.y);
     lcdDisplay('Z', false, machineCoordinates.z);
+/// LETARTARE
+	if (axisC) {
+		lcdDisplay('C', true, workCoordinates.c);
+		lcdDisplay('C', false, machineCoordinates.c);
+	}
+	else {
+		lcdDisplay('C', true, 0);
+		lcdDisplay('C', false, 0);
+
+	}
+/// <--
 }
 
 void MainWindow::lcdDisplay(char axis, bool workCoord, float floatVal)
@@ -1093,6 +1207,14 @@ void MainWindow::lcdDisplay(char axis, bool workCoord, float floatVal)
         else
             ui->lcdMachNumberZ->display(value);
         break;
+/// LETARTARE
+    case 'C':
+        if (workCoord)
+            ui->lcdWorkNumberC->display(value);
+        else
+            ui->lcdMachNumberC->display(value);
+        break;
+/// <--
     }
 }
 
@@ -1103,29 +1225,48 @@ void MainWindow::zJogSliderDisplay(int pos)
     pos -= CENTER_POS;
 
     if (pos > 0)
-        str.sprintf("+%d", pos);
+        if(controlParams.useMm)
+            str.sprintf("+%d", pos);
+        else
+            str.sprintf("+%.1f",(double)pos/10);
     else if (pos < 0)
-        str.sprintf("%d", pos);
+        if(controlParams.useMm)
+            str.sprintf("%d", pos);
+        else
+            str.sprintf("%.1f", (double)pos/10);
     else
         str = "0";
 
     ui->currentZJogSliderDelta->setText(str);
 
-    int newPos = pos + sliderTo;
-
+    double newPos;
     QString to;
-    to.sprintf("%d", newPos);
+    if(controlParams.useMm)
+        newPos = pos + sliderTo;
+    else
+        newPos = (double)pos/10+sliderTo;
+
+    if(controlParams.useMm)
+        to.sprintf("%.1f", newPos);
+    else
+        to.sprintf("%.1f", newPos);
 
     if (sliderPressed)
     {
         ui->resultingZJogSliderPosition->setText(to);
-        info("Usr chg: pos=%d new=%d\n", pos, newPos);
+        if(controlParams.useMm)
+            info("Usr chg: pos=%d new=%d\n", pos, newPos);
+        else
+            info("Usr chg: pos=%.1f new=%.1f\n", (double)pos/10, newPos);
     }
     else
     {
         ui->verticalSliderZJog->setSliderPosition(CENTER_POS);
         ui->currentZJogSliderDelta->setText("0");
-        info("Usr chg no slider: %d\n", pos);
+        if(controlParams.useMm)
+            info("Usr chg no slider: %d\n", pos);
+        else
+            info("Usr chg no slider: %.1f\n", (double) pos/10);
     }
 }
 
@@ -1158,9 +1299,15 @@ void MainWindow::zJogSliderReleased()
 
         if (value != 0)
         {
-            sliderTo += value;
+            if(controlParams.useMm)
+                sliderTo += value;
+            else
+                sliderTo += (double)value/10;
             float setTo = value;
-            emit axisAdj('Z', setTo, invZ, absoluteAfterAxisAdj, sliderZCount++);
+            if(controlParams.useMm)
+                emit axisAdj('Z', setTo, invZ, absoluteAfterAxisAdj, sliderZCount++);
+            else
+                emit axisAdj('Z', setTo/10, invZ, absoluteAfterAxisAdj, sliderZCount++);
         }
     }
 

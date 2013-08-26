@@ -35,7 +35,7 @@
      <x>40</x>
      <y>10</y>
      <width>151</width>
-     <height>101</height>
+     <height>131</height>
     </rect>
    </property>
    <property name="title">
@@ -47,7 +47,7 @@
       <x>10</x>
       <y>19</y>
       <width>131</width>
-      <height>71</height>
+      <height>107</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayoutInvert">
@@ -69,6 +69,13 @@
       <widget class="QCheckBox" name="chkInvX">
        <property name="text">
         <string>X Axis</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="chkInvC">
+       <property name="text">
+        <string>C Axis</string>
        </property>
       </widget>
      </item>
@@ -111,7 +118,7 @@
    <property name="geometry">
     <rect>
      <x>210</x>
-     <y>70</y>
+     <y>90</y>
      <width>261</width>
      <height>16</height>
     </rect>
@@ -124,7 +131,7 @@
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>130</y>
+     <y>160</y>
      <width>431</width>
      <height>17</height>
     </rect>
@@ -137,7 +144,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>170</y>
+     <y>190</y>
      <width>471</width>
      <height>91</height>
     </rect>
@@ -151,7 +158,7 @@
       <x>10</x>
       <y>20</y>
       <width>451</width>
-      <height>51</height>
+      <height>53</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayoutRateLimit">
@@ -237,7 +244,7 @@
    <property name="geometry">
     <rect>
      <x>210</x>
-     <y>90</y>
+     <y>110</y>
      <width>91</width>
      <height>22</height>
     </rect>
@@ -268,7 +275,7 @@
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>270</y>
+     <y>290</y>
      <width>461</width>
      <height>81</height>
     </rect>
@@ -294,7 +301,7 @@
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>360</y>
+     <y>380</y>
      <width>461</width>
      <height>111</height>
     </rect>
@@ -328,13 +335,13 @@
      <string>Selectively reduce precision for excessively long lines</string>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>20</x>
       <y>80</y>
       <width>261</width>
-      <height>22</height>
+      <height>24</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">

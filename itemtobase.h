@@ -8,6 +8,8 @@ class ItemToBase
 {
 public:
     ItemToBase(int index);
+/// LETARTARE    add  virtual destructor : Compiler warning !
+	virtual ~ItemToBase()  ;
 
     virtual void moveToFirst(QPainterPath& path) = 0;
     virtual void addToPath(QPainterPath& path) = 0;

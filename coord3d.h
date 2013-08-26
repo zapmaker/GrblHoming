@@ -13,6 +13,9 @@ public:
     float x;
     float y;
     float z;
+/// LETARTARE
+	float c;
+/// <-
     bool stoppedZ;
     int sliderZIndex;
 };

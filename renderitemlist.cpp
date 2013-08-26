@@ -1,4 +1,5 @@
 #include "renderitemlist.h"
+#include <QObject>
 
 RenderItemList::RenderItemList()
     : scale(1), offsetx(50), offsety(50), mm(true), currFileLine(0)
@@ -152,11 +153,10 @@ void RenderItemList::drawMeasurements(QPainter& painter)
     int ht = painter.fontMetrics().height();
     int wd = painter.fontMetrics().averageCharWidth();
 
-    QString units = mm ? " mm" : " inches";
+    QString units = mm ? QObject::tr(" mm") : QObject::tr(" inches");
 
-    QString info(QString::number(extents.j).append(units).append("  (Width-X: ").append(QString::number(extents.width()))
-                .append("  Height-Y: ").append(QString::number(extents.height())).append(")"));
-
+    QString info(QString::number(extents.j).append(units).append(QObject::tr("  (Width-X: ").append(QString::number(extents.width()))
+                .append(QObject::tr("  Height-Y: ")).append(QString::number(extents.height())).append(")")) )  ;
     int xMsgTop = x + wd;
     QRect br = painter.fontMetrics().boundingRect(info);
     br.setWidth(br.width() + wd);

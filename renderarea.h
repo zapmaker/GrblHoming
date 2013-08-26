@@ -9,16 +9,17 @@
 #include "renderitemlist.h"
 #include "arcitem.h"
 #include "lineitem.h"
-#include "renderitemlist.h"
+/// LETARTARE
+// #include "renderitemlist.h"
 
 class RenderArea : public QWidget
 {
     Q_OBJECT
 public:
     explicit RenderArea(QWidget *parent = 0);
-    
+
 signals:
-    
+
 public slots:
     void setItems(QList<PosItem>);
     void setLivePoint(double x, double y, bool isMM);

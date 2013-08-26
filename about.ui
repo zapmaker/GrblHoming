@@ -33,7 +33,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>20</y>
+     <y>30</y>
      <width>151</width>
      <height>61</height>
     </rect>
@@ -52,7 +52,7 @@
    <property name="geometry">
     <rect>
      <x>180</x>
-     <y>60</y>
+     <y>70</y>
      <width>201</width>
      <height>91</height>
     </rect>
@@ -68,9 +68,9 @@
    <property name="geometry">
     <rect>
      <x>180</x>
-     <y>30</y>
+     <y>10</y>
      <width>211</width>
-     <height>31</height>
+     <height>51</height>
     </rect>
    </property>
    <property name="font">
@@ -81,7 +81,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Grbl Controller</string>
+    <string>Grbl Controller 4</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
@@ -101,7 +101,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>110</y>
+     <y>120</y>
      <width>130</width>
      <height>33</height>
     </rect>

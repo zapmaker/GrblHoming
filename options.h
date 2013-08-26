@@ -18,6 +18,9 @@
 
 #include "definitions.h"
 
+/// LETARTARE
+#define SETTINGS_INVERSE_C                  "inverse.c"
+/// <--
 #define SETTINGS_INVERSE_X                  "inverse.x"
 #define SETTINGS_INVERSE_Y                  "inverse.y"
 #define SETTINGS_INVERSE_Z                  "inverse.z"
@@ -51,7 +54,7 @@ class Options;
 class Options : public QDialog
 {
     Q_OBJECT
-    
+
 public:
     explicit Options(QWidget *parent = 0);
     ~Options();

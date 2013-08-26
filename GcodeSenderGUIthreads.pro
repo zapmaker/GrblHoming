@@ -1,10 +1,11 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2012-02-13T17:48:40
+# Project created by QtCreator 2012-02-13 T17:48:40
 #
+# modified by LETARTARE 2013-08-03
 #-------------------------------------------------
 
-QT       += core gui widgets
+QT       += core gui # widgets
 
 TARGET = GrblController
 TEMPLATE = app
@@ -99,3 +100,6 @@ OTHER_FILES += \
     android/src/org/kde/necessitas/origo/QtApplication.java \
     android/version.xml
 
+# LETARTARE
+# Translations
+	TRANSLATIONS +=  trlocale/controleurcnc4_fr.ts

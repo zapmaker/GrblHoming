@@ -4,6 +4,10 @@ ItemToBase::ItemToBase(int index1)
     : scale(1), height(100), offsetx(50), offsety(50), index(index1)
 {
 }
+/// LETARTARE    add  virtual destructor
+ItemToBase::~ItemToBase()
+{
+}
 
 void ItemToBase::setParams(double scale1, double height1, double offsetx1, double offsety1)
 {

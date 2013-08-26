@@ -8,7 +8,7 @@
  ****************************************************************/
 #ifndef VERSION_H
 #define VERSION_H
-
-#define GRBL_CONTROLLER_NAME_AND_VERSION    "Grbl Controller 3.4.3"
-
+/// LETARTARE   +  "\n 4 axis X, Y, Z, C"
+#define GRBL_CONTROLLER_NAME_AND_VERSION    "Grbl Controller 3.4.4\n 4 axis X, Y, Z, C"
+/// <--
 #endif // VERSION_H

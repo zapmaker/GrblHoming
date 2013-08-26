@@ -13,7 +13,6 @@
 #include <QtWidgets/QApplication>
 #endif
 
-
 enum GC_LOG_TYPES
 {
     LOG_DEBUG_TYPE = 1,
@@ -62,9 +61,17 @@ int main(int argc, char *argv[])
     //Log4Qt::Logger::rootLogger()->addAppender(p_fappender);
 
     QApplication a(argc, argv);
+
+/// LETARTARE
+	QString locale = QLocale::system().name().section('_', 0, 0);
+	QTranslator translator;
+    translator.load(QString("controleurcnc4_") + locale );
+    a.installTranslator(&translator);
+/// <-
+
     MainWindow w;
     w.show();
-    
+
     int result = a.exec();
 
     if (pDebugLogFile != NULL)

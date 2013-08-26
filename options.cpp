@@ -24,6 +24,10 @@ Options::Options(QWidget *parent) :
     QString invX = settings.value(SETTINGS_INVERSE_X, "false").value<QString>();
     QString invY = settings.value(SETTINGS_INVERSE_Y, "false").value<QString>();
     QString invZ = settings.value(SETTINGS_INVERSE_Z, "false").value<QString>();
+/// LETARTARE
+	QString invC = settings.value(SETTINGS_INVERSE_C, "false").value<QString>();
+	ui->chkInvC->setChecked(invC == "true");
+/// <--
 
     ui->chkInvX->setChecked(invX == "true");
     ui->chkInvY->setChecked(invY == "true");
@@ -78,7 +82,9 @@ void Options::accept()
     settings.setValue(SETTINGS_INVERSE_X, ui->chkInvX->isChecked());
     settings.setValue(SETTINGS_INVERSE_Y, ui->chkInvY->isChecked());
     settings.setValue(SETTINGS_INVERSE_Z, ui->chkInvZ->isChecked());
-
+/// LETARTARE
+	settings.setValue(SETTINGS_INVERSE_C, ui->chkInvC->isChecked());
+/// <-
     settings.setValue(SETTINGS_ENABLE_DEBUG_LOG, ui->checkBoxEnableDebugLog->isChecked());
     settings.setValue(SETTINGS_USE_AGGRESSIVE_PRELOAD, ui->chkAggressivePreload->isChecked());
     settings.setValue(SETTINGS_USE_MM_FOR_MANUAL_CMDS, ui->checkBoxUseMmManualCmds->isChecked());

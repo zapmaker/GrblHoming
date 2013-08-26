@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>838</width>
-    <height>651</height>
+    <width>896</width>
+    <height>740</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -35,10 +35,10 @@
    <widget class="QWidget" name="layoutWidget1">
     <property name="geometry">
      <rect>
-      <x>418</x>
+      <x>450</x>
       <y>30</y>
-      <width>191</width>
-      <height>131</height>
+      <width>200</width>
+      <height>230</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayoutMachCoord">
@@ -83,6 +83,7 @@
        </property>
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>50</weight>
          <bold>false</bold>
          <kerning>true</kerning>
@@ -213,15 +214,72 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QLCDNumber" name="lcdMachNumberC">
+       <property name="palette">
+        <palette>
+         <active>
+          <colorrole role="Light">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>0</red>
+             <green>0</green>
+             <blue>0</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </active>
+         <inactive>
+          <colorrole role="Light">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>0</red>
+             <green>0</green>
+             <blue>0</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </inactive>
+         <disabled>
+          <colorrole role="Light">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>0</red>
+             <green>0</green>
+             <blue>0</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </disabled>
+        </palette>
+       </property>
+       <property name="font">
+        <font>
+         <weight>50</weight>
+         <bold>false</bold>
+         <kerning>true</kerning>
+        </font>
+       </property>
+       <property name="smallDecimalPoint">
+        <bool>true</bool>
+       </property>
+       <property name="digitCount">
+        <number>7</number>
+       </property>
+       <property name="segmentStyle">
+        <enum>QLCDNumber::Filled</enum>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="layoutWidget2">
     <property name="geometry">
      <rect>
-      <x>390</x>
+      <x>400</x>
       <y>30</y>
-      <width>20</width>
-      <height>131</height>
+      <width>40</width>
+      <height>230</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -270,6 +328,21 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QLabel" name="lblC">
+       <property name="font">
+        <font>
+         <pointsize>18</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>C</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QListWidget" name="statusList">
@@ -279,9 +352,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>360</y>
-      <width>341</width>
-      <height>231</height>
+      <y>330</y>
+      <width>380</width>
+      <height>361</height>
      </rect>
     </property>
    </widget>
@@ -292,9 +365,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>120</y>
+      <y>109</y>
       <width>341</width>
-      <height>161</height>
+      <height>140</height>
      </rect>
     </property>
     <property name="title">
@@ -369,7 +442,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>130</y>
+       <y>120</y>
        <width>61</width>
        <height>16</height>
       </rect>
@@ -385,7 +458,7 @@
      <property name="geometry">
       <rect>
        <x>90</x>
-       <y>130</y>
+       <y>120</y>
        <width>61</width>
        <height>16</height>
       </rect>
@@ -401,60 +474,21 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>700</x>
-      <y>490</y>
+      <x>760</x>
+      <y>610</y>
       <width>121</width>
-      <height>61</height>
+      <height>70</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
     </property>
     <property name="text">
-     <string>GRBL settings</string>
+     <string>GRBL
+settings</string>
     </property>
-   </widget>
-   <widget class="QGroupBox" name="groupBoxManualGCode">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>290</y>
-      <width>341</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Manual GCode</string>
-    </property>
-    <widget class="QWidget" name="layoutWidget7">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>321</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Command</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="Command">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
    </widget>
    <widget class="QPushButton" name="btnOpenPort">
     <property name="geometry">
@@ -525,10 +559,10 @@
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>620</x>
+      <x>669</x>
       <y>30</y>
-      <width>191</width>
-      <height>131</height>
+      <width>211</width>
+      <height>230</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayoutWorkCoord">
@@ -703,13 +737,70 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QLCDNumber" name="lcdWorkNumberC">
+       <property name="palette">
+        <palette>
+         <active>
+          <colorrole role="Light">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>0</red>
+             <green>0</green>
+             <blue>0</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </active>
+         <inactive>
+          <colorrole role="Light">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>0</red>
+             <green>0</green>
+             <blue>0</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </inactive>
+         <disabled>
+          <colorrole role="Light">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>0</red>
+             <green>0</green>
+             <blue>0</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </disabled>
+        </palette>
+       </property>
+       <property name="font">
+        <font>
+         <weight>50</weight>
+         <bold>false</bold>
+         <kerning>true</kerning>
+        </font>
+       </property>
+       <property name="smallDecimalPoint">
+        <bool>true</bool>
+       </property>
+       <property name="digitCount">
+        <number>7</number>
+       </property>
+       <property name="segmentStyle">
+        <enum>QLCDNumber::Filled</enum>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QGroupBox" name="groupBoxReset">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>470</y>
+      <x>440</x>
+      <y>600</y>
       <width>161</width>
       <height>91</height>
      </rect>
@@ -747,9 +838,9 @@
    <widget class="QWidget" name="horizontalLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>420</x>
+      <x>452</x>
       <y>0</y>
-      <width>191</width>
+      <width>190</width>
       <height>31</height>
      </rect>
     </property>
@@ -773,9 +864,9 @@
    <widget class="QWidget" name="horizontalLayoutWidget_3">
     <property name="geometry">
      <rect>
-      <x>620</x>
+      <x>670</x>
       <y>0</y>
-      <width>201</width>
+      <width>210</width>
       <height>31</height>
      </rect>
     </property>
@@ -800,7 +891,7 @@
     <property name="geometry">
      <rect>
       <x>160</x>
-      <y>90</y>
+      <y>80</y>
       <width>201</width>
       <height>31</height>
      </rect>
@@ -825,8 +916,8 @@
    <widget class="QWidget" name="verticalLayoutWidget_4">
     <property name="geometry">
      <rect>
-      <x>550</x>
-      <y>490</y>
+      <x>610</x>
+      <y>610</y>
       <width>141</width>
       <height>71</height>
      </rect>
@@ -859,10 +950,10 @@
    <widget class="QTabWidget" name="tabAxisVisualizer">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>180</y>
+      <x>440</x>
+      <y>280</y>
       <width>441</width>
-      <height>281</height>
+      <height>301</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -876,7 +967,7 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>20</y>
+        <y>12</y>
         <width>214</width>
         <height>120</height>
        </rect>
@@ -1032,7 +1123,7 @@
       <property name="geometry">
        <rect>
         <x>320</x>
-        <y>170</y>
+        <y>210</y>
         <width>101</width>
         <height>52</height>
        </rect>
@@ -1054,9 +1145,9 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>170</y>
+        <y>203</y>
         <width>281</width>
-        <height>61</height>
+        <height>60</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -1142,6 +1233,69 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
+     <widget class="QWidget" name="horizontalLayoutWidget_5">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>150</y>
+        <width>211</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
+       <item>
+        <widget class="QPushButton" name="DecCBtn">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="GrblController.qrc">
+           <normaloff>:/img/left.PNG</normaloff>:/img/left.PNG</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblCJog">
+         <property name="font">
+          <font>
+           <pointsize>10</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>C Jog</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="IncCBtn">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="GrblController.qrc">
+           <normaloff>:/img/right.PNG</normaloff>:/img/right.PNG</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_">
      <attribute name="title">
@@ -1153,7 +1307,7 @@
         <x>-1</x>
         <y>-1</y>
         <width>437</width>
-        <height>259</height>
+        <height>271</height>
        </rect>
       </property>
       <property name="palette">
@@ -1226,13 +1380,13 @@
      </widget>
     </widget>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>160</x>
+      <x>161</x>
       <y>50</y>
-      <width>171</width>
-      <height>22</height>
+      <width>200</width>
+      <height>24</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -1251,14 +1405,74 @@
      </item>
     </layout>
    </widget>
+   <widget class="QGroupBox" name="groupBoxManualGCode">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>260</y>
+      <width>380</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Manual GCode</string>
+    </property>
+    <widget class="QWidget" name="layoutWidget7_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>18</y>
+       <width>360</width>
+       <height>40</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_7">
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Command</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="Command">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>220</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+        <property name="maxVisibleItems">
+         <number>12</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>838</width>
-     <height>25</height>
+     <width>896</width>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">

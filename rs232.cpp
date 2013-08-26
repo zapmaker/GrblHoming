@@ -8,6 +8,8 @@
  ****************************************************************/
 
 #include "rs232.h"
+/// LETARTARE
+#include <QObject>
 
 RS232::RS232()
     : port(NULL), detectedEOL(0)
@@ -153,10 +155,11 @@ int RS232::SendBuf(const char *buf, int size)
 {
     if (port == NULL || !port->isOpen())
         return 0;
-
+/// LETARTARE  for test
+err(buf) ;
     if (size <= 0)
     {
-        err("Unexpected: Told to send %d bytes\n", size);
+        err( qPrintable(QObject::tr("Unexpected: Told to send %d bytes\n")), size) ;
         return 1;
     }
 

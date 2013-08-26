@@ -20,6 +20,10 @@ build from source.
 Details on how to do this can be found here:
 http://zapmaker.org/
 
+V3.4.4
+Bug fix
+- Fix to issue #17. Z axis slider now moves in 0.1 inch increments when in inches mode.
+
 V3.4.3
 Bug fix
 - Unsupported G43/G44 commands include following Z command which causes problems when 

@@ -34,8 +34,8 @@
 
 #define REGEXP_SETTINGS_LINE    "(\\d+)\\s*=\\s*([\\w\\.]+)\\s*\\(([^\\)]*)\\)"
 
-#define OPEN_BUTTON_TEXT                "Open"
-#define CLOSE_BUTTON_TEXT               "Close / Reset"
+//#define OPEN_BUTTON_TEXT                "Open"
+//#define CLOSE_BUTTON_TEXT               "Close / Reset"
 
 #define LOG_MSG_TYPE_DIAG       "DIAG"
 #define LOG_MSG_TYPE_STATUS     "STATUS"
