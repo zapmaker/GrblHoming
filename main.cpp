@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 /// LETARTARE
 	QString locale = QLocale::system().name().section('_', 0, 0);
 	QTranslator translator;
-    translator.load(QString("controleurcnc4_") + locale );
+    translator.load(QString("GrblController_") + locale );
     a.installTranslator(&translator);
 /// <-
 

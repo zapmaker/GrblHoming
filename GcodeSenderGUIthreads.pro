@@ -2,7 +2,7 @@
 #
 # Project created by QtCreator 2012-02-13 T17:48:40
 #
-# modified by LETARTARE 2013-08-03
+# modified by LETARTARE 2013-08-26
 #-------------------------------------------------
 
 QT       += core gui # widgets
