@@ -102,4 +102,5 @@ OTHER_FILES += \
 
 # LETARTARE
 # Translations
-	TRANSLATIONS +=  trlocale/controleurcnc4_fr.ts
+	TRANSLATIONS +=  trlocale/GrblController_xx.ts
+	TRANSLATIONS +=  trlocale/GrblController_fr.ts
