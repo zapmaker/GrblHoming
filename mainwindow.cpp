@@ -163,15 +163,15 @@ MainWindow::MainWindow(QWidget *parent) :
     int portIndex = -1;
     for (int i = 0; i < ports.size(); i++)
     {
-        ui->cmbPort->addItem(ports.at(i).portName.toLocal8Bit().constData());
+        ui->cmbPort->addItem(qPrintable(ports.at(i).portName));
 
         if (ports.at(i).portName == lastOpenPort)
             portIndex = i;
 
-        //diag("port name: %s\n", ports.at(i).portName.toLocal8Bit().constData());
-        //diag("friendly name: %s\n", ports.at(i).friendName.toLocal8Bit().constData());
-        //diag("physical name: %s\n", ports.at(i).physName.toLocal8Bit().constData());
-        //diag("enumerator name: %s\n", ports.at(i).enumName.toLocal8Bit().constData());
+        //diag("port name: %s\n", qPrintable(ports.at(i).portName));
+        //diag("friendly name: %s\n", qPrintable(ports.at(i).friendName) );
+        //diag("physical name: %s\n", qPrintable(ports.at(i).physName) );
+        //diag("enumerator name: %s\n", qPrintable(ports.at(i).enumName) );
         //diag("===================================\n\n");
     }
 
@@ -184,7 +184,9 @@ MainWindow::MainWindow(QWidget *parent) :
     {
         // did not find matching port
         // This code block is used to restore a port to view that isn't visible to QextSerialEnumerator
-        ui->cmbPort->addItem(lastOpenPort.toLocal8Bit().constData());
+/// LETARTARE
+        ui->cmbPort->addItem(qPrintable(lastOpenPort)) ;
+/// <--
         if (ports.size() > 0)
             ui->cmbPort->setCurrentIndex(ports.size());
         else
@@ -208,8 +210,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->tabAxisVisualizer->setEnabled(false);
 /// LETARTARE
-	ui->lcdWorkNumberC->setEnabled(false);;
-    ui->lcdMachNumberC->setEnabled(false);;
+	ui->lcdWorkNumberC->setEnabled(false);
+    ui->lcdMachNumberC->setEnabled(false);
 	ui->IncCBtn->setEnabled(false);
 	ui->DecCBtn->setEnabled(false);
 	ui->lblCJog->setEnabled(false);
@@ -293,15 +295,15 @@ void MainWindow::begin()
 /// <--
         )
     {
-        QMessageBox msgBox;
-        msgBox.setText("Wish to \"zero position\" before beginning?");
-        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+    	QMessageBox msgBox;
+        msgBox.setText(tr("Wish to \"zero position\" before beginning?") );
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel );
         msgBox.setDefaultButton(QMessageBox::Yes);
         ret = msgBox.exec();
-        if(ret ==QMessageBox::Yes)
+        if(ret == QMessageBox::Yes)
             setHome();
     }
-    if(ret!=QMessageBox::Cancel)
+    if(ret!= QMessageBox::Cancel )
     {
         ui->tabAxisVisualizer->setEnabled(false);
         ui->groupBoxManualGCode->setEnabled(false);
@@ -477,7 +479,7 @@ void MainWindow::portIsClosed(bool reopen)
 
     if (reopen)
     {
-        receiveList("Resetting port to restart controller");
+        receiveList(tr("Resetting port to restart controller"));
         openPortCtl(false);
     }
 }
@@ -785,7 +787,7 @@ void MainWindow::preProcessFile(QString filepath)
                         }
                         posList.append(PosItem(x, y, i, j, arc, cw, mm, index));
 
-                        //printf("Got G command:%s (%f,%f)\n", strline.toLocal8Bit().constData(), x, y);
+                        //printf("Got G command:%s (%f,%f)\n", qPrintable(strline), x, y);
                     }
                 }
             }
@@ -1024,7 +1026,7 @@ void MainWindow::addToStatusList(bool in, QString msg)
         nMsg = "> " + msg;
     ui->statusList->addItem(nMsg);
 
-    status("%s", nMsg.toLocal8Bit().constData());
+    status("%s", qPrintable(nMsg));
 
     doScroll();
 }
@@ -1043,7 +1045,7 @@ void MainWindow::addToStatusList(QStringList& list)
 
         cleanList.append(msg);
 
-        status("%s", msg.toLocal8Bit().constData());
+        status("%s", qPrintable(msg) );
     }
 
     if (cleanList.size() == 0)
@@ -1123,12 +1125,12 @@ void MainWindow::toggleSpindle()
     if (ui->SpindleOn->QAbstractButton::isChecked())
     {
         sendGcode("M03\r");
-        receiveList("Spindle On.");
+        receiveList(tr("Spindle On."));
     }
     else
     {
         sendGcode("M05\r");
-        receiveList("Spindle Off.");
+        receiveList(tr("Spindle Off."));
     }
 }
 

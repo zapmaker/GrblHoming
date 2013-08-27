@@ -156,7 +156,7 @@ int RS232::SendBuf(const char *buf, int size)
     if (port == NULL || !port->isOpen())
         return 0;
 /// LETARTARE  for test
-err(buf) ;
+//err(buf);
     if (size <= 0)
     {
         err( qPrintable(QObject::tr("Unexpected: Told to send %d bytes\n")), size) ;
@@ -166,7 +166,7 @@ err(buf) ;
     char b[300] = {0};
     memcpy(b, buf, size);
 #ifdef DIAG
-    printf("Sending to port %s [%s]:", port->portName().toLocal8Bit().constData(), b);
+    printf("Sending to port %s [%s]:", qPrintable(port->portName()), b);
     for (int x= 0; x < size; x++)
     {
         printf("%02X ", buf[x]);
@@ -200,7 +200,7 @@ err(buf) ;
     }
     else if (result == -1)
     {
-        err("Error writing to port. Write data lost!");
+        err(qPrintable(QObject::tr("Error writing to port. Write data lost!")));
         result = 0;
     }
     return result;

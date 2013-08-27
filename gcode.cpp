@@ -39,8 +39,6 @@ void GCode::openPort(QString commPortStr, QString baudRate)
         QString msg = tr("Can't open COM port ") + commPortStr;
         sendMsg(msg);
         addList(msg);
-    ///
-    //    warn("%s", msg.toLocal8Bit().constData());
         warn("%s", qPrintable(msg));
 
         addList(tr("-Is hardware connected to USB?") );
@@ -171,7 +169,6 @@ void GCode::sendGcode(QString line)
             {
                 QString msg = tr("Sending to port failed");
             /// LETARTARE
-             ///   err("%s", msg.toLocal8Bit().constData());
 				err("%s", qPrintable(msg));
                 emit addList(msg);
                 emit sendMsg(msg);
@@ -330,7 +327,7 @@ bool GCode::sendGcodeInternal(QString line, QString& result, bool recordResponse
     if (!port.isPortOpen())
     {
         QString msg = tr("Port not available yet")  ;
-        err("%s", msg.toLocal8Bit().constData());
+        err("%s", qPrintable(msg));
         emit addList(msg);
         emit sendMsg(msg);
         return false;
@@ -542,7 +539,8 @@ bool GCode::waitForOk(QString& result, int waitSec, bool sentReqForLocation, boo
                     else
                     {
                         CmdResponse cmdResp = sendCount.takeFirst();
-                        diag(qPrintable(tr("GOT[%d]:%s for %s\n")), cmdResp.line, tmpTrim.toLocal8Bit().constData(), cmdResp.cmd.toLocal8Bit().constData());
+                        diag(qPrintable(tr("GOT[%d]:%s for %s\n")), cmdResp.line, qPrintable(tmpTrim),
+							 qPrintable(cmdResp.cmd) );
                     }
                     rcvdI++;
                 }
@@ -555,7 +553,8 @@ bool GCode::waitForOk(QString& result, int waitSec, bool sentReqForLocation, boo
                     {
                         CmdResponse cmdResp = sendCount.takeFirst();
                         orig = cmdResp.cmd;
-                        diag(qPrintable(tr("GOT[%d]:%s for %s\n")), cmdResp.line, tmpTrim.toLocal8Bit().constData(), orig.toLocal8Bit().constData());
+                        diag(qPrintable(tr("GOT[%d]:%s for %s\n")),
+							 cmdResp.line, qPrintable(tmpTrim), qPrintable(orig));
                     }
                     errorCount++;
                     QString result;
@@ -566,7 +565,7 @@ bool GCode::waitForOk(QString& result, int waitSec, bool sentReqForLocation, boo
                 }
                 else
                 {
-                    diag(qPrintable(tr("GOT:%s\n")), tmpTrim.toLocal8Bit().constData());
+                    diag(qPrintable(tr("GOT:%s\n")), qPrintable(tmpTrim));
                     parseCoordinates(received, aggressive);
                 }
 
@@ -591,7 +590,7 @@ bool GCode::waitForOk(QString& result, int waitSec, bool sentReqForLocation, boo
             }
             else
             {
-                diag(qPrintable(tr("GOT:%s\n")), tmpTrim.toLocal8Bit().constData());
+                diag(qPrintable(tr("GOT:%s\n")), qPrintable(tmpTrim));
             }
 
             if (!received.contains(RESPONSE_OK) && !received.contains(RESPONSE_ERROR))
@@ -718,7 +717,7 @@ bool GCode::waitForStartupBanner(QString& result, int waitSec, bool failOnNoFoun
             int pos = tmpTrim.indexOf(port.getDetectedLineFeed());
             if (pos != -1)
                 tmpTrim.remove(pos, port.getDetectedLineFeed().size());
-            diag(qPrintable(tr("GOT:%s\n")), tmpTrim.toLocal8Bit().constData());
+            diag(qPrintable(tr("GOT:%s\n")), qPrintable(tmpTrim));
 
             if (tmpTrim.length() > 0)
             {
@@ -880,7 +879,7 @@ void GCode::parseCoordinates(const QString& received, bool aggressive)
 			workCoord.stoppedZ = false;
 
 		workCoord.sliderZIndex = sliderZCount;
-		if (numaxis ==3 )
+		if (numaxis == 3)
 			diag(qPrintable(tr("Decoded: State:%s MPos: %f,%f,%f WPos: %f,%f,%f\n")),
 				 qPrintable(state),
 				 machineCoord.x, machineCoord.y, machineCoord.z,
@@ -1376,9 +1375,10 @@ QString GCode::reducePrecision(QString line)
                 //chk.append(item.token);
                 //chk.append("]");
             }
-            //diag(chk.toLocal8Bit().constData());
+            //diag(qPrintable(chk));
 
-            err(qPrintable(tr("Unable to remove enough decimal places for command (will be truncated): %s")), line.toLocal8Bit().constData());
+            err(qPrintable(tr("Unable to remove enough decimal places for command (will be truncated): %s")),
+							qPrintable(line));
 
             QString msg;
             if (failRemoveSufficientDecimals)

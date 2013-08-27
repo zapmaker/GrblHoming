@@ -65,8 +65,12 @@ int main(int argc, char *argv[])
 /// LETARTARE
 	QString locale = QLocale::system().name().section('_', 0, 0);
 	QTranslator translator;
-    translator.load(QString("GrblController_") + locale );
+    translator.load("GrblController_" + locale );
     a.installTranslator(&translator);
+     // qt translation for default dialogs (QFileDialog) and so on
+	QTranslator qtTranslator;
+	qtTranslator.load("qt_" + locale, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+	a.installTranslator(&qtTranslator);
 /// <-
 
     MainWindow w;

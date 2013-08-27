@@ -27,205 +27,205 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="46"/>
+        <location filename="../gcode.cpp" line="44"/>
         <source>-Is hardware connected to USB?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="47"/>
+        <location filename="../gcode.cpp" line="45"/>
         <source>-Is correct port chosen?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="48"/>
+        <location filename="../gcode.cpp" line="46"/>
         <source>-Does current user have sufficient permissions?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="169"/>
+        <location filename="../gcode.cpp" line="167"/>
         <source>SENDING: 0x%02X (CTRL-X) to check presence of Grbl
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="172"/>
-        <location filename="../gcode.cpp" line="410"/>
+        <location filename="../gcode.cpp" line="170"/>
+        <location filename="../gcode.cpp" line="407"/>
         <source>Sending to port failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="315"/>
+        <location filename="../gcode.cpp" line="312"/>
         <source>Got Grbl Version (Parsed:) %d.%d%c ($$=%d)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="332"/>
+        <location filename="../gcode.cpp" line="329"/>
         <source>Port not available yet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="379"/>
+        <location filename="../gcode.cpp" line="376"/>
         <source>Buffer size too small</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="389"/>
+        <location filename="../gcode.cpp" line="386"/>
         <source>SENDING[%d]: 0x%02X (CTRL-X)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="391"/>
+        <location filename="../gcode.cpp" line="388"/>
         <source>SENDING[%d]: %s
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="421"/>
+        <location filename="../gcode.cpp" line="418"/>
         <source>WAITFOROK FAILED
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="427"/>
+        <location filename="../gcode.cpp" line="424"/>
         <source>Wait for ok failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="518"/>
-        <location filename="../gcode.cpp" line="710"/>
+        <location filename="../gcode.cpp" line="515"/>
+        <location filename="../gcode.cpp" line="709"/>
         <source>Error reading data from COM port
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="540"/>
+        <location filename="../gcode.cpp" line="537"/>
         <source>Unexpected: list is empty (o)!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="545"/>
-        <location filename="../gcode.cpp" line="558"/>
+        <location filename="../gcode.cpp" line="542"/>
+        <location filename="../gcode.cpp" line="556"/>
         <source>GOT[%d]:%s for %s
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="551"/>
+        <location filename="../gcode.cpp" line="549"/>
         <source>Error?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="553"/>
+        <location filename="../gcode.cpp" line="551"/>
         <source>Unexpected: list is empty (e)!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="569"/>
-        <location filename="../gcode.cpp" line="594"/>
-        <location filename="../gcode.cpp" line="721"/>
+        <location filename="../gcode.cpp" line="568"/>
+        <location filename="../gcode.cpp" line="593"/>
+        <location filename="../gcode.cpp" line="720"/>
         <source>GOT:%s
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="661"/>
+        <location filename="../gcode.cpp" line="660"/>
         <source>Wait interrupted by user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="729"/>
+        <location filename="../gcode.cpp" line="728"/>
         <source>Expecting Grbl version string. Unable to parse response.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="752"/>
+        <location filename="../gcode.cpp" line="751"/>
         <source>No data from COM port after connect. Expecting Grbl version string.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="773"/>
+        <location filename="../gcode.cpp" line="772"/>
         <source>Wait interrupted by user (startup)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="884"/>
+        <location filename="../gcode.cpp" line="883"/>
         <source>Decoded: State:%s MPos: %f,%f,%f WPos: %f,%f,%f
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="891"/>
+        <location filename="../gcode.cpp" line="890"/>
         <source>Decoded: State:%s MPos: %f,%f,%f,%f WPos: %f,%f,%f,%f
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="908"/>
+        <location filename="../gcode.cpp" line="907"/>
         <source>Error decoding position data!
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="942"/>
+        <location filename="../gcode.cpp" line="941"/>
         <source>GOT-TE:%s
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="965"/>
+        <location filename="../gcode.cpp" line="964"/>
         <source>Sending file &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1118"/>
+        <location filename="../gcode.cpp" line="1117"/>
         <source>Gave up waiting for OK
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1137"/>
+        <location filename="../gcode.cpp" line="1136"/>
         <source>Code sent successfully with %1 error(s):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1149"/>
+        <location filename="../gcode.cpp" line="1148"/>
         <source>Code sent successfully with no errors.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1156"/>
+        <location filename="../gcode.cpp" line="1155"/>
         <source>Filtered %1 commands:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1169"/>
+        <location filename="../gcode.cpp" line="1168"/>
         <source>Process interrupted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1201"/>
+        <location filename="../gcode.cpp" line="1200"/>
         <source>Removed unsupported command &apos;%1&apos; part of &apos;%2&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1217"/>
+        <location filename="../gcode.cpp" line="1216"/>
         <source>Removed unsupported G command &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1230"/>
+        <location filename="../gcode.cpp" line="1229"/>
         <source>Removed unsupported M command &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1248"/>
+        <location filename="../gcode.cpp" line="1247"/>
         <source>Removed unsupported command &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1381"/>
+        <location filename="../gcode.cpp" line="1380"/>
         <source>Unable to remove enough decimal places for command (will be truncated): %s</source>
         <translation type="unfinished"></translation>
     </message>
@@ -720,7 +720,7 @@ settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="242"/>
+        <location filename="../mainwindow.cpp" line="244"/>
         <source>You appear to have upgraded to the latest version of Grbl Controller. Please be aware that as of version 3.4 the default behavior of sending commands to Grbl has been changed to send them as fast as possible (Aggressive preload mode).
 
 Your settings have been changed to enable this mode. Why? Because it provides the most optimal use of Grbl and greatly reduces the time to finish a typical job.
@@ -729,18 +729,38 @@ What does this mean to you? Arc commands will now run smoother and faster than b
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="382"/>
+        <location filename="../mainwindow.cpp" line="299"/>
+        <source>Wish to &quot;zero position&quot; before beginning?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="384"/>
         <source>User clicked Port Open/Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="654"/>
-        <source>Open File</source>
+        <location filename="../mainwindow.cpp" line="482"/>
+        <source>Resetting port to restart controller</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="656"/>
+        <source>Open File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="658"/>
         <source>NC (*.nc);;All Files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="1128"/>
+        <source>Spindle On.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="1133"/>
+        <source>Spindle Off.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -868,6 +888,11 @@ What does this mean to you? Arc commands will now run smoother and faster than b
         <location filename="../rs232.cpp" line="162"/>
         <source>Unexpected: Told to send %d bytes
 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rs232.cpp" line="203"/>
+        <source>Error writing to port. Write data lost!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
