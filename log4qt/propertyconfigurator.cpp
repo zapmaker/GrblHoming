@@ -377,7 +377,7 @@ namespace Log4Qt
         LogObjectPtr<Appender> p_appender = Factory::createAppender(value);
         if (!p_appender)
         {
-            LogError e = LOG4QT_ERROR(QT_TR_NOOP("Unable to create appender of class '%1' namd '%2'"),
+            LogError e = LOG4QT_ERROR(QT_TR_NOOP("Unable to create appender of class '%1' named '%2'"),
                                       CONFIGURATOR_UNKNOWN_APPENDER_CLASS_ERROR,
                                       "Log4Qt::PropertyConfigurator");
             e << value << rName;
@@ -435,7 +435,7 @@ namespace Log4Qt
         LogObjectPtr<Layout> p_layout = Factory::createLayout(value);
         if (!p_layout)
         {
-            LogError e = LOG4QT_ERROR(QT_TR_NOOP("Unable to create layoput of class '%1' requested by appender '%2'"),
+            LogError e = LOG4QT_ERROR(QT_TR_NOOP("Unable to create layout of class '%1' requested by appender '%2'"),
                                       CONFIGURATOR_UNKNOWN_LAYOUT_CLASS_ERROR,
                                       "Log4Qt::PropertyConfigurator");
             e << value << rAppenderKey;
