@@ -24,6 +24,7 @@ v3.4.5
 Enhancements
 - Add 3/4 axis automatic detection  and translation (to french)
 
+
 V3.4.4
 Bug fix
 - Fix to issue #17. Z axis slider now moves in 0.1 inch increments when in inches mode.
