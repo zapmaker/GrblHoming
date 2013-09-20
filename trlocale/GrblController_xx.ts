@@ -492,17 +492,17 @@
     </message>
     <message>
         <location filename="../log4qt/propertyconfigurator.cpp" line="380"/>
-        <source>Unable to create appender of class &apos;%1&apos; namd &apos;%2&apos;</source>
+        <source>Unable to create appender of class &apos;%1&apos; named &apos;%2&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../log4qt/propertyconfigurator.cpp" line="438"/>
+        <source>Unable to create layout of class &apos;%1&apos; requested by appender &apos;%2&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../log4qt/propertyconfigurator.cpp" line="428"/>
         <source>Missing layout definition for appender &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../log4qt/propertyconfigurator.cpp" line="438"/>
-        <source>Unable to create layoput of class &apos;%1&apos; requested by appender &apos;%2&apos;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

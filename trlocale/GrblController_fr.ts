@@ -14,6 +14,10 @@
         <translation>Le programme est fourni en l&apos;état SANS GARANTIE D&apos;AUCUNE SORTE, MEME LES GARANTIES DE CONCEPTION, MARCHANDE ET D&apos;ADAPTATION À UN USAGE PARTICULIER.</translation>
     </message>
     <message>
+        <source>Grbl Controller</source>
+        <translation type="obsolete">Controleur Grbl</translation>
+    </message>
+    <message>
         <location filename="../about.ui" line="84"/>
         <source>Grbl Controller 4</source>
         <translation>Controleur Grbl 4</translation>
@@ -348,12 +352,12 @@
     <message>
         <location filename="../log4qt/appenderskeleton.cpp" line="228"/>
         <source>Use of non activated appender &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisation de  &apos;Appender&apos;  &apos;%1&apos; non activé</translation>
     </message>
     <message>
         <location filename="../log4qt/appenderskeleton.cpp" line="236"/>
         <source>Use of closed appender &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisation de  &apos;Appender&apos;  &apos;%1&apos; fermé</translation>
     </message>
     <message>
         <location filename="../log4qt/appenderskeleton.cpp" line="244"/>
@@ -366,12 +370,12 @@
     <message>
         <location filename="../log4qt/dailyrollingfileappender.cpp" line="148"/>
         <source>Use of appender &apos;%1&apos; without having a valid date pattern set</source>
-        <translation type="unfinished"></translation>
+        <translation>Utiliation de  &apos;Appender&apos;  &apos;%1&apos; sans un modèle valide initialisé</translation>
     </message>
     <message>
         <location filename="../log4qt/dailyrollingfileappender.cpp" line="215"/>
         <source>The pattern &apos;%1&apos; does not specify a frequency for appender &apos;%2&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Le modème &apos;%1&apos;  ne spécifie aucune fréquence pour 4Appender&apos; &apos;%2&apos;</translation>
     </message>
 </context>
 <context>
@@ -379,32 +383,32 @@
     <message>
         <location filename="../log4qt/helpers/factory.cpp" line="262"/>
         <source>Cannot convert to type &apos;%1&apos; for property &apos;%2&apos; on object of class &apos;%3&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>La conversion de type &apos;%1&apos; de la propriété &apos;%2&apos; de l&apos;objet de classe &apos;%3&apos; est impossible.</translation>
     </message>
     <message>
         <location filename="../log4qt/helpers/factory.cpp" line="375"/>
         <source>Unable to set property value on object</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;inialiser la valeur de la propriété de l&apos;objet.</translation>
     </message>
     <message>
         <location filename="../log4qt/helpers/factory.cpp" line="381"/>
         <source>Invalid null object pointer</source>
-        <translation type="unfinished"></translation>
+        <translation>Pointeur d&apos;objet &apos;null&apos; invalide</translation>
     </message>
     <message>
         <location filename="../log4qt/helpers/factory.cpp" line="390"/>
         <source>Invalid empty property name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom de propriété invalide (vide)</translation>
     </message>
     <message>
         <location filename="../log4qt/helpers/factory.cpp" line="408"/>
         <source>Property &apos;%1&apos; does not exist in class &apos;%2&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>La propriété &apos;%1&apos; n&apos;existe pas dans la classe &apos;%2&apos;</translation>
     </message>
     <message>
         <location filename="../log4qt/helpers/factory.cpp" line="421"/>
         <source>Property &apos;%1&apos; is not writable in class &apos;%2&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>La propriété &apos;%1&apos; ne peut être modifiée dans la classe &apos;%2&apos;</translation>
     </message>
 </context>
 <context>
@@ -412,32 +416,32 @@
     <message>
         <location filename="../log4qt/fileappender.cpp" line="131"/>
         <source>Activation of Appender &apos;%1&apos; that requires file and has no file set</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;activation de &apos;Appender&apos; &apos;%1&apos; nécessite un fichier associé</translation>
     </message>
     <message>
         <location filename="../log4qt/fileappender.cpp" line="161"/>
         <source>Use of appender &apos;%1&apos; without open file</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisation de  &apos;Appender&apos;  &apos;%1&apos; sans fichier ouvert</translation>
     </message>
     <message>
         <location filename="../log4qt/fileappender.cpp" line="224"/>
         <source>Unable to write to file &apos;%1&apos; for appender &apos;%2&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;écrire dans le fichier &apos;%1&apos; pour &apos;Appender&apos; &apos;%2&apos;</translation>
     </message>
     <message>
         <location filename="../log4qt/fileappender.cpp" line="258"/>
         <source>Unable to open file &apos;%1&apos; for appender &apos;%2&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;ouvrir le fichier &apos;%1&apos; pour &apos;Appender&apos; &apos;%2&apos;</translation>
     </message>
     <message>
         <location filename="../log4qt/fileappender.cpp" line="276"/>
         <source>Unable to remove file &apos;%1&apos; for appender &apos;%2&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de supprimer le fichier &apos;%1&apos; pour &apos;Appender&apos; &apos;%2&apos;</translation>
     </message>
     <message>
         <location filename="../log4qt/fileappender.cpp" line="292"/>
         <source>Unable to rename file &apos;%1&apos; to &apos;%2&apos; for appender &apos;%3&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de renommer le fichier &apos;%1&apos; en &apos;%2&apos; pour &apos;Appender&apos; &apos;%3&apos;</translation>
     </message>
 </context>
 <context>
@@ -445,32 +449,32 @@
     <message>
         <location filename="../log4qt/helpers/optionconverter.cpp" line="103"/>
         <source>Missing closing bracket for opening bracket at %1. Invalid subsitution in value %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Parenthèse fermante manquante pour la parenthèse ouvrante &apos;%1&apos;. Valeur de substitution &apos;%2&apos;  invalide</translation>
     </message>
     <message>
         <location filename="../log4qt/helpers/optionconverter.cpp" line="151"/>
         <source>Invalid option string &apos;%1&apos; for a boolean</source>
-        <translation type="unfinished"></translation>
+        <translation>Option chaîne &apos;%1&apos; invalide pour un booléen </translation>
     </message>
     <message>
         <location filename="../log4qt/helpers/optionconverter.cpp" line="207"/>
         <source>Invalid option string &apos;%1&apos; for a file size</source>
-        <translation type="unfinished"></translation>
+        <translation>Option chaîne &apos;%1&apos; invalide pour la taille d&apos;un fichier</translation>
     </message>
     <message>
         <location filename="../log4qt/helpers/optionconverter.cpp" line="227"/>
         <source>Invalid option string &apos;%1&apos; for an integer</source>
-        <translation type="unfinished"></translation>
+        <translation>Option chaîne &apos;%1&apos; invalide pour un entier </translation>
     </message>
     <message>
         <location filename="../log4qt/helpers/optionconverter.cpp" line="246"/>
         <source>Invalid option string &apos;%1&apos; for a level</source>
-        <translation type="unfinished"></translation>
+        <translation>Option chaîne &apos;%1&apos; invalide pour un niveau </translation>
     </message>
     <message>
         <location filename="../log4qt/helpers/optionconverter.cpp" line="285"/>
         <source>Invalid option string &apos;%1&apos; for a target</source>
-        <translation type="unfinished"></translation>
+        <translation>Option chaîne &apos;%1&apos; invalide pour une cible </translation>
     </message>
 </context>
 <context>
@@ -478,17 +482,17 @@
     <message>
         <location filename="../log4qt/helpers/patternformatter.cpp" line="535"/>
         <source>Found character &apos;%1&apos; where digit was expected.</source>
-        <translation type="unfinished"></translation>
+        <translation>On trouve un  caractère&apos;%1&apos;, alors qu&apos;un chiffre est attendu.</translation>
     </message>
     <message>
         <location filename="../log4qt/helpers/patternformatter.cpp" line="620"/>
         <source>Option &apos;%1&apos; cannot be converted into an integer</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;option &apos;%1&apos; ne peut-être convertie vers un entier</translation>
     </message>
     <message>
         <location filename="../log4qt/helpers/patternformatter.cpp" line="628"/>
         <source>Option %1 isn&apos;t a positive integer</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;option &apos;%1&apos; n&apos;est pas un entier positif</translation>
     </message>
 </context>
 <context>
@@ -496,32 +500,40 @@
     <message>
         <location filename="../log4qt/propertyconfigurator.cpp" line="146"/>
         <source>Unable to open property file &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;ouvrir le fichier de propriétés &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../log4qt/propertyconfigurator.cpp" line="158"/>
         <source>Unable to read property file &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de lire le fichier de propriétés &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../log4qt/propertyconfigurator.cpp" line="370"/>
         <source>Missing appender definition for appender named &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>La définition de &apos;appender&apos; est manquente pour &apos;Appender&apos; nommé &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../log4qt/propertyconfigurator.cpp" line="380"/>
+        <source>Unable to create appender of class &apos;%1&apos; named &apos;%2&apos;</source>
+        <translation>La création de la classe &apos;Appender&apos;&apos;%1&apos; nommée &apos;%2&apos; est impossible</translation>
+    </message>
+    <message>
+        <location filename="../log4qt/propertyconfigurator.cpp" line="438"/>
+        <source>Unable to create layout of class &apos;%1&apos; requested by appender &apos;%2&apos;</source>
+        <translation>Impossible de créer la structure de classe &apos;%1&apos; attendu par &apos;%2&apos;</translation>
+    </message>
+    <message>
         <source>Unable to create appender of class &apos;%1&apos; namd &apos;%2&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">La création de la classe &apos;Appender&apos;&apos;%1&apos; nommée &apos;%2&apos; est impossible</translation>
     </message>
     <message>
         <location filename="../log4qt/propertyconfigurator.cpp" line="428"/>
         <source>Missing layout definition for appender &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>La définition de la structure est manquante pour &apos;Appender&apos; &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../log4qt/propertyconfigurator.cpp" line="438"/>
         <source>Unable to create layoput of class &apos;%1&apos; requested by appender &apos;%2&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Impossible de créer la structure de classe &apos;%1&apos; attendu par &apos;%2&apos;</translation>
     </message>
 </context>
 <context>
@@ -704,6 +716,15 @@ GRBL</translation>
         <translation>Vitesse du port</translation>
     </message>
     <message>
+        <source>Advanced</source>
+        <translation type="obsolete">Avancé</translation>
+    </message>
+    <message>
+        <source>GRBL Settings</source>
+        <translation type="obsolete">Configuratiion
+GRBL</translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="1480"/>
         <source>&amp;Help</source>
         <translation>&amp;Aide</translation>
@@ -763,6 +784,10 @@ Vos paramètres ont été modifiés pour permettre ce mode. Pourquoi? Parce qu&a
         <location filename="../mainwindow.cpp" line="482"/>
         <source>Resetting port to restart controller</source>
         <translation>L&apos;initilisation du port initialise le contrôleur</translation>
+    </message>
+    <message>
+        <source>Do you want to zero the displayed position before proceeding?</source>
+        <translation type="obsolete">Voulez-vous afficher la postion zéro avant de démarrer ?</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="656"/>
@@ -863,6 +888,10 @@ Vos paramètres ont été modifiés pour permettre ce mode. Pourquoi? Parce qu&a
         <translation>Mise au point sauvée dans le répertoire d&apos;accueil (+ redémarrage)</translation>
     </message>
     <message>
+        <source>Enable 4-axis mode</source>
+        <translation type="obsolete">Valider le mode 4 axes</translation>
+    </message>
+    <message>
         <location filename="../options.ui" line="310"/>
         <source>Command Filtering</source>
         <translation>Filtrage des commandes</translation>
@@ -894,7 +923,7 @@ Vos paramètres ont été modifiés pour permettre ce mode. Pourquoi? Parce qu&a
     <message>
         <location filename="../rs232.cpp" line="203"/>
         <source>Error writing to port. Write data lost!</source>
-        <translation>Erreu d&apos;écriture sur le port. Les données à écrire sont perdues</translation>
+        <translation>Erreur d&apos;écriture sur le port. Les données à écrire sont perdues</translation>
     </message>
     <message>
         <location filename="../renderitemlist.cpp" line="156"/>
