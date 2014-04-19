@@ -7,9 +7,8 @@
  * Software is provided AS-IS
  ****************************************************************/
 #include "timer.h"
-#/// <---
-Timer::Timer()
-    : timing(false)
+Timer::Timer(QObject *parent) :
+    QObject(parent), timing(false)
 {
     startTimer(500);
 }

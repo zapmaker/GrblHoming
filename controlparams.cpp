@@ -5,6 +5,7 @@ ControlParams::ControlParams()
             useMm(true), zRateLimit(false), zRateLimitAmount(DEFAULT_Z_LIMIT_RATE),
             xyRateAmount(DEFAULT_XY_RATE),
             useAggressivePreload(false), filterFileCommands(false),
-            reducePrecision(false), grblLineBufferLen(DEFAULT_GRBL_LINE_BUFFER_LEN)
+            reducePrecision(false), grblLineBufferLen(DEFAULT_GRBL_LINE_BUFFER_LEN),
+            useFourAxis(false), charSendDelayMs(DEFAULT_CHAR_SEND_DELAY_MS)
 {
 }

@@ -9,8 +9,6 @@
 #include "renderitemlist.h"
 #include "arcitem.h"
 #include "lineitem.h"
-/// LETARTARE
-// #include "renderitemlist.h"
 
 class RenderArea : public QWidget
 {

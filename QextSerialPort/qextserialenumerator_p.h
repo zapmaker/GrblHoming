@@ -73,7 +73,7 @@ class QextSerialEnumeratorPrivate
 {
     Q_DECLARE_PUBLIC(QextSerialEnumerator)
 public:
-    QextSerialEnumeratorPrivate(QextSerialEnumerator * enumrator);
+    QextSerialEnumeratorPrivate(QextSerialEnumerator *enumrator);
     ~QextSerialEnumeratorPrivate();
     void platformSpecificInit();
     void platformSpecificDestruct();
@@ -82,10 +82,10 @@ public:
     bool setUpNotifications_sys(bool setup);
 
 #ifdef Q_OS_WIN
-    LRESULT onDeviceChanged( WPARAM wParam, LPARAM lParam );
-    bool matchAndDispatchChangedDevice(const QString & deviceID, const GUID & guid, WPARAM wParam);
+    LRESULT onDeviceChanged(WPARAM wParam, LPARAM lParam);
+    bool matchAndDispatchChangedDevice(const QString &deviceID, const GUID &guid, WPARAM wParam);
 #  ifdef QT_GUI_LIB
-    QextSerialRegistrationWidget* notificationWidget;
+    QextSerialRegistrationWidget *notificationWidget;
 #  endif
 #endif /*Q_OS_WIN*/
 
@@ -94,12 +94,12 @@ public:
      * Search for serial ports using IOKit.
      *    \param infoList list with result.
      */
-    static void iterateServicesOSX(io_object_t service, QList<QextPortInfo> & infoList);
-    static bool getServiceDetailsOSX( io_object_t service, QextPortInfo* portInfo );
-    void onDeviceDiscoveredOSX( io_object_t service );
-    void onDeviceTerminatedOSX( io_object_t service );
-    friend void deviceDiscoveredCallbackOSX( void *ctxt, io_iterator_t serialPortIterator );
-    friend void deviceTerminatedCallbackOSX( void *ctxt, io_iterator_t serialPortIterator );
+    static void iterateServicesOSX(io_object_t service, QList<QextPortInfo> &infoList);
+    static bool getServiceDetailsOSX(io_object_t service, QextPortInfo *portInfo);
+    void onDeviceDiscoveredOSX(io_object_t service);
+    void onDeviceTerminatedOSX(io_object_t service);
+    friend void deviceDiscoveredCallbackOSX(void *ctxt, io_iterator_t serialPortIterator);
+    friend void deviceTerminatedCallbackOSX(void *ctxt, io_iterator_t serialPortIterator);
 
     IONotificationPortRef notificationPortRef;
 #endif // Q_OS_MAC
@@ -114,7 +114,7 @@ public:
 #endif
 
 private:
-    QextSerialEnumerator * q_ptr;
+    QextSerialEnumerator *q_ptr;
 };
 
 #endif //_QEXTSERIALENUMERATOR_P_H_

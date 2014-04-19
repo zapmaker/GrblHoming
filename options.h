@@ -18,9 +18,7 @@
 
 #include "definitions.h"
 
-/// LETARTARE
 #define SETTINGS_INVERSE_C                  "inverse.c"
-/// <--
 #define SETTINGS_INVERSE_X                  "inverse.x"
 #define SETTINGS_INVERSE_Y                  "inverse.y"
 #define SETTINGS_INVERSE_Z                  "inverse.z"
@@ -33,6 +31,7 @@
 #define SETTINGS_Z_RATE_LIMIT               "zRateLimit"
 #define SETTINGS_Z_RATE_LIMIT_AMOUNT        "zRateLimitAmount"
 #define SETTINGS_XY_RATE_AMOUNT             "xyRateAmount"
+#define SETTINGS_FOUR_AXIS                  "fourAxis"
 
 #define SETTINGS_FILE_OPEN_DIALOG_STATE     "fileopendialogstate"
 #define SETTINGS_NAME_FILTER                "namefilter"
@@ -45,6 +44,7 @@
 #define SETTINGS_FILTER_FILE_COMMANDS       "filterFileCommands"
 #define SETTINGS_REDUCE_PREC_FOR_LONG_LINES "reducePrecisionForLongLines"
 #define SETTINGS_GRBL_LINE_BUFFER_LEN       "grblLineBufferLen"
+#define SETTINGS_CHAR_SEND_DELAY_MS         "charSendDelayMs"
 
 
 namespace Ui {
@@ -66,6 +66,7 @@ signals:
 private slots:
     void toggleUseMm(bool useMm);
     void toggleLimitZRate(bool limitZ);
+    void toggleFourAxis(bool four);
 
 private:
     Ui::Options *ui;

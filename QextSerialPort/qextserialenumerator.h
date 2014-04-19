@@ -51,15 +51,15 @@ class QEXTSERIALPORT_EXPORT QextSerialEnumerator : public QObject
     Q_OBJECT
     Q_DECLARE_PRIVATE(QextSerialEnumerator)
 public:
-    QextSerialEnumerator(QObject * parent=0);
+    QextSerialEnumerator(QObject *parent=0);
     ~QextSerialEnumerator();
 
     static QList<QextPortInfo> getPorts();
     void setUpNotifications();
 
 Q_SIGNALS:
-    void deviceDiscovered(const QextPortInfo & info);
-    void deviceRemoved(const QextPortInfo & info);
+    void deviceDiscovered(const QextPortInfo &info);
+    void deviceRemoved(const QextPortInfo &info);
 
 private:
     Q_DISABLE_COPY(QextSerialEnumerator)

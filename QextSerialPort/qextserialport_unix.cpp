@@ -70,30 +70,30 @@ bool QextSerialPortPrivate::open_sys(QIODevice::OpenMode mode)
 
         /*In the Private class, We can not call QIODevice::open()*/
         q->setOpenMode(mode);             // Flag the port as opened
-        ::tcgetattr(fd, &old_termios);    // Save the old termios
-        Posix_CommConfig = old_termios;   // Make a working copy
-        ::cfmakeraw(&Posix_CommConfig);   // Enable raw access
+        ::tcgetattr(fd, &oldTermios);    // Save the old termios
+        currentTermios = oldTermios;   // Make a working copy
+        ::cfmakeraw(&currentTermios);   // Enable raw access
 
         /*set up other port settings*/
-        Posix_CommConfig.c_cflag |= CREAD|CLOCAL;
-        Posix_CommConfig.c_lflag &= (~(ICANON|ECHO|ECHOE|ECHOK|ECHONL|ISIG));
-        Posix_CommConfig.c_iflag &= (~(INPCK|IGNPAR|PARMRK|ISTRIP|ICRNL|IXANY));
-        Posix_CommConfig.c_oflag &= (~OPOST);
-        Posix_CommConfig.c_cc[VMIN] = 0;
+        currentTermios.c_cflag |= CREAD|CLOCAL;
+        currentTermios.c_lflag &= (~(ICANON|ECHO|ECHOE|ECHOK|ECHONL|ISIG));
+        currentTermios.c_iflag &= (~(INPCK|IGNPAR|PARMRK|ISTRIP|ICRNL|IXANY));
+        currentTermios.c_oflag &= (~OPOST);
+        currentTermios.c_cc[VMIN] = 0;
 #ifdef _POSIX_VDISABLE  // Is a disable character available on this system?
         // Some systems allow for per-device disable-characters, so get the
         //  proper value for the configured device
         const long vdisable = ::fpathconf(fd, _PC_VDISABLE);
-        Posix_CommConfig.c_cc[VINTR] = vdisable;
-        Posix_CommConfig.c_cc[VQUIT] = vdisable;
-        Posix_CommConfig.c_cc[VSTART] = vdisable;
-        Posix_CommConfig.c_cc[VSTOP] = vdisable;
-        Posix_CommConfig.c_cc[VSUSP] = vdisable;
+        currentTermios.c_cc[VINTR] = vdisable;
+        currentTermios.c_cc[VQUIT] = vdisable;
+        currentTermios.c_cc[VSTART] = vdisable;
+        currentTermios.c_cc[VSTOP] = vdisable;
+        currentTermios.c_cc[VSUSP] = vdisable;
 #endif //_POSIX_VDISABLE
         settingsDirtyFlags = DFE_ALL;
         updatePortSettings();
 
-        if (_queryMode == QextSerialPort::EventDriven) {
+        if (queryMode == QextSerialPort::EventDriven) {
             readNotifier = new QSocketNotifier(fd, QSocketNotifier::Read, q);
             q->connect(readNotifier, SIGNAL(activated(int)), q, SLOT(_q_canRead()));
         }
@@ -109,9 +109,9 @@ bool QextSerialPortPrivate::close_sys()
     // Force a flush and then restore the original termios
     flush_sys();
     // Using both TCSAFLUSH and TCSANOW here discards any pending input
-    ::tcsetattr(fd, TCSAFLUSH | TCSANOW, &old_termios);   // Restore termios
+    ::tcsetattr(fd, TCSAFLUSH | TCSANOW, &oldTermios);   // Restore termios
     ::close(fd);
-    if(readNotifier) {
+    if (readNotifier) {
         delete readNotifier;
         readNotifier = 0;
     }
@@ -186,12 +186,12 @@ unsigned long QextSerialPortPrivate::lineStatus_sys()
     ::ioctl(fd, TIOCMGET, &Temp);
     if (Temp & TIOCM_CTS) Status |= LS_CTS;
     if (Temp & TIOCM_DSR) Status |= LS_DSR;
-    if (Temp & TIOCM_RI ) Status |= LS_RI;
-    if (Temp & TIOCM_CD ) Status |= LS_DCD;
+    if (Temp & TIOCM_RI) Status |= LS_RI;
+    if (Temp & TIOCM_CD) Status |= LS_DCD;
     if (Temp & TIOCM_DTR) Status |= LS_DTR;
     if (Temp & TIOCM_RTS) Status |= LS_RTS;
-    if (Temp & TIOCM_ST ) Status |= LS_ST;
-    if (Temp & TIOCM_SR ) Status |= LS_SR;
+    if (Temp & TIOCM_ST) Status |= LS_ST;
+    if (Temp & TIOCM_SR) Status |= LS_SR;
     return Status;
 }
 
@@ -203,7 +203,7 @@ unsigned long QextSerialPortPrivate::lineStatus_sys()
     \warning before calling this function ensure that serial port associated with this class
     is currently open (use isOpen() function to check if port is open).
 */
-qint64 QextSerialPortPrivate::readData_sys(char * data, qint64 maxSize)
+qint64 QextSerialPortPrivate::readData_sys(char *data, qint64 maxSize)
 {
     int retVal = ::read(fd, data, maxSize);
     if (retVal == -1)
@@ -220,7 +220,7 @@ qint64 QextSerialPortPrivate::readData_sys(char * data, qint64 maxSize)
     \warning before calling this function ensure that serial port associated with this class
     is currently open (use isOpen() function to check if port is open).
 */
-qint64 QextSerialPortPrivate::writeData_sys(const char * data, qint64 maxSize)
+qint64 QextSerialPortPrivate::writeData_sys(const char *data, qint64 maxSize)
 {
     int retVal = ::write(fd, data, maxSize);
     if (retVal == -1)
@@ -249,154 +249,159 @@ void QextSerialPortPrivate::updatePortSettings()
         return;
 
     if (settingsDirtyFlags & DFE_BaudRate) {
-        switch (Settings.BaudRate) {
+        switch (settings.BaudRate) {
         case BAUD50:
-            setBaudRate2Termios(&Posix_CommConfig, B50);
+            setBaudRate2Termios(&currentTermios, B50);
             break;
         case BAUD75:
-            setBaudRate2Termios(&Posix_CommConfig, B75);
+            setBaudRate2Termios(&currentTermios, B75);
             break;
         case BAUD110:
-            setBaudRate2Termios(&Posix_CommConfig, B110);
+            setBaudRate2Termios(&currentTermios, B110);
             break;
         case BAUD134:
-            setBaudRate2Termios(&Posix_CommConfig, B134);
+            setBaudRate2Termios(&currentTermios, B134);
             break;
         case BAUD150:
-            setBaudRate2Termios(&Posix_CommConfig, B150);
+            setBaudRate2Termios(&currentTermios, B150);
             break;
         case BAUD200:
-            setBaudRate2Termios(&Posix_CommConfig, B200);
+            setBaudRate2Termios(&currentTermios, B200);
             break;
         case BAUD300:
-            setBaudRate2Termios(&Posix_CommConfig, B300);
+            setBaudRate2Termios(&currentTermios, B300);
             break;
         case BAUD600:
-            setBaudRate2Termios(&Posix_CommConfig, B600);
+            setBaudRate2Termios(&currentTermios, B600);
             break;
         case BAUD1200:
-            setBaudRate2Termios(&Posix_CommConfig, B1200);
+            setBaudRate2Termios(&currentTermios, B1200);
             break;
         case BAUD1800:
-            setBaudRate2Termios(&Posix_CommConfig, B1800);
+            setBaudRate2Termios(&currentTermios, B1800);
             break;
         case BAUD2400:
-            setBaudRate2Termios(&Posix_CommConfig, B2400);
+            setBaudRate2Termios(&currentTermios, B2400);
             break;
         case BAUD4800:
-            setBaudRate2Termios(&Posix_CommConfig, B4800);
+            setBaudRate2Termios(&currentTermios, B4800);
             break;
         case BAUD9600:
-            setBaudRate2Termios(&Posix_CommConfig, B9600);
+            setBaudRate2Termios(&currentTermios, B9600);
             break;
         case BAUD19200:
-            setBaudRate2Termios(&Posix_CommConfig, B19200);
+            setBaudRate2Termios(&currentTermios, B19200);
             break;
         case BAUD38400:
-            setBaudRate2Termios(&Posix_CommConfig, B38400);
+            setBaudRate2Termios(&currentTermios, B38400);
             break;
         case BAUD57600:
-            setBaudRate2Termios(&Posix_CommConfig, B57600);
+            setBaudRate2Termios(&currentTermios, B57600);
             break;
 #ifdef B76800
         case BAUD76800:
-            setBaudRate2Termios(&Posix_CommConfig, B76800);
+            setBaudRate2Termios(&currentTermios, B76800);
             break;
 #endif
         case BAUD115200:
-            setBaudRate2Termios(&Posix_CommConfig, B115200);
+            setBaudRate2Termios(&currentTermios, B115200);
             break;
 #if defined(B230400) && defined(B4000000)
         case BAUD230400:
-            setBaudRate2Termios(&Posix_CommConfig, B230400);
+            setBaudRate2Termios(&currentTermios, B230400);
             break;
         case BAUD460800:
-            setBaudRate2Termios(&Posix_CommConfig, B460800);
+            setBaudRate2Termios(&currentTermios, B460800);
             break;
         case BAUD500000:
-            setBaudRate2Termios(&Posix_CommConfig, B500000);
+            setBaudRate2Termios(&currentTermios, B500000);
             break;
         case BAUD576000:
-            setBaudRate2Termios(&Posix_CommConfig, B576000);
+            setBaudRate2Termios(&currentTermios, B576000);
             break;
         case BAUD921600:
-            setBaudRate2Termios(&Posix_CommConfig, B921600);
+            setBaudRate2Termios(&currentTermios, B921600);
             break;
         case BAUD1000000:
-            setBaudRate2Termios(&Posix_CommConfig, B1000000);
+            setBaudRate2Termios(&currentTermios, B1000000);
             break;
         case BAUD1152000:
-            setBaudRate2Termios(&Posix_CommConfig, B1152000);
+            setBaudRate2Termios(&currentTermios, B1152000);
             break;
         case BAUD1500000:
-            setBaudRate2Termios(&Posix_CommConfig, B1500000);
+            setBaudRate2Termios(&currentTermios, B1500000);
             break;
         case BAUD2000000:
-            setBaudRate2Termios(&Posix_CommConfig, B2000000);
+            setBaudRate2Termios(&currentTermios, B2000000);
             break;
         case BAUD2500000:
-            setBaudRate2Termios(&Posix_CommConfig, B2500000);
+            setBaudRate2Termios(&currentTermios, B2500000);
             break;
         case BAUD3000000:
-            setBaudRate2Termios(&Posix_CommConfig, B3000000);
+            setBaudRate2Termios(&currentTermios, B3000000);
             break;
         case BAUD3500000:
-            setBaudRate2Termios(&Posix_CommConfig, B3500000);
+            setBaudRate2Termios(&currentTermios, B3500000);
             break;
         case BAUD4000000:
-            setBaudRate2Termios(&Posix_CommConfig, B4000000);
+            setBaudRate2Termios(&currentTermios, B4000000);
+            break;
+#endif
+#ifdef Q_OS_MAC
+        default:
+            setBaudRate2Termios(&currentTermios, settings.BaudRate);
             break;
 #endif
         }
     }
     if (settingsDirtyFlags & DFE_Parity) {
-        switch (Settings.Parity) {
+        switch (settings.Parity) {
         case PAR_SPACE:
             /*space parity not directly supported - add an extra data bit to simulate it*/
             settingsDirtyFlags |= DFE_DataBits;
             break;
         case PAR_NONE:
-            Posix_CommConfig.c_cflag &= (~PARENB);
+            currentTermios.c_cflag &= (~PARENB);
             break;
         case PAR_EVEN:
-            Posix_CommConfig.c_cflag &= (~PARODD);
-            Posix_CommConfig.c_cflag |= PARENB;
+            currentTermios.c_cflag &= (~PARODD);
+            currentTermios.c_cflag |= PARENB;
             break;
         case PAR_ODD:
-            Posix_CommConfig.c_cflag |= (PARENB|PARODD);
+            currentTermios.c_cflag |= (PARENB|PARODD);
             break;
         }
     }
     /*must after Parity settings*/
     if (settingsDirtyFlags & DFE_DataBits) {
-        if (Settings.Parity != PAR_SPACE) {
-            Posix_CommConfig.c_cflag &= (~CSIZE);
-            switch(Settings.DataBits) {
+        if (settings.Parity != PAR_SPACE) {
+            currentTermios.c_cflag &= (~CSIZE);
+            switch(settings.DataBits) {
             case DATA_5:
-                Posix_CommConfig.c_cflag |= CS5;
+                currentTermios.c_cflag |= CS5;
                 break;
             case DATA_6:
-                Posix_CommConfig.c_cflag |= CS6;
+                currentTermios.c_cflag |= CS6;
                 break;
             case DATA_7:
-                Posix_CommConfig.c_cflag |= CS7;
+                currentTermios.c_cflag |= CS7;
                 break;
             case DATA_8:
-                Posix_CommConfig.c_cflag |= CS8;
+                currentTermios.c_cflag |= CS8;
                 break;
             }
         } else {
             /*space parity not directly supported - add an extra data bit to simulate it*/
-            Posix_CommConfig.c_cflag &= ~(PARENB|CSIZE);
-            switch(Settings.DataBits) {
+            currentTermios.c_cflag &= ~(PARENB|CSIZE);
+            switch(settings.DataBits) {
             case DATA_5:
-                Posix_CommConfig.c_cflag |= CS6;
+                currentTermios.c_cflag |= CS6;
                 break;
             case DATA_6:
-                Posix_CommConfig.c_cflag |= CS7;
+                currentTermios.c_cflag |= CS7;
                 break;
             case DATA_7:
-                Posix_CommConfig.c_cflag |= CS8;
+                currentTermios.c_cflag |= CS8;
                 break;
             case DATA_8:
                 /*this will never happen, put here to Suppress an warning*/
@@ -405,39 +410,39 @@ void QextSerialPortPrivate::updatePortSettings()
         }
     }
     if (settingsDirtyFlags & DFE_StopBits) {
-        switch (Settings.StopBits) {
+        switch (settings.StopBits) {
         case STOP_1:
-            Posix_CommConfig.c_cflag &= (~CSTOPB);
+            currentTermios.c_cflag &= (~CSTOPB);
             break;
         case STOP_2:
-            Posix_CommConfig.c_cflag |= CSTOPB;
+            currentTermios.c_cflag |= CSTOPB;
             break;
         }
     }
     if (settingsDirtyFlags & DFE_Flow) {
-        switch(Settings.FlowControl) {
+        switch(settings.FlowControl) {
         case FLOW_OFF:
-            Posix_CommConfig.c_cflag &= (~CRTSCTS);
-            Posix_CommConfig.c_iflag &= (~(IXON|IXOFF|IXANY));
+            currentTermios.c_cflag &= (~CRTSCTS);
+            currentTermios.c_iflag &= (~(IXON|IXOFF|IXANY));
             break;
         case FLOW_XONXOFF:
             /*software (XON/XOFF) flow control*/
-            Posix_CommConfig.c_cflag &= (~CRTSCTS);
-            Posix_CommConfig.c_iflag |= (IXON|IXOFF|IXANY);
+            currentTermios.c_cflag &= (~CRTSCTS);
+            currentTermios.c_iflag |= (IXON|IXOFF|IXANY);
             break;
         case FLOW_HARDWARE:
-            Posix_CommConfig.c_cflag |= CRTSCTS;
-            Posix_CommConfig.c_iflag &= (~(IXON|IXOFF|IXANY));
+            currentTermios.c_cflag |= CRTSCTS;
+            currentTermios.c_iflag &= (~(IXON|IXOFF|IXANY));
             break;
         }
     }
 
-    /*if any thing in Posix_CommConfig changed, flush*/
+    /*if any thing in currentTermios changed, flush*/
     if (settingsDirtyFlags & DFE_Settings_Mask)
-        ::tcsetattr(fd, TCSAFLUSH, &Posix_CommConfig);
+        ::tcsetattr(fd, TCSAFLUSH, &currentTermios);
 
     if (settingsDirtyFlags & DFE_TimeOut) {
-        int millisec = Settings.Timeout_Millisec;
+        int millisec = settings.Timeout_Millisec;
         if (millisec == -1) {
             ::fcntl(fd, F_SETFL, O_NDELAY);
         }
@@ -446,9 +451,9 @@ void QextSerialPortPrivate::updatePortSettings()
             //however this seems not working on Linux 2.6.21 (works on OpenBSD 4.2)
             ::fcntl(fd, F_SETFL, O_SYNC);
         }
-        ::tcgetattr(fd, & Posix_CommConfig);
-        Posix_CommConfig.c_cc[VTIME] = millisec/100;
-        ::tcsetattr(fd, TCSAFLUSH, & Posix_CommConfig);
+        ::tcgetattr(fd, &currentTermios);
+        currentTermios.c_cc[VTIME] = millisec/100;
+        ::tcsetattr(fd, TCSAFLUSH, &currentTermios);
     }
 
     settingsDirtyFlags = 0;

@@ -2,12 +2,10 @@
 #
 # Project created by QtCreator 2012-02-13 T17:48:40
 #
-# modified by LETARTARE 2013-09-20
+# (fourth axis modifications and translation added by LETARTARE 2013-08-03)
 #-------------------------------------------------
 
-QT       += core gui
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
+QT       += core gui widgets
 
 TARGET = GrblController
 TEMPLATE = app
@@ -101,6 +99,7 @@ OTHER_FILES += \
     android/src/org/kde/necessitas/origo/QtActivity.java \
     android/src/org/kde/necessitas/origo/QtApplication.java \
     android/version.xml
+
 # Translations
-	TRANSLATIONS +=  trlocale/GrblController_xx.ts
-	TRANSLATIONS +=  trlocale/GrblController_fr.ts
+	TRANSLATIONS += trlocale/GrblController_xx.ts
+	TRANSLATIONS += trlocale/GrblController_fr.ts

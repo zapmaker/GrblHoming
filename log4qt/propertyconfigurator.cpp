@@ -5,26 +5,26 @@
  * created:     September 2007
  * author:      Martin Heinrich
  *
- * 
+ *
  * changes      Feb 2009, Martin Heinrich
- *              - Fixed VS 2008 unreferenced formal parameter warning by using 
+ *              - Fixed VS 2008 unreferenced formal parameter warning by using
  *                Q_UNUSED in operator<<.
  *
  *
  * Copyright 2007 - 2009 Martin Heinrich
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  ******************************************************************************/
 
 
@@ -53,47 +53,47 @@
 
 namespace Log4Qt
 {
-	    
-	    
+
+
 	/**************************************************************************
 	 * Declarations
 	 **************************************************************************/
-	
-	
-	
+
+
+
 	/**************************************************************************
 	 * C helper functions
 	 **************************************************************************/
-	
-	
+
+
     LOG4QT_DECLARE_STATIC_LOGGER(logger, Log4Qt::PropertyConfigurator)
-    
-    
-	
+
+
+
 	/**************************************************************************
 	 * Class implementation: PropertyConfigurator
 	 **************************************************************************/
-	
 
-	bool PropertyConfigurator::doConfigure(const Properties &rProperties, 
-                                           LoggerRepository *pLoggerRepository) 
+
+	bool PropertyConfigurator::doConfigure(const Properties &rProperties,
+                                           LoggerRepository *pLoggerRepository)
 	{
         startCaptureErrors();
 		configureFromProperties(rProperties, pLoggerRepository);
 		return stopCaptureErrors();
 	}
-	
-	
-	bool PropertyConfigurator::doConfigure(const QString &rConfigFileName, 
+
+
+	bool PropertyConfigurator::doConfigure(const QString &rConfigFileName,
                                            LoggerRepository *pLoggerRepository)
 	{
         startCaptureErrors();
 		configureFromFile(rConfigFileName, pLoggerRepository);
         return stopCaptureErrors();
 	}
-	
-	
-    bool PropertyConfigurator::doConfigure(const QSettings &rSettings, 
+
+
+    bool PropertyConfigurator::doConfigure(const QSettings &rSettings,
                                            LoggerRepository *pLoggerRepository)
     {
         startCaptureErrors();
@@ -101,28 +101,28 @@ namespace Log4Qt
         return stopCaptureErrors();
     }
 
-    
+
     bool PropertyConfigurator::configure(const Properties &rProperties)
 	{
 		PropertyConfigurator configurator;
 		return configurator.doConfigure(rProperties);
 	}
-	
-	
+
+
     bool PropertyConfigurator::configure(const QString &rConfigFilename)
     {
         PropertyConfigurator configurator;
         return configurator.doConfigure(rConfigFilename);
     }
-    
-    
+
+
     bool PropertyConfigurator::configure(const QSettings &rSettings)
     {
         PropertyConfigurator configurator;
         return configurator.doConfigure(rSettings);
     }
-    
-    
+
+
 	bool PropertyConfigurator::configureAndWatch(const QString &rConfigFileName)
 	{
 		// Stop an existing watch to avoid a possible concurrent configuration
@@ -135,8 +135,8 @@ namespace Log4Qt
 		ConfiguratorHelper::setConfigurationFile(rConfigFileName, configure);
 		return result;
 	}
-	
-	
+
+
 	void PropertyConfigurator::configureFromFile(const QString &rConfigFileName,
                                                  LoggerRepository *pLoggerRepository)
 	{
@@ -165,21 +165,21 @@ namespace Log4Qt
         }
 		configureFromProperties(properties, pLoggerRepository);
 	}
-	
-	
-	void PropertyConfigurator::configureFromProperties(const Properties &rProperties, 
+
+
+	void PropertyConfigurator::configureFromProperties(const Properties &rProperties,
                                                        LoggerRepository *pLoggerRepository)
 	{
 		if (!pLoggerRepository)
 			pLoggerRepository = LogManager::loggerRepository();
-		
+
         configureGlobalSettings(rProperties, pLoggerRepository);
         configureRootLogger(rProperties, pLoggerRepository);
         configureNonRootElements(rProperties, pLoggerRepository);
         mAppenderRegistry.clear();
 	}
-	
-	
+
+
     void PropertyConfigurator::configureFromSettings(const QSettings &rSettings,
                                                      LoggerRepository *pLoggerRepository)
     {
@@ -188,7 +188,7 @@ namespace Log4Qt
         configureFromProperties(properties, pLoggerRepository);
     }
 
-    
+
     void PropertyConfigurator::configureGlobalSettings(const Properties &rProperties,
                                                        LoggerRepository *pLoggerRepository) const
     {
@@ -205,7 +205,7 @@ namespace Log4Qt
         // - Debug: log4j.Debug, log4j.configDebug
         // - Threshold: log4j.threshold
         // - Handle Qt Messages: log4j.handleQtMessages
-        
+
         // Reset
         QString value = rProperties.property(key_reset);
         if (!value.isEmpty() && OptionConverter::toBoolean(value, false))
@@ -215,7 +215,7 @@ namespace Log4Qt
             LogManager::resetConfiguration();
             logger()->debug("Reset configuration");
         }
-            
+
         // Debug
         value = rProperties.property(key_debug);
         if (value.isNull())
@@ -232,16 +232,16 @@ namespace Log4Qt
             if (!ok)
                 level = Level::DEBUG_INT;
             LogManager::logLogger()->setLevel(level);
-            logger()->debug("Set level for Log4Qt logging to %1", 
+            logger()->debug("Set level for Log4Qt logging to %1",
                             LogManager::logLogger()->level().toString());
         }
-        
+
         // Threshold
         value = rProperties.property(key_threshold);
         if (!value.isNull())
         {
             pLoggerRepository->setThreshold(OptionConverter::toLevel(value, Level::ALL_INT));
-            logger()->debug("Set threshold for LoggerRepository to %1", 
+            logger()->debug("Set threshold for LoggerRepository to %1",
                             pLoggerRepository->threshold().toString());
         }
 
@@ -250,17 +250,17 @@ namespace Log4Qt
         if (!value.isNull())
         {
             LogManager::setHandleQtMessages(OptionConverter::toBoolean(value, false));
-            logger()->debug("Set handling of Qt messages LoggerRepository to %1", 
+            logger()->debug("Set handling of Qt messages LoggerRepository to %1",
                             QVariant(LogManager::handleQtMessages()).toString());
         }
     }
 
-    
-    void PropertyConfigurator::configureNonRootElements(const Properties &rProperties, 
+
+    void PropertyConfigurator::configureNonRootElements(const Properties &rProperties,
                                                         LoggerRepository *pLoggerRepository)
     {
         Q_ASSERT_X(pLoggerRepository, "PropertyConfigurator::configureNonRootElements()", "pLoggerRepository must not be null.");
-    
+
         const QString logger_prefix = QLatin1String("log4j.logger.");
         const QString category_prefix = QLatin1String("log4j.category.");
 
@@ -269,7 +269,7 @@ namespace Log4Qt
         // - Convert JAVA class names to C++ ones
         // - Parse logger data (Level, Appender)
         // - Parse logger additivity
-        
+
         QStringList keys = rProperties.propertyNames();
         QString key;
         Q_FOREACH(key, keys)
@@ -290,18 +290,18 @@ namespace Log4Qt
         }
     }
 
-    
-    void PropertyConfigurator::configureRootLogger(const Properties &rProperties, 
+
+    void PropertyConfigurator::configureRootLogger(const Properties &rProperties,
                                                    LoggerRepository *pLoggerRepository)
     {
         Q_ASSERT_X(pLoggerRepository, "PropertyConfigurator::configureRootLogger()", "pLoggerRepository must not be null.");
-        
+
         const QLatin1String key_root_logger("log4j.rootLogger");
         const QLatin1String key_root_category("log4j.rootCategory");
-        
+
         // - Test for the logger/category prefix
         // - Parse logger data for root logger
-        
+
         QString key = key_root_logger;
         QString value = OptionConverter::findAndSubst(rProperties, key);
         if (value.isNull())
@@ -314,22 +314,22 @@ namespace Log4Qt
 
         if (value.isNull())
             logger()->debug("Could not find root logger information. Is this correct?");
-        else 
+        else
             parseLogger(rProperties, pLoggerRepository->rootLogger(), key, value);
     }
 
-    
+
     void PropertyConfigurator::parseAdditivityForLogger(const Properties &rProperties,
-                                                        Logger *pLogger, 
+                                                        Logger *pLogger,
                                                         const QString &rLog4jName) const
     {
         Q_ASSERT_X(pLogger, "parseAdditivityForLogger()", "pLogger must not be null.");
 
         const QLatin1String additivity_prefix("log4j.additivity.");
-        
+
         // - Lookup additivity key for logger
         // - Set additivity, if specified
-        
+
         QString key = additivity_prefix + rLog4jName;
         QString value = OptionConverter::findAndSubst(rProperties, key);
         logger()->debug("Parsing additivity for logger: key '%1', value '%2'", key, value);
@@ -340,7 +340,7 @@ namespace Log4Qt
             pLogger->setAdditivity(additivity);
         }
     }
-    
+
 
     LogObjectPtr<Appender> PropertyConfigurator::parseAppender(const Properties &rProperties,
                                                                const QString &rName)
@@ -352,9 +352,9 @@ namespace Log4Qt
         // - Set properties
         // - Activate options
         // - Add appender to registry
-        
+
         const QLatin1String appender_prefix("log4j.appender.");
-        
+
         logger()->debug("Parsing appender named '%1'", rName);
 
         if (mAppenderRegistry.contains(rName))
@@ -385,7 +385,7 @@ namespace Log4Qt
             return 0;
         }
         p_appender->setName(rName);
-        
+
         if (p_appender->requiresLayout())
         {
             LogObjectPtr<Layout> p_layout = parseLayout(rProperties, key);
@@ -394,19 +394,19 @@ namespace Log4Qt
             else
                 return 0;
         }
-        
+
         QStringList exclusions;
         exclusions << QLatin1String("layout");
         setProperties(rProperties, key + QLatin1String("."), exclusions, p_appender);
         AppenderSkeleton *p_appenderskeleton = qobject_cast<AppenderSkeleton *>(p_appender);
-        if (p_appenderskeleton) 
+        if (p_appenderskeleton)
             p_appenderskeleton->activateOptions();
-        
+
         mAppenderRegistry.insert(rName, p_appender);
         return p_appender;
     }
-    
-    
+
+
     LogObjectPtr<Layout> PropertyConfigurator::parseLayout(const Properties &rProperties,
                                                            const QString &rAppenderKey)
     {
@@ -418,7 +418,7 @@ namespace Log4Qt
         // - Activate options
 
         const QLatin1String layout_suffix(".layout");
-        
+
         logger()->debug("Parsing layout for appender named '%1'", rAppenderKey);
 
         QString key = rAppenderKey + layout_suffix;
@@ -442,25 +442,25 @@ namespace Log4Qt
             logger()->error(e);
             return 0;
         }
-        
+
         QStringList exclusions;
         setProperties(rProperties, key + QLatin1String("."), QStringList(), p_layout);
         p_layout->activateOptions();
-        
+
         return p_layout;
     }
-    
-    
-    void PropertyConfigurator::parseLogger(const Properties &rProperties, 
+
+
+    void PropertyConfigurator::parseLogger(const Properties &rProperties,
                                            Logger *pLogger,
                                            const QString &rKey,
                                            const QString &rValue)
     {
         Q_ASSERT_X(pLogger, "PropertyConfigurator::parseLogger()", "pLogger must not be null.");
         Q_ASSERT_X(!rKey.isEmpty(), "PropertyConfigurator::parseLogger()", "rKey must not be empty.");
-        
+
         const QLatin1String keyword_inherited("INHERITED");
-        
+
         // - Split value on comma
         // - If level value, is specified
         //   - Test for NULL and INHERITED
@@ -468,12 +468,12 @@ namespace Log4Qt
         //   - Set level
         // - For each entry
         //   - Create Appender
-        
+
         logger()->debug("Parsing logger: key '%1', value '%2'", rKey, rValue);
         QStringList appenders = rValue.split(QLatin1Char(','));
         QStringListIterator i (appenders);
-        
-        // First entry is the level. There will be always one entry, even if the rValue is 
+
+        // First entry is the level. There will be always one entry, even if the rValue is
         // empty or does not contain a comma.
         QString value = i.next().trimmed();
         if (!value.isEmpty())
@@ -488,11 +488,11 @@ namespace Log4Qt
             else
             {
                 pLogger->setLevel(level);
-                logger()->debug("Set level for logger '%1' to '%2'", 
+                logger()->debug("Set level for logger '%1' to '%2'",
                                 pLogger->name(), pLogger->level().toString());
             }
         }
-        
+
         pLogger->removeAllAppenders();
         while(i.hasNext())
         {
@@ -504,8 +504,8 @@ namespace Log4Qt
                 pLogger->addAppender(p_appender);
         }
     }
-    
-    
+
+
     void PropertyConfigurator::setProperties(const Properties &rProperties,
                                              const QString &rPrefix,
                                              const QStringList &rExclusions,
@@ -513,17 +513,17 @@ namespace Log4Qt
     {
         Q_ASSERT_X(!rPrefix.isEmpty(), "PropertyConfigurator::setProperties()", "rPrefix must not be empty.");
         Q_ASSERT_X(pObject, "PropertyConfigurator::setProperties()", "pObject must not be null.");
-        
+
         // Iterate through all entries:
         // - Test for prefix to determine, if setting is for object
         // - Skip empty property name
         // - Skip property names in exclusion list
         // - Set property on object
-        
+
         logger()->debug("Setting properties for object of class '%1' from keys starting with '%2'",
                         QLatin1String(pObject->metaObject()->className()),
                         rPrefix);
-        
+
         QStringList keys = rProperties.propertyNames();
         QString key;
         Q_FOREACH(key, keys)
@@ -540,49 +540,49 @@ namespace Log4Qt
             Factory::setObjectProperty(pObject, property, value);
         }
     }
-    
-    
+
+
     void PropertyConfigurator::startCaptureErrors()
     {
         Q_ASSERT_X(!mpConfigureErrors, "PropertyConfigurator::startCaptureErrors()", "mpConfigureErrors must be empty.");
-        
+
         mpConfigureErrors = new ListAppender;
         mpConfigureErrors->setName(QLatin1String("PropertyConfigurator"));
         mpConfigureErrors->setConfiguratorList(true);
         mpConfigureErrors->setThreshold(Level::ERROR_INT);
         LogManager::logLogger()->addAppender(mpConfigureErrors);
     }
-    
-    
+
+
     bool PropertyConfigurator::stopCaptureErrors()
     {
         Q_ASSERT_X(mpConfigureErrors, "PropertyConfigurator::stopCaptureErrors()", "mpConfigureErrors must not be empty.");
-        
+
         LogManager::logLogger()->removeAppender(mpConfigureErrors);
         ConfiguratorHelper::setConfigureError(mpConfigureErrors->list());
         bool result = (mpConfigureErrors->list().count() == 0);
         mpConfigureErrors = 0;
         return result;
     }
-    
-    
-    
+
+
+
 	/**************************************************************************
 	 * Implementation: Operators, Helper
 	 **************************************************************************/
-	
-	
+
+
 #ifndef QT_NO_DEBUG_STREAM
 	QDebug operator<<(QDebug debug,
 	                  const PropertyConfigurator &rPropertyConfigurator)
 	{
 		Q_UNUSED(rPropertyConfigurator);
-		debug.nospace() << "PropertyConfigurator(" 
+		debug.nospace() << "PropertyConfigurator("
 		    << ")";
-		return debug.space();    
+		return debug.space();
 	}
 #endif
-	
-	
-	
+
+
+
 } // namespace Logging

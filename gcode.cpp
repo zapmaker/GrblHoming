@@ -16,8 +16,7 @@ GCode::GCode()
       incorrectMeasurementUnits(false), incorrectLcdDisplayUnits(false),
       maxZ(0), motionOccurred(false),
       sliderZCount(0),
-/// LETARTARE
-      numaxis(3)
+      numaxis(DEFAULT_AXIS_COUNT)
 {
     // use base class's timer - use it to capture random text from the controller
     startTimer(1000);
@@ -25,9 +24,13 @@ GCode::GCode()
 
 void GCode::openPort(QString commPortStr, QString baudRate)
 {
+    numaxis = controlParams.useFourAxis ? MAX_AXIS_COUNT : DEFAULT_AXIS_COUNT;
+
     clearToHome();
 
     currComPort = commPortStr;
+
+    port.setCharSendDelayMs(controlParams.charSendDelayMs);
 
     if (port.OpenComport(commPortStr, baudRate))
     {
@@ -101,8 +104,8 @@ void GCode::sendGrblUnlock()
 void GCode::grblSetHome()
 {
     clearToHome();
-/// LETARTARE   + c0
-	if (numaxis == 4)
+
+    if (numaxis == MAX_AXIS_COUNT)
 		gotoXYZC("G92 x0 y0 z0 c0");
 	else
 		gotoXYZC("G92 x0 y0 z0");
@@ -128,8 +131,8 @@ void GCode::goToHome()
     QString zpos = QString::number(maxZOver);
 
     gotoXYZC(QString("G0 z").append(zpos));
-/// LETARTARE
-	if (numaxis == 4)
+
+    if (numaxis == MAX_AXIS_COUNT)
 		gotoXYZC("G1 x0 y0 z0 c0");
 	else
 		gotoXYZC("G1 x0 y0 z0");
@@ -163,12 +166,10 @@ void GCode::sendGcode(QString line)
 
             buf[0] = CTRL_X;
 
-        /// diag("SENDING: 0x%02X (CTRL-X) to check presence of Grbl\n", buf[0])  ;
 			diag(qPrintable(tr("SENDING: 0x%02X (CTRL-X) to check presence of Grbl\n")), buf[0])  ;
             if (!port.SendBuf(buf, 1))
             {
                 QString msg = tr("Sending to port failed");
-            /// LETARTARE
 				err("%s", qPrintable(msg));
                 emit addList(msg);
                 emit sendMsg(msg);
@@ -298,7 +299,7 @@ bool GCode::checkGrbl(const QString& result)
             {
                 int majorVer = list.at(1).toInt();
                 int minorVer = list.at(2).toInt();
-                char letter = 'a';
+                char letter = ' ';
                 if (list.size() == 4 && list.at(3).size() > 0)
                 {
                     letter = list.at(3).toLatin1().at(0);
@@ -327,7 +328,7 @@ bool GCode::sendGcodeInternal(QString line, QString& result, bool recordResponse
     if (!port.isPortOpen())
     {
         QString msg = tr("Port not available yet")  ;
-        err("%s", qPrintable(msg));
+        err("%s", msg.toLocal8Bit().constData());
         emit addList(msg);
         emit sendMsg(msg);
         return false;
@@ -396,7 +397,11 @@ bool GCode::sendGcodeInternal(QString line, QString& result, bool recordResponse
         else
             sendCount.append(CmdResponse(buf, line.length(), currLine));
 
-        waitForOk(result, waitSecActual, false, false, aggressive);
+        //diag("DG Buffer Add %d", sendCount.size());
+
+        emit setQueuedCommands(sendCount.size(), true);
+
+        waitForOk(result, waitSecActual, false, false, aggressive, false);
 
         if (shutdownState.get())
             return false;
@@ -413,7 +418,7 @@ bool GCode::sendGcodeInternal(QString line, QString& result, bool recordResponse
     else
     {
         sentI++;
-        if (!waitForOk(result, waitSecActual, sentReqForLocation, sentReqForParserState, aggressive))
+        if (!waitForOk(result, waitSecActual, sentReqForLocation, sentReqForParserState, aggressive, false))
         {
             diag(qPrintable(tr("WAITFOROK FAILED\n")));
             if (shutdownState.get())
@@ -465,11 +470,14 @@ bool GCode::sendGcodeInternal(QString line, QString& result, bool recordResponse
     return true;
 }
 
-bool GCode::waitForOk(QString& result, int waitSec, bool sentReqForLocation, bool sentReqForParserState, bool aggressive)
+bool GCode::waitForOk(QString& result, int waitSec, bool sentReqForLocation, bool sentReqForParserState, bool aggressive, bool finalize)
 {
+    int okcount = 0;
+
     if (aggressive)
     {
-        if (!port.bytesAvailable())
+        //if (!port.bytesAvailable()) //more conservative code
+        if (!finalize || !port.bytesAvailable())
         {
             int total = 0;
             bool haveWait = false;
@@ -510,8 +518,8 @@ bool GCode::waitForOk(QString& result, int waitSec, bool sentReqForLocation, boo
             count++;
             SLEEP(100);
         }
-        else
-		if (n < 0)      {
+        else if (n < 0)
+        {
 			QString Mes(tr("Error reading data from COM port\n"))  ;
             err(qPrintable(Mes));
 
@@ -539,10 +547,14 @@ bool GCode::waitForOk(QString& result, int waitSec, bool sentReqForLocation, boo
                     else
                     {
                         CmdResponse cmdResp = sendCount.takeFirst();
-                        diag(qPrintable(tr("GOT[%d]:%s for %s\n")), cmdResp.line, qPrintable(tmpTrim),
-							 qPrintable(cmdResp.cmd) );
+                        diag(qPrintable(tr("GOT[%d]:%s for %s\n")), cmdResp.line, tmpTrim.toLocal8Bit().constData(), cmdResp.cmd.toLocal8Bit().constData());
+                        
+						//diag("DG Buffer %d", sendCount.size());
+                        
+						emit setQueuedCommands(sendCount.size(), true);
                     }
                     rcvdI++;
+                    okcount++;
                 }
                 else if (received.contains(RESPONSE_ERROR))
                 {
@@ -553,8 +565,11 @@ bool GCode::waitForOk(QString& result, int waitSec, bool sentReqForLocation, boo
                     {
                         CmdResponse cmdResp = sendCount.takeFirst();
                         orig = cmdResp.cmd;
-                        diag(qPrintable(tr("GOT[%d]:%s for %s\n")),
-							 cmdResp.line, qPrintable(tmpTrim), qPrintable(orig));
+                        diag(qPrintable(tr("GOT[%d]:%s for %s\n")), cmdResp.line, tmpTrim.toLocal8Bit().constData(), orig.toLocal8Bit().constData());
+                        
+						//diag("DG Buffer %d", sendCount.size());
+                        
+                        emit setQueuedCommands(sendCount.size(), true);
                     }
                     errorCount++;
                     QString result;
@@ -565,7 +580,7 @@ bool GCode::waitForOk(QString& result, int waitSec, bool sentReqForLocation, boo
                 }
                 else
                 {
-                    diag(qPrintable(tr("GOT:%s\n")), qPrintable(tmpTrim));
+                    diag(qPrintable(tr("GOT:%s\n")), tmpTrim.toLocal8Bit().constData());
                     parseCoordinates(received, aggressive);
                 }
 
@@ -578,8 +593,21 @@ bool GCode::waitForOk(QString& result, int waitSec, bool sentReqForLocation, boo
                 //printf("Total out (b): %d (%d)\n", total, sendCount.size());
                 //printf("SENT:%d RCVD:%d\n", sentI, rcvdI);
 
-                if (port.bytesAvailable() || total >= (GRBL_RX_BUFFER_SIZE - 1))
+                if (total >= (GRBL_RX_BUFFER_SIZE - 1))
                 {
+                    //diag("DG Loop again\n");
+                    result.clear();
+                    continue;
+                }
+                else if (port.bytesAvailable())
+                {
+                    // comment out this block for more conservative approach
+                    if (!finalize && okcount > 0)
+                    {
+                        //diag("DG Leave early\n");
+                        return true;
+                    }
+
                     result.clear();
                     continue;
                 }
@@ -590,7 +618,7 @@ bool GCode::waitForOk(QString& result, int waitSec, bool sentReqForLocation, boo
             }
             else
             {
-                diag(qPrintable(tr("GOT:%s\n")), qPrintable(tmpTrim));
+                diag(qPrintable(tr("GOT:%s\n")), tmpTrim.toLocal8Bit().constData());
             }
 
             if (!received.contains(RESPONSE_OK) && !received.contains(RESPONSE_ERROR))
@@ -674,7 +702,7 @@ bool GCode::waitForOk(QString& result, int waitSec, bool sentReqForLocation, boo
     QStringList listToSend;
     for (int i = 0; i < list.size(); i++)
     {
-        if (list.at(i).length() > 0 && list.at(i) != RESPONSE_OK && !sentReqForLocation)
+        if (list.at(i).length() > 0 && list.at(i) != RESPONSE_OK && !sentReqForLocation && !list.at(i).startsWith("MPos:["))
             listToSend.append(list.at(i));
     }
 
@@ -717,7 +745,7 @@ bool GCode::waitForStartupBanner(QString& result, int waitSec, bool failOnNoFoun
             int pos = tmpTrim.indexOf(port.getDetectedLineFeed());
             if (pos != -1)
                 tmpTrim.remove(pos, port.getDetectedLineFeed().size());
-            diag(qPrintable(tr("GOT:%s\n")), qPrintable(tmpTrim));
+            diag(qPrintable(tr("GOT:%s\n")), tmpTrim.toLocal8Bit().constData());
 
             if (tmpTrim.length() > 0)
             {
@@ -731,6 +759,7 @@ bool GCode::waitForStartupBanner(QString& result, int waitSec, bool failOnNoFoun
 
                         closePort(false);
                     }
+                    status = false;
                 }
                 else
                 {
@@ -801,7 +830,6 @@ bool GCode::waitForStartupBanner(QString& result, int waitSec, bool failOnNoFoun
     return status;
 }
 
-/// LETARTARE modified  24-08-2013
 void GCode::parseCoordinates(const QString& received, bool aggressive)
 {
     if (aggressive)
@@ -812,7 +840,7 @@ void GCode::parseCoordinates(const QString& received, bool aggressive)
 
         parseCoordTimer.restart();
     }
-/// LETARTARE modified
+
 	bool good = false;
 	int captureCount ;
 	QString state;
@@ -830,8 +858,8 @@ void GCode::parseCoordinates(const QString& received, bool aggressive)
 	QRegExp rxWPos;
 	/// 3 axis
 	QString format("(-*\\d+\\.\\d+),(-*\\d+\\.\\d+)") ;
-	int maxaxis = 4, naxis ;
-	for (naxis = 3; naxis <= maxaxis; naxis++) {
+    int maxaxis = MAX_AXIS_COUNT, naxis ;
+    for (naxis = DEFAULT_AXIS_COUNT; naxis <= maxaxis; naxis++) {
 		if (!doubleDollarFormat)
 			captureCount = naxis ;
 		else
@@ -851,6 +879,25 @@ void GCode::parseCoordinates(const QString& received, bool aggressive)
 			break;
 	}
 	if (good) {  /// naxis contains number axis
+        if (numaxis <= DEFAULT_AXIS_COUNT)
+        {
+            if (naxis > DEFAULT_AXIS_COUNT)
+            {
+                QString msg = tr("Incorrect - extra axis present in hardware but options set for only 3 axes. Please fix options.");
+                emit addList(msg);
+                emit sendMsg(msg);
+            }
+        }
+        else
+        {
+            if (naxis <= DEFAULT_AXIS_COUNT)
+            {
+                QString msg = tr("Incorrect - extra axis not present in hardware but options set for > 3 axes. Please fix options.");
+                emit addList(msg);
+                emit sendMsg(msg);
+            }
+        }
+
 		numaxis = naxis;
 		QStringList list = rxStateMPos.capturedTexts();
 		int index = 1;
@@ -861,32 +908,27 @@ void GCode::parseCoordinates(const QString& received, bool aggressive)
 		machineCoord.x = list.at(index++).toFloat();
 		machineCoord.y = list.at(index++).toFloat();
 		machineCoord.z = list.at(index++).toFloat();
-	/// LETARTARE
-		if (numaxis == 4)
+        if (numaxis == MAX_AXIS_COUNT)
 			machineCoord.c = list.at(index++).toFloat();
-	/// <-
 		list = rxWPos.capturedTexts();
 		workCoord.x = list.at(1).toFloat();
 		workCoord.y = list.at(2).toFloat();
 		workCoord.z = list.at(3).toFloat();
-	/// LETARTARE
-		if (numaxis == 4)
+        if (numaxis == MAX_AXIS_COUNT)
 			workCoord.c = list.at(4).toFloat();
-	/// <-
 		if (state != "Run")
 			workCoord.stoppedZ = true;
 		else
 			workCoord.stoppedZ = false;
 
 		workCoord.sliderZIndex = sliderZCount;
-		if (numaxis == 3)
+        if (numaxis == DEFAULT_AXIS_COUNT)
 			diag(qPrintable(tr("Decoded: State:%s MPos: %f,%f,%f WPos: %f,%f,%f\n")),
 				 qPrintable(state),
 				 machineCoord.x, machineCoord.y, machineCoord.z,
 				 workCoord.x, workCoord.y, workCoord.z
 				 );
-		else
-		if (numaxis == 4)
+        else if (numaxis == MAX_AXIS_COUNT)
 			diag(qPrintable(tr("Decoded: State:%s MPos: %f,%f,%f,%f WPos: %f,%f,%f,%f\n")),
 				 qPrintable(state),
 				 machineCoord.x, machineCoord.y, machineCoord.z, machineCoord.c,
@@ -903,8 +945,9 @@ void GCode::parseCoordinates(const QString& received, bool aggressive)
 		lastState = state;
 		return;
 	}
-	if (!good /*&& received.indexOf("MPos:") != -1*/)
-		err(qPrintable(tr("Error decoding position data!\n") ));
+    // TODO fix to print
+    //if (!good /*&& received.indexOf("MPos:") != -1*/)
+    //    err(qPrintable(tr("Error decoding position data! [%s]\n")), qPrintable(received));
 
     lastState = "";
 }
@@ -967,6 +1010,7 @@ void GCode::sendFile(QString path)
     //sendGcodeLocal("", true, SHORT_WAIT_SEC);
 
     setProgress(0);
+    emit setQueuedCommands(0, false);
     grblCmdErrors.clear();
     grblFilteredCmds.clear();
     errorCount = 0;
@@ -989,7 +1033,15 @@ void GCode::sendFile(QString path)
         // set here once so that it doesn't change in the middle of a file send
         bool aggressive = controlParams.useAggressivePreload;
         if (aggressive)
+        {
             sendCount.clear();
+            //if (sendCount.size() == 0)
+            //{
+            //    diag("DG Buffer 0 at start\n"));
+            //}
+
+            emit setQueuedCommands(sendCount.size(), true);
+        }
 
         sentI = 0;
         rcvdI = 0;
@@ -1100,7 +1152,7 @@ void GCode::sendFile(QString path)
             while (sendCount.size() > 0 && limitCount)
             {
                 QString result;
-                waitForOk(result, controlParams.waitTime, false, false, aggressive);
+                waitForOk(result, controlParams.waitTime, false, false, aggressive, true);
                 SLEEP(100);
 
                 if (shutdownState.get())
@@ -1177,6 +1229,8 @@ void GCode::sendFile(QString path)
     {
         emit stopSending();
     }
+
+    emit setQueuedCommands(0, false);
 }
 
 void GCode::trimToEnd(QString& strline, QChar ch)
@@ -1237,6 +1291,7 @@ QString GCode::removeUnsupportedCommands(QString line)
             // skip line numbers
         }
         else if (s.at(0) == 'X' || s.at(0) == 'Y' || s.at(0) == 'Z'
+                 || s.at(0) == 'A' || s.at(0) == 'B' || s.at(0) == 'C'
                  || s.at(0) == 'I' || s.at(0) == 'J' || s.at(0) == 'K'
                  || s.at(0) == 'F' || s.at(0) == 'L' || s.at(0) == 'S')
         {
@@ -1375,10 +1430,9 @@ QString GCode::reducePrecision(QString line)
                 //chk.append(item.token);
                 //chk.append("]");
             }
-            //diag(qPrintable(chk));
+            //diag(chk.toLocal8Bit().constData());
 
-            err(qPrintable(tr("Unable to remove enough decimal places for command (will be truncated): %s")),
-							qPrintable(line));
+            err(qPrintable(tr("Unable to remove enough decimal places for command (will be truncated): %s")), line.toLocal8Bit().constData());
 
             QString msg;
             if (failRemoveSufficientDecimals)
@@ -1618,7 +1672,6 @@ QStringList GCode::doZRateLimit(QString inputLine, QString& msg, bool& xyRateSet
                 gotF = true;
             }
             else
-        /// LETARTARE
 			if (s.at(0) == 'X' || s.at(0) == 'Y' || s.at(0) == 'C')
             {
                 addRateXY = true;
@@ -1671,8 +1724,7 @@ void GCode::gotoXYZC(QString line)
 
             item = getMoveAmountFromString("Z", list.at(i));
             moveDetected = item.length() > 0 ;
-        /// LETARTARE  for C
-			if (numaxis == 4)  {
+            if (numaxis == MAX_AXIS_COUNT)  {
 				item = getMoveAmountFromString("C", list.at(i));
 				moveDetected = item.length() > 0;
 			}
@@ -1757,6 +1809,8 @@ void GCode::setResponseWait(ControlParams controlParamsIn)
 
     controlParams.useMm = oldMm;
 
+    port.setCharSendDelayMs(controlParams.charSendDelayMs);
+
     if ((oldMm != controlParamsIn.useMm) && isPortOpen() && doubleDollarFormat)
     {
         if (controlParamsIn.useMm)
@@ -1770,6 +1824,7 @@ void GCode::setResponseWait(ControlParams controlParamsIn)
     }
 
     controlParams.useMm = controlParamsIn.useMm;
+    numaxis = controlParams.useFourAxis ? MAX_AXIS_COUNT : DEFAULT_AXIS_COUNT;
 
     setUnitsTypeDisplay(controlParams.useMm);
 }
@@ -1864,9 +1919,7 @@ void GCode::clearToHome()
     motionOccurred = false;
 }
 
-/// LETARTARE
 int GCode:: getNumaxis()
 {
 	return numaxis;
 }
-/// <--

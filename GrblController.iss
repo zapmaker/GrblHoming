@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Grbl Controller"
-#define MyAppVersion "3.4.3"
+#define MyAppVersion "3.5.1"
 #define MyAppPublisher "Zapmaker"
 #define MyAppURL "http://zapmaker.org"
 #define MyAppExeName "GrblController.exe"
@@ -25,7 +25,7 @@ AllowNoIcons=yes
 LicenseFile=C:\dev\github\GrblHoming\winlicense.txt
 InfoBeforeFile=C:\dev\github\GrblHoming\wininfobefore.txt
 InfoAfterFile=C:\dev\github\GrblHoming\wininfoafter.txt
-OutputBaseFilename=GrblController343Setup
+OutputBaseFilename=GrblController351Setup
 Compression=lzma
 SolidCompression=yes
 
@@ -38,6 +38,7 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 [Files]
 Source: "C:\dev\github\GrblHoming\release\GrblController.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\dev\github\GrblHoming\trlocale\*.qm"; DestDir: "{app}\trlocale"; Flags: ignoreversion
 Source: "C:\Qt\4.8.3\bin\libgcc_s_dw2-1.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Qt\4.8.3\bin\mingwm10.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Qt\4.8.3\bin\QtCore4.dll"; DestDir: "{app}"; Flags: ignoreversion

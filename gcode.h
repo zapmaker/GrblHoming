@@ -31,6 +31,9 @@
 
 #define CTRL_X '\x18'
 
+#define DEFAULT_AXIS_COUNT      3
+#define MAX_AXIS_COUNT          4
+
 class CmdResponse
 {
 public:
@@ -70,9 +73,7 @@ public:
     void setReset();
     void setShutdown();
     int getSettingsItemCount();
-/// LETARTARE
 	int getNumaxis();
-/// <--
 
     static void trimToEnd(QString& strline, QChar);
 
@@ -88,6 +89,7 @@ signals:
     void adjustedAxis();
     void gcodeResult(int id, QString result);
     void setProgress(int);
+    void setQueuedCommands(int, bool);
     void resetTimer(bool timeIt);
     void enableGrblDialogButton();
     void updateCoordinates(Coord3D machineCoord, Coord3D workCoord);
@@ -103,8 +105,6 @@ public slots:
     void sendGcode(QString line);
     void sendGcodeAndGetResult(int id, QString line);
     void sendFile(QString path);
-/// LETARTARE
-   // void gotoXYZ(QString line);
     void gotoXYZC(QString line);
     void axisAdj(char axis, float coord, bool inv, bool absoluteAfterAxisAdj, int sliderZCount);
     void setResponseWait(ControlParams controlParams);
@@ -118,7 +118,7 @@ protected:
 
 private:
     bool sendGcodeLocal(QString line, bool recordResponseOnFail = false, int waitSec = -1, bool aggressive = false, int currLine = 0);
-    bool waitForOk(QString& result, int waitCount, bool sentReqForLocation, bool sentReqForParserState, bool aggressive);
+    bool waitForOk(QString& result, int waitCount, bool sentReqForLocation, bool sentReqForParserState, bool aggressive, bool finalize);
     bool waitForStartupBanner(QString& result, int waitSec, bool failOnNoFound);
     bool sendGcodeInternal(QString line, QString& result, bool recordResponseOnFail, int waitSec, bool aggressive, int currLine = 0);
     QString removeUnsupportedCommands(QString line);
@@ -165,9 +165,7 @@ private:
 
     int sentI;
     int rcvdI;
-/// LETARTARE
     int numaxis;
-/// <--
 };
 
 #endif // GCODE_H

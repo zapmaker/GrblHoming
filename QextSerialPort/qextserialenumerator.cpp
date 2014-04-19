@@ -75,7 +75,7 @@ QextSerialEnumeratorPrivate::~QextSerialEnumeratorPrivate()
     \bold Example
     \code
     QList<QextPortInfo> ports = QextSerialEnumerator::getPorts();
-    foreach( QextPortInfo port, ports ) {
+    foreach (QextPortInfo port, ports) {
         // inspect port...
     }
     \endcode
@@ -86,7 +86,7 @@ QextSerialEnumeratorPrivate::~QextSerialEnumeratorPrivate()
   
     \bold Example
     \code
-    QextSerialEnumerator* enumerator = new QextSerialEnumerator();
+    QextSerialEnumerator *enumerator = new QextSerialEnumerator();
     connect(enumerator, SIGNAL(deviceDiscovered(const QextPortInfo &)),
                myClass, SLOT(onDeviceDiscovered(const QextPortInfo &)));
     connect(enumerator, SIGNAL(deviceRemoved(const QextPortInfo &)),
@@ -103,7 +103,7 @@ QextSerialEnumeratorPrivate::~QextSerialEnumeratorPrivate()
 */
 
 /*!
-    \fn void QextSerialEnumerator::deviceDiscovered( const QextPortInfo & info )
+    \fn void QextSerialEnumerator::deviceDiscovered(const QextPortInfo &info)
     A new device has been connected to the system.
   
     setUpNotifications() must be called first to enable event-driven device notifications.
@@ -113,7 +113,7 @@ QextSerialEnumeratorPrivate::~QextSerialEnumeratorPrivate()
 */
 
 /*!
-   \fn void QextSerialEnumerator::deviceRemoved( const QextPortInfo & info );
+   \fn void QextSerialEnumerator::deviceRemoved(const QextPortInfo &info);
     A device has been disconnected from the system.
   
     setUpNotifications() must be called first to enable event-driven device notifications.
@@ -128,14 +128,14 @@ QextSerialEnumeratorPrivate::~QextSerialEnumeratorPrivate()
 QextSerialEnumerator::QextSerialEnumerator(QObject *parent)
     :QObject(parent), d_ptr(new QextSerialEnumeratorPrivate(this))
 {
-    if( !QMetaType::isRegistered( QMetaType::type("QextPortInfo") ) )
+    if (!QMetaType::isRegistered(QMetaType::type("QextPortInfo")))
         qRegisterMetaType<QextPortInfo>("QextPortInfo");
 }
 
 /*!
    Destructs the QextSerialEnumerator object.
 */
-QextSerialEnumerator::~QextSerialEnumerator( )
+QextSerialEnumerator::~QextSerialEnumerator()
 {
     delete d_ptr;
 }
@@ -147,9 +147,6 @@ QextSerialEnumerator::~QextSerialEnumerator( )
 */
 QList<QextPortInfo> QextSerialEnumerator::getPorts()
 {
-#if defined(Q_OS_UNIX) && !defined(Q_OS_LINUX) && !defined(Q_OS_MAC)
-    qCritical("Enumeration for POSIX systems (except Linux) is not implemented yet.");
-#endif
     return QextSerialEnumeratorPrivate::getPorts_sys();
 }
 
@@ -158,9 +155,6 @@ QList<QextPortInfo> QextSerialEnumerator::getPorts()
 */
 void QextSerialEnumerator::setUpNotifications()
 {
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC) && !(defined(Q_OS_LINUX) && !defined(QESP_NO_UDEV))
-    qCritical("Notifications for *Nix/FreeBSD are not implemented yet");
-#endif
     Q_D(QextSerialEnumerator);
     if (!d->setUpNotifications_sys(true))
         QESP_WARNING("Setup Notification Failed...");

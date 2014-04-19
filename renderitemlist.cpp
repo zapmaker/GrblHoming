@@ -163,13 +163,13 @@ void RenderItemList::drawMeasurements(QPainter& painter)
     if (br.width() > (windowSize.width() - x))
         xMsgTop = wd;
 
-#ifdef Q_WS_MACX
+#ifdef Q_OS_MACX
     writeText(painter, info, xMsgTop, (3 * ht / 4) + 4, wd);
 #else
     writeText(painter, info, xMsgTop, (3 * ht / 4) + 1, wd);
 #endif
 
-#ifdef Q_WS_MACX
+#ifdef Q_OS_MACX
     writeText(painter, QString::number(extents.y), x + wd, windowSize.height() - (ht / 2) - 1, wd);
 #else
     writeText(painter, QString::number(extents.y), x + wd, windowSize.height() - (ht / 4) - 1, wd);

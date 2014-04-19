@@ -62,16 +62,28 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
-/// LETARTARE
-	QString locale = QLocale::system().name().section('_', 0, 0);
+    QString locale = QLocale::system().name().section('_', 0, 0);
+    QString dir = QDir::currentPath() + "/trlocale";
+    QString file = QString("GrblController_") + locale;
 	QTranslator translator;
-    translator.load("GrblController_" + locale );
+    bool r = translator.load(file, dir);
+    if (!r)
+    {
+        dir = QDir::currentPath() + "/../GrblHoming/trlocale";
+        translator.load(file, dir);
+    }
     a.installTranslator(&translator);
-     // qt translation for default dialogs (QFileDialog) and so on
-	QTranslator qtTranslator;
-	qtTranslator.load("qt_" + locale, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-	a.installTranslator(&qtTranslator);
-/// <-
+
+    QString xlatpath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+    file = QString("qt_") + locale ;
+    QTranslator qtTranslator;
+    r = qtTranslator.load(file , xlatpath);
+    if (!r)
+    {
+        xlatpath = QDir::currentPath() + "/trlocale";
+        qtTranslator.load(file, xlatpath);
+    }
+    a.installTranslator(&qtTranslator);
 
     MainWindow w;
     w.show();

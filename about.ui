@@ -81,7 +81,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Grbl Controller 4</string>
+    <string>Grbl Controller</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">

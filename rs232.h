@@ -15,7 +15,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#if defined(Q_OS_LINUX) || defined(Q_WS_MACX) || defined(Q_OS_ANDROID)
+#if defined(Q_OS_LINUX) || defined(Q_OS_MACX) || defined(Q_OS_ANDROID)
 #include <termios.h>
 #include "../termiosext.h"
 #include <sys/ioctl.h>
@@ -40,7 +40,7 @@
 #include "definitions.h"
 
 
-#if defined(Q_OS_LINUX) || defined(Q_WS_MACX) || defined(Q_OS_ANDROID)
+#if defined(Q_OS_LINUX) || defined(Q_OS_MACX) || defined(Q_OS_ANDROID)
 #define SLEEP(x) usleep(1000 * x);
 #else
 #define SLEEP(x) Sleep(x);
@@ -62,11 +62,13 @@ public:
     bool isPortOpen();
     QString getDetectedLineFeed();
     int bytesAvailable();
+    void setCharSendDelayMs(int charSendDelayMs);
 
 private:
     QextSerialPort *port;
     char detectedEOL;
     QString detectedLineFeed;
+    int charSendDelayMs;
 
 };
 

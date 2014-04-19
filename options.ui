@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>529</width>
-    <height>564</height>
+    <width>502</width>
+    <height>459</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,9 +16,9 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>240</x>
-     <y>510</y>
-     <width>281</width>
+     <x>290</x>
+     <y>410</y>
+     <width>191</width>
      <height>32</height>
     </rect>
    </property>
@@ -32,29 +32,29 @@
   <widget class="QGroupBox" name="groupBoxAxis">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>10</y>
-     <width>151</width>
-     <height>131</height>
+     <x>20</x>
+     <y>0</y>
+     <width>451</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="title">
     <string>Invert Axis</string>
    </property>
-   <widget class="QWidget" name="verticalLayoutWidget">
+   <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>19</y>
-      <width>131</width>
-      <height>107</height>
+      <x>20</x>
+      <y>20</y>
+      <width>431</width>
+      <height>31</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayoutInvert">
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QCheckBox" name="chkInvZ">
+      <widget class="QCheckBox" name="chkInvX">
        <property name="text">
-        <string>Z Axis</string>
+        <string>X Axis</string>
        </property>
       </widget>
      </item>
@@ -66,9 +66,9 @@
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="chkInvX">
+      <widget class="QCheckBox" name="chkInvZ">
        <property name="text">
-        <string>X Axis</string>
+        <string>Z Axis</string>
        </property>
       </widget>
      </item>
@@ -82,56 +82,11 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QLabel" name="labelWaitForResp">
-   <property name="geometry">
-    <rect>
-     <x>210</x>
-     <y>20</y>
-     <width>261</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Seconds to Wait for Response</string>
-   </property>
-  </widget>
-  <widget class="QSpinBox" name="spinResponseWaitSec">
-   <property name="geometry">
-    <rect>
-     <x>210</x>
-     <y>40</y>
-     <width>71</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="minimum">
-    <number>1</number>
-   </property>
-   <property name="maximum">
-    <number>1000</number>
-   </property>
-   <property name="value">
-    <number>60</number>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelZJogRate">
-   <property name="geometry">
-    <rect>
-     <x>210</x>
-     <y>90</y>
-     <width>261</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Z-Jog Rate (inches or mm/min)</string>
-   </property>
-  </widget>
   <widget class="QCheckBox" name="checkBoxUseMmManualCmds">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>160</y>
+     <x>20</x>
+     <y>130</y>
      <width>431</width>
      <height>17</height>
     </rect>
@@ -143,10 +98,10 @@
   <widget class="QGroupBox" name="groupZRateLimit">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>190</y>
+     <x>10</x>
+     <y>150</y>
      <width>471</width>
-     <height>91</height>
+     <height>81</height>
     </rect>
    </property>
    <property name="title">
@@ -155,7 +110,7 @@
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>20</y>
       <width>451</width>
       <height>53</height>
@@ -240,43 +195,12 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QDoubleSpinBox" name="doubleSpinZJogRate">
-   <property name="geometry">
-    <rect>
-     <x>210</x>
-     <y>110</y>
-     <width>91</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="accelerated">
-    <bool>true</bool>
-   </property>
-   <property name="correctionMode">
-    <enum>QAbstractSpinBox::CorrectToNearestValue</enum>
-   </property>
-   <property name="decimals">
-    <number>3</number>
-   </property>
-   <property name="minimum">
-    <double>0.100000000000000</double>
-   </property>
-   <property name="maximum">
-    <double>9999.989999999999782</double>
-   </property>
-   <property name="singleStep">
-    <double>1.000000000000000</double>
-   </property>
-   <property name="value">
-    <double>260.000000000000000</double>
-   </property>
-  </widget>
   <widget class="QWidget" name="verticalLayoutWidget_2">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>290</y>
-     <width>461</width>
+     <x>20</x>
+     <y>230</y>
+     <width>451</width>
      <height>81</height>
     </rect>
    </property>
@@ -295,15 +219,22 @@
       </property>
      </widget>
     </item>
+    <item>
+     <widget class="QCheckBox" name="checkBoxFourAxis">
+      <property name="text">
+       <string>Enable 4-axis mode</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>380</y>
+     <x>20</x>
+     <y>320</y>
      <width>461</width>
-     <height>111</height>
+     <height>61</height>
     </rect>
    </property>
    <property name="title">
@@ -312,7 +243,7 @@
    <widget class="QCheckBox" name="chkFilterFileCommands">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>30</x>
       <y>20</y>
       <width>431</width>
       <height>17</height>
@@ -325,8 +256,8 @@
    <widget class="QCheckBox" name="checkBoxReducePrecForLongLines">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>50</y>
+      <x>30</x>
+      <y>40</y>
       <width>431</width>
       <height>17</height>
      </rect>
@@ -335,56 +266,161 @@
      <string>Selectively reduce precision for excessively long lines</string>
     </property>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>80</y>
-      <width>261</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Grbl Line Buffer Size</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="spinBoxGrblLineBufferSize">
-       <property name="value">
-        <number>50</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
+  </widget>
+  <widget class="QWidget" name="gridLayoutWidget_2">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>60</y>
+     <width>451</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout" columnstretch="2,1">
+    <item row="2" column="0">
+     <widget class="QLabel" name="labelZJogRate">
+      <property name="text">
+       <string>Z-Jog Rate (inches or mm/min)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="labelWaitForResp">
+      <property name="text">
+       <string>Seconds to Wait for Response</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QSpinBox" name="spinResponseWaitSec">
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>1000</number>
+      </property>
+      <property name="value">
+       <number>60</number>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QDoubleSpinBox" name="doubleSpinZJogRate">
+      <property name="accelerated">
+       <bool>true</bool>
+      </property>
+      <property name="correctionMode">
+       <enum>QAbstractSpinBox::CorrectToNearestValue</enum>
+      </property>
+      <property name="decimals">
+       <number>3</number>
+      </property>
+      <property name="minimum">
+       <double>0.100000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>9999.989999999999782</double>
+      </property>
+      <property name="singleStep">
+       <double>1.000000000000000</double>
+      </property>
+      <property name="value">
+       <double>260.000000000000000</double>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget_2">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>420</y>
+     <width>261</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <item>
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Character send delay ms</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="horizontalSpacer_4">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QSpinBox" name="spinBoxCharSendDelay">
+      <property name="maximum">
+       <number>20</number>
+      </property>
+      <property name="value">
+       <number>10</number>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>390</y>
+     <width>261</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Grbl Line Buffer Size</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="horizontalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QSpinBox" name="spinBoxGrblLineBufferSize">
+      <property name="value">
+       <number>50</number>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <zorder>groupZRateLimit</zorder>
   <zorder>buttonBox</zorder>
   <zorder>groupBoxAxis</zorder>
-  <zorder>labelWaitForResp</zorder>
-  <zorder>spinResponseWaitSec</zorder>
-  <zorder>labelZJogRate</zorder>
   <zorder>checkBoxUseMmManualCmds</zorder>
-  <zorder>doubleSpinZJogRate</zorder>
   <zorder>verticalLayoutWidget_2</zorder>
   <zorder>groupBox</zorder>
+  <zorder>gridLayoutWidget_2</zorder>
+  <zorder>layoutWidget_2</zorder>
+  <zorder>layoutWidget</zorder>
  </widget>
  <resources/>
  <connections>

@@ -17,6 +17,7 @@
 #include <QSettings>
 #include <QCloseEvent>
 #include <QItemDelegate>
+#include <QScrollBar>
 #include <QListView>
 #include "about.h"
 #include "definitions.h"
@@ -34,8 +35,11 @@
 
 #define TAB_AXIS_INDEX          0
 #define TAB_VISUALIZER_INDEX    1
+#define TAB_ADVANCED_INDEX      2
 
 #define CENTER_POS              40
+
+#define MAX_STATUS_LINES_WHEN_ACTIVE        200
 
 /* testing optimizing scrollbar, doesn't work right
 class MyItemDelegate : public QItemDelegate
@@ -115,10 +119,8 @@ private slots:
     void decX();
     void decY();
     void decZ();
-/// LETARTARE
 	void decC();
 	void incC();
-/// <--
     void incX();
     void incY();
     void incZ();
@@ -158,6 +160,10 @@ private slots:
     void zJogSliderDisplay(int pos);
     void zJogSliderPressed();
     void zJogSliderReleased();
+    void doScroll();
+    void statusSliderPressed();
+    void statusSliderReleased();
+    void setQueuedCommands(int commandCount, bool running);
 
 private:
     // enums
@@ -169,26 +175,29 @@ private:
         I_ITEM,
         J_ITEM,
     };
+    enum
+    {
+        QCS_OK = 0,
+        QCS_WAITING_FOR_ITEMS
+    };
     //objects
     Ui::MainWindow *ui;
     //FileSender fileSender;
     //QThread fileSenderThread;
     GCode gcode;
     QThread gcodeThread;
-    Timer timer;
-    QThread timerThread;
+
+    Timer runtimeTimer;
+    QThread runtimeTimerThread;
 
     //variables
     bool invX;
     bool invY;
     bool invZ;
-/// LETARTARE
 	bool invC;
-	bool axisC;
 	/// for translation
 	QString open_button_text ;
 	QString close_button_text ;
-/// <--
     bool mm;
     QString styleSheet;
     QString directory;
@@ -201,12 +210,21 @@ private:
     bool absoluteAfterAxisAdj;
     bool checkLogWrite;
     QTime scrollStatusTimer;
+    QTime queuedCommandsEmptyTimer;
+    QTime queuedCommandsRefreshTimer;
     QList<PosItem> posList;
     bool sliderPressed;
     double sliderTo;
     int sliderZCount;
     bool promptedAggrPreload;
     ControlParams controlParams;
+    QTimer *scrollTimer;
+    bool scrollRequireMove;
+    bool scrollPressed;
+    bool queuedCommandsStarved;
+    int lastQueueCount;
+    int queuedCommandState;
+    QStringList fullStatus;
 
     //methods
     int SendJog(QString strline);
@@ -220,7 +238,6 @@ private:
     void refreshLcd();
     void lcdDisplay(char axis, bool workCoord, float value);
     void updateSettingsFromOptionDlg(QSettings& settings);
-    void doScroll();
     int computeListViewMinimumWidth(QAbstractItemView* view);
     void preProcessFile(QString filepath);
     bool processGCode(QString inputLine, double& x, double& y, double& i, double& j, bool& arc, bool& cw, bool& mm, int& g);

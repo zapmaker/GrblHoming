@@ -8,11 +8,10 @@
  ****************************************************************/
 
 #include "rs232.h"
-/// LETARTARE
 #include <QObject>
 
 RS232::RS232()
-    : port(NULL), detectedEOL(0)
+    : port(NULL), detectedEOL(0), charSendDelayMs(DEFAULT_CHAR_SEND_DELAY_MS)
 {
 }
 
@@ -156,7 +155,7 @@ int RS232::SendBuf(const char *buf, int size)
     if (port == NULL || !port->isOpen())
         return 0;
 /// LETARTARE  for test
-//err(buf);
+//err(buf) ;
     if (size <= 0)
     {
         err( qPrintable(QObject::tr("Unexpected: Told to send %d bytes\n")), size) ;
@@ -166,7 +165,7 @@ int RS232::SendBuf(const char *buf, int size)
     char b[300] = {0};
     memcpy(b, buf, size);
 #ifdef DIAG
-    printf("Sending to port %s [%s]:", qPrintable(port->portName()), b);
+    printf("Sending to port %s [%s]:", port->portName().toLocal8Bit().constData(), b);
     for (int x= 0; x < size; x++)
     {
         printf("%02X ", buf[x]);
@@ -177,6 +176,34 @@ int RS232::SendBuf(const char *buf, int size)
 
     port->waitForBytesWritten(-1);// this usually doesn't do anything, but let's put it here in case
 
+#if 1
+    // On very fast PCs running Windows we have to slow down the sending of bytes to grbl
+    // because grbl loses bytes due to its interrupt service routine (ISR) taking too many clock
+    // cycles away from serial handling.
+    int result = 0;
+    for (int i = 0; i < size; i++)
+    {
+        result = port->write(&buf[i], 1);
+        if (result == 0)
+        {
+            err("Unable to write bytes to port probably due to outgoing queue full. Write data lost!");
+            break;
+        }
+        else if (result == -1)
+        {
+            err("Error writing to port. Write data lost!");
+            result = 0;
+            break;
+        }
+
+        if (charSendDelayMs > 0)
+        {
+            SLEEP(charSendDelayMs);
+        }
+    }
+
+#else
+    // DO NOT RUN THIS CODE
     int result = port->write(buf, size);
     if (result == 0)
     {
@@ -200,9 +227,10 @@ int RS232::SendBuf(const char *buf, int size)
     }
     else if (result == -1)
     {
-        err(qPrintable(QObject::tr("Error writing to port. Write data lost!")));
+        err("Error writing to port. Write data lost!");
         result = 0;
     }
+#endif
     return result;
 }
 
@@ -249,4 +277,9 @@ int RS232::bytesAvailable()
 {
     int n = port->bytesAvailable();
     return n;
+}
+
+void RS232::setCharSendDelayMs(int csd)
+{
+    charSendDelayMs = csd;
 }

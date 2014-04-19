@@ -17,7 +17,7 @@ class Timer : public QObject
     Q_OBJECT
 
 public:
-    Timer();
+    explicit Timer(QObject *parent = 0);
 
 signals:
     void setRuntime(QString timestr);

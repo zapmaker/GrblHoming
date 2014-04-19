@@ -14,142 +14,142 @@
         <translation>Le programme est fourni en l&apos;état SANS GARANTIE D&apos;AUCUNE SORTE, MEME LES GARANTIES DE CONCEPTION, MARCHANDE ET D&apos;ADAPTATION À UN USAGE PARTICULIER.</translation>
     </message>
     <message>
+        <location filename="../about.ui" line="84"/>
         <source>Grbl Controller</source>
-        <translation type="obsolete">Controleur Grbl</translation>
+        <translation>Controleur Grbl</translation>
     </message>
     <message>
-        <location filename="../about.ui" line="84"/>
         <source>Grbl Controller 4</source>
-        <translation>Controleur Grbl 4</translation>
+        <translation type="obsolete">Controleur Grbl 4</translation>
     </message>
 </context>
 <context>
     <name>GCode</name>
     <message>
-        <location filename="../gcode.cpp" line="39"/>
+        <location filename="../gcode.cpp" line="42"/>
         <source>Can&apos;t open COM port </source>
         <translation>Impossible d&apos;ouvrir le port série  </translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="44"/>
+        <location filename="../gcode.cpp" line="47"/>
         <source>-Is hardware connected to USB?</source>
-        <translation>-le périphérique est-il bien connecté sur un port USB ?</translation>
+        <translation>- le périphérique est-il bien connecté sur un port USB ?</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="45"/>
+        <location filename="../gcode.cpp" line="48"/>
         <source>-Is correct port chosen?</source>
         <translation>- le port choisi est-il correct ?</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="46"/>
+        <location filename="../gcode.cpp" line="49"/>
         <source>-Does current user have sufficient permissions?</source>
-        <translation>- L&apos;utilisateur a-t-il les droits d&apos;utilisation suffisants ?</translation>
+        <translation>- l&apos;utilisateur a-t-il les droits d&apos;utilisation suffisants ?</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="167"/>
+        <location filename="../gcode.cpp" line="169"/>
         <source>SENDING: 0x%02X (CTRL-X) to check presence of Grbl
 </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="170"/>
-        <location filename="../gcode.cpp" line="407"/>
+        <location filename="../gcode.cpp" line="172"/>
+        <location filename="../gcode.cpp" line="412"/>
         <source>Sending to port failed</source>
         <translation>L&apos;émission vers le port a échoué</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="312"/>
+        <location filename="../gcode.cpp" line="313"/>
         <source>Got Grbl Version (Parsed:) %d.%d%c ($$=%d)
 </source>
         <translation>Vous avez la version Grbl (analysée)  %d.%d%c ($$=%d)\n</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="329"/>
+        <location filename="../gcode.cpp" line="330"/>
         <source>Port not available yet</source>
         <translation>Le port n&apos;est plus disponible</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="376"/>
+        <location filename="../gcode.cpp" line="377"/>
         <source>Buffer size too small</source>
         <translation>Le tampon est trop petit</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="386"/>
+        <location filename="../gcode.cpp" line="387"/>
         <source>SENDING[%d]: 0x%02X (CTRL-X)
 </source>
         <translation>EMISSION[%d]: 0x%02X (CTRL-X)\n</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="388"/>
+        <location filename="../gcode.cpp" line="389"/>
         <source>SENDING[%d]: %s
 </source>
         <translation>EMISSION[%d]: %s\n</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="418"/>
+        <location filename="../gcode.cpp" line="423"/>
         <source>WAITFOROK FAILED
 </source>
         <translation>Echec lors de l&apos;attente de Ok </translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="424"/>
+        <location filename="../gcode.cpp" line="429"/>
         <source>Wait for ok failed</source>
         <translation>L&apos;attente d&apos;un bon déroulement a échouée</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="515"/>
-        <location filename="../gcode.cpp" line="709"/>
+        <location filename="../gcode.cpp" line="523"/>
+        <location filename="../gcode.cpp" line="737"/>
         <source>Error reading data from COM port
 </source>
         <translation>Erreur de lecture des données dur le port série</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="537"/>
+        <location filename="../gcode.cpp" line="545"/>
         <source>Unexpected: list is empty (o)!</source>
         <translation>Liste inattendue vide (o) </translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="542"/>
-        <location filename="../gcode.cpp" line="556"/>
+        <location filename="../gcode.cpp" line="550"/>
+        <location filename="../gcode.cpp" line="568"/>
         <source>GOT[%d]:%s for %s
 </source>
         <translation>Vous avez [%d]:%s pour %s\n</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="549"/>
+        <location filename="../gcode.cpp" line="561"/>
         <source>Error?</source>
         <translation>Erreur non répertoriée</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="551"/>
+        <location filename="../gcode.cpp" line="563"/>
         <source>Unexpected: list is empty (e)!</source>
         <translation>Liste inattendue vide (e) </translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="568"/>
-        <location filename="../gcode.cpp" line="593"/>
-        <location filename="../gcode.cpp" line="720"/>
+        <location filename="../gcode.cpp" line="583"/>
+        <location filename="../gcode.cpp" line="621"/>
+        <location filename="../gcode.cpp" line="748"/>
         <source>GOT:%s
 </source>
         <translation>Vous avez : %s\n</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="660"/>
+        <location filename="../gcode.cpp" line="688"/>
         <source>Wait interrupted by user</source>
         <translation>Attente d&apos;interuption par l&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="728"/>
+        <location filename="../gcode.cpp" line="756"/>
         <source>Expecting Grbl version string. Unable to parse response.</source>
         <translation>Attente de la version Grbl, impossible d&apos;analyser la réponse</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="751"/>
+        <location filename="../gcode.cpp" line="780"/>
         <source>No data from COM port after connect. Expecting Grbl version string.</source>
-        <translation>Aucune données depuis le port série après la connexion, en attente de la veriosn Grnl</translation>
+        <translation>Aucune données depuis le port série après la connexion, en attente de la version Grbl</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="772"/>
+        <location filename="../gcode.cpp" line="801"/>
         <source>Wait interrupted by user (startup)</source>
         <translation>Attente d&apos;interuption par l&apos;utilisateur (démarrage)</translation>
     </message>
@@ -170,146 +170,155 @@
         <translation type="obsolete">PosT :</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="883"/>
+        <location filename="../gcode.cpp" line="926"/>
         <source>Decoded: State:%s MPos: %f,%f,%f WPos: %f,%f,%f
 </source>
         <translation>Décodage : Etat :%s MPos: %f,%f,%f WPos: %f,%f,%f
 </translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="890"/>
+        <location filename="../gcode.cpp" line="932"/>
         <source>Decoded: State:%s MPos: %f,%f,%f,%f WPos: %f,%f,%f,%f
 </source>
         <translation>Décodage : Etat :%s MPos: %f,%f,%f,%f WPos: %f,%f,%f,%f
 </translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="907"/>
         <source>Error decoding position data!
 </source>
-        <translation>Erreur de décodage des données de position\n</translation>
+        <translation type="obsolete">Erreur de décodage des données de position\n</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="941"/>
+        <location filename="../gcode.cpp" line="886"/>
+        <source>Incorrect - extra axis present in hardware but options set for only 3 axes. Please fix options.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gcode.cpp" line="895"/>
+        <source>Incorrect - extra axis not present in hardware but options set for &gt; 3 axes. Please fix options.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gcode.cpp" line="984"/>
         <source>GOT-TE:%s
 </source>
         <translation>Vous avez -TE :%s\n</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="964"/>
+        <location filename="../gcode.cpp" line="1007"/>
         <source>Sending file &apos;%1&apos;</source>
         <translation>Emission du fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1117"/>
+        <location filename="../gcode.cpp" line="1169"/>
         <source>Gave up waiting for OK
 </source>
         <translation>Fin d&apos;attent Ok\n</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1136"/>
+        <location filename="../gcode.cpp" line="1188"/>
         <source>Code sent successfully with %1 error(s):</source>
         <translation>Code émis correctement avec %1 erreur(s)</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1148"/>
+        <location filename="../gcode.cpp" line="1200"/>
         <source>Code sent successfully with no errors.</source>
         <translation>Code émis correctement sans erreur</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1155"/>
+        <location filename="../gcode.cpp" line="1207"/>
         <source>Filtered %1 commands:</source>
         <translation>Commande filtrée %1</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1168"/>
+        <location filename="../gcode.cpp" line="1220"/>
         <source>Process interrupted.</source>
         <translation>Processus interrompu</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1200"/>
+        <location filename="../gcode.cpp" line="1254"/>
         <source>Removed unsupported command &apos;%1&apos; part of &apos;%2&apos;</source>
         <translation>Suppression de la commande &apos;%1&apos; portion de &apos;%2 ( non supprortée)</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1216"/>
+        <location filename="../gcode.cpp" line="1270"/>
         <source>Removed unsupported G command &apos;%1&apos;</source>
         <translation>Suppression de la commande G  &apos;%1&apos;  non supprortée</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1229"/>
+        <location filename="../gcode.cpp" line="1283"/>
         <source>Removed unsupported M command &apos;%1&apos;</source>
         <translation>Suppression de la commande M  &apos;%1&apos;  non supprortée</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1247"/>
+        <location filename="../gcode.cpp" line="1302"/>
         <source>Removed unsupported command &apos;%1&apos;</source>
         <translation>Suppression de la commande &apos;%1&apos;  non supprortée</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1380"/>
+        <location filename="../gcode.cpp" line="1435"/>
         <source>Unable to remove enough decimal places for command (will be truncated): %s</source>
         <translation>Impossible de supprimer assez de décimales pour la commande (sera tronqué) %s</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1385"/>
+        <location filename="../gcode.cpp" line="1439"/>
         <source>Error, insufficent reduction &apos;%1&apos;</source>
         <translation>Erreur : réduction insuffisante  &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1387"/>
+        <location filename="../gcode.cpp" line="1441"/>
         <source>Precision reduced &apos;%1&apos;</source>
         <translation>Précision réduite  &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1583"/>
+        <location filename="../gcode.cpp" line="1637"/>
         <source>Z-Rate Limit: [%1]=&gt;[%2]</source>
         <translation>Limite de vitesse Z  [%1]=&gt;[%2]</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1588"/>
+        <location filename="../gcode.cpp" line="1642"/>
         <source>Z-Rate Limit: [%1]=&gt;[%2,%3]</source>
         <translation>Limite de vitesse Z :  [%1]=&gt;[%2,%3]</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1634"/>
+        <location filename="../gcode.cpp" line="1687"/>
         <source>XY-Rate Limit FIX: [%1]=&gt;[%2]</source>
         <translation>Correction de la limite de vitesse XY : [%1]=&gt;[%2]</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1690"/>
+        <location filename="../gcode.cpp" line="1742"/>
         <source>Bad command: %1</source>
         <translation>Commande erronée : %1</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1791"/>
+        <location filename="../gcode.cpp" line="1846"/>
         <source>Options specify use mm but Grbl parser set for inches. Fixing.</source>
         <translation>Vous utiliser les mm alors que l&apos;analyse indique des pouces. Corriger</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1796"/>
+        <location filename="../gcode.cpp" line="1851"/>
         <source>Options specify use inches but Grbl parser set for mm. Fixing.</source>
         <translation>Vous devez utiliser les pouces alors que l&apos;analyse indique des mm. Corriger</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1810"/>
+        <location filename="../gcode.cpp" line="1865"/>
         <source>Options specify use mm but Grbl reporting set for inches. Fixing.</source>
         <translation>Vous utiliser les mm alors que Grbl donne despouces. Corriger</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1815"/>
+        <location filename="../gcode.cpp" line="1870"/>
         <source>Options specify use inches but Grbl reporting set for mm. Fixing.</source>
         <translation>Vous utiliser les pouces alors que Grbl donne des mm. Corriger</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1851"/>
-        <location filename="../gcode.cpp" line="1852"/>
+        <location filename="../gcode.cpp" line="1906"/>
+        <location filename="../gcode.cpp" line="1907"/>
         <source>(mm)</source>
         <translation>(mm)</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1856"/>
-        <location filename="../gcode.cpp" line="1857"/>
+        <location filename="../gcode.cpp" line="1911"/>
+        <location filename="../gcode.cpp" line="1912"/>
         <source>(in)</source>
         <translation>(pouce)</translation>
     </message>
@@ -552,205 +561,220 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.ui" line="29"/>
+        <location filename="../mainwindow.ui" line="32"/>
         <source>Grbl Controller</source>
         <translation>Controleur Grbl</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="294"/>
+        <location filename="../mainwindow.ui" line="427"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="309"/>
+        <location filename="../mainwindow.ui" line="622"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="324"/>
+        <location filename="../mainwindow.ui" line="947"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="374"/>
+        <location filename="../mainwindow.ui" line="177"/>
         <source>Send File</source>
         <translation>Envoi d&apos;un fichier</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="392"/>
+        <location filename="../mainwindow.ui" line="212"/>
         <source>Begin</source>
         <translation>Démarrer</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="399"/>
+        <location filename="../mainwindow.ui" line="185"/>
         <source>Stop</source>
         <translation>Arrêter</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="419"/>
+        <location filename="../mainwindow.ui" line="205"/>
         <source>Choose file</source>
         <translation>Choisir un fichier</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="451"/>
+        <location filename="../mainwindow.ui" line="291"/>
         <source>Runtime:</source>
         <translation>Exécution</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1421"/>
         <source>Manual GCode</source>
-        <translation>Commande directe en GCode</translation>
+        <translation type="obsolete">Commande directe en GCode</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1436"/>
+        <location filename="../mainwindow.ui" line="315"/>
         <source>Command</source>
         <translation>Texte</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="503"/>
+        <location filename="../mainwindow.ui" line="111"/>
         <location filename="../mainwindow.cpp" line="21"/>
         <source>Open</source>
         <translation>Ouvrir</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="339"/>
+        <location filename="../mainwindow.ui" line="980"/>
         <source>C</source>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="489"/>
         <source>GRBL
 settings</source>
-        <translation>Configuratiion
-GRBL</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="534"/>
-        <source>Port name</source>
-        <translation>Nom du port</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="809"/>
-        <source>Reset Control</source>
-        <translation>Commande RAZ</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="824"/>
-        <source>Soft Reset Grbl</source>
-        <translation>RAZ logiciel de Grbl</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="831"/>
-        <source>Unlock Grbl</source>
-        <translation>Débloquer Grbl</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="851"/>
-        <source>Machine Coordinates</source>
-        <translation>Coordonnées machine</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="877"/>
-        <source>Work Coordinates</source>
-        <translation>Coordonnées de travail</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="903"/>
-        <source>Last State:</source>
-        <translation>Dernier état</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="937"/>
-        <source>Zero Position</source>
-        <translation>Position zéro</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="944"/>
-        <source>Go Home</source>
-        <translation>Aller position repos</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="964"/>
-        <source>Axis Control</source>
-        <translation>Commandes d&apos;axes</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1096"/>
-        <source>Z Jog</source>
-        <translation>pilote Z</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1135"/>
-        <source>Step Size           </source>
-        <translation>Valeur du pas</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1157"/>
-        <source>Absolute coordinates after adjust</source>
-        <translation>Coordonnées absolues après ajustement</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1164"/>
-        <source>Spindle On</source>
-        <translation>Départ broche</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1214"/>
-        <location filename="../mainwindow.ui" line="1230"/>
-        <source>0</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1273"/>
-        <source>C Jog</source>
-        <translation>pilote C</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1302"/>
-        <source>Visualizer</source>
-        <translation>Visualisateur</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1399"/>
-        <source>Baud Rate</source>
-        <translation>Vitesse du port</translation>
-    </message>
-    <message>
-        <source>Advanced</source>
-        <translation type="obsolete">Avancé</translation>
-    </message>
-    <message>
-        <source>GRBL Settings</source>
         <translation type="obsolete">Configuratiion
 GRBL</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1480"/>
+        <location filename="../mainwindow.ui" line="75"/>
+        <source>Port name</source>
+        <translation>Nom du port</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1643"/>
+        <source>Reset Control</source>
+        <translation>Commande RAZ</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1657"/>
+        <source>Soft Reset Grbl</source>
+        <translation>RAZ logiciel de Grbl</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1670"/>
+        <source>Unlock Grbl</source>
+        <translation>Débloquer Grbl</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1142"/>
+        <source>Machine Coordinates</source>
+        <translation>Coordonnées machine</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="517"/>
+        <source>Work Coordinates</source>
+        <translation>Coordonnées de travail</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="152"/>
+        <source>Last State:</source>
+        <translation>Dernier état</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1724"/>
+        <source>Zero Position</source>
+        <translation>Position zéro</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1737"/>
+        <source>Go Home</source>
+        <translation>Aller position repos</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1176"/>
+        <source>Axis Control</source>
+        <translation>Commandes d&apos;axes</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1430"/>
+        <source>Z Jog</source>
+        <translation>pilote Z</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1516"/>
+        <source>Step Size           </source>
+        <translation>Valeur du pas</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1471"/>
+        <source>Absolute coordinates after adjust</source>
+        <translation>Coordonnées absolues après ajustement</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1484"/>
+        <source>Spindle On</source>
+        <translation>Départ broche</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1382"/>
+        <location filename="../mainwindow.ui" line="1392"/>
+        <source>0</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1282"/>
+        <source>C Jog</source>
+        <translation>pilote C</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1538"/>
+        <source>Visualizer</source>
+        <translation>Visualisateur</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="138"/>
+        <source>Baud Rate</source>
+        <translation>Vitesse du port</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="251"/>
+        <source>%v</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="264"/>
+        <source>File progress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="277"/>
+        <source>Queued Commands</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1631"/>
+        <source>Advanced</source>
+        <translation>Avancé</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1699"/>
+        <source>GRBL Settings</source>
+        <translation>Configuratiion
+GRBL</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1771"/>
         <source>&amp;Help</source>
         <translation>&amp;Aide</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1486"/>
+        <location filename="../mainwindow.ui" line="1777"/>
         <source>&amp;Tools</source>
         <translation>&amp;Outils</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1492"/>
+        <location filename="../mainwindow.ui" line="1783"/>
         <source>&amp;File</source>
         <translation>&amp;Fichiers</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1503"/>
+        <location filename="../mainwindow.ui" line="1794"/>
         <source>&amp;About</source>
         <translation>&amp;A propos</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1508"/>
+        <location filename="../mainwindow.ui" line="1799"/>
         <source>&amp;Options</source>
         <translation>&amp;Options</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1513"/>
+        <location filename="../mainwindow.ui" line="1804"/>
         <source>E&amp;xit</source>
         <translation>&amp;Quitter</translation>
     </message>
@@ -760,7 +784,7 @@ GRBL</translation>
         <translation>Fermer / Raz</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="244"/>
+        <location filename="../mainwindow.cpp" line="266"/>
         <source>You appear to have upgraded to the latest version of Grbl Controller. Please be aware that as of version 3.4 the default behavior of sending commands to Grbl has been changed to send them as fast as possible (Aggressive preload mode).
 
 Your settings have been changed to enable this mode. Why? Because it provides the most optimal use of Grbl and greatly reduces the time to finish a typical job.
@@ -771,41 +795,41 @@ What does this mean to you? Arc commands will now run smoother and faster than b
 Vos paramètres ont été modifiés pour permettre ce mode. Pourquoi? Parce qu&apos;il permet une utilisation la plus optimale de Grbl et réduit considérablement le temps de terminer un travail typique. Qu&apos;est-ce que cela signifie pour vous ? Maintenant les commandes d&apos;arc vont être plus continues et plus rapides qu&apos;auparavant, ce qui peut amener votre broche à travailler un peu plus vite, s&apos;il vous plaît donc faire quelques tests en premier. Sinon, passez à la boîte de dialogue Options et désactiver manuellement la  précharge agressive</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="299"/>
         <source>Wish to &quot;zero position&quot; before beginning?</source>
-        <translation>Voulez-vous allez en postion zéro avant de démarrer ?</translation>
+        <translation type="obsolete">Voulez-vous allez en postion zéro avant de démarrer ?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="384"/>
+        <location filename="../mainwindow.cpp" line="414"/>
         <source>User clicked Port Open/Close</source>
         <translation>L&apos;utilisateur a cliqué Ouverture/Fermeture du port</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="482"/>
+        <location filename="../mainwindow.cpp" line="512"/>
         <source>Resetting port to restart controller</source>
         <translation>L&apos;initilisation du port initialise le contrôleur</translation>
     </message>
     <message>
+        <location filename="../mainwindow.cpp" line="323"/>
         <source>Do you want to zero the displayed position before proceeding?</source>
-        <translation type="obsolete">Voulez-vous afficher la postion zéro avant de démarrer ?</translation>
+        <translation>Voulez-vous afficher la postion zéro avant de démarrer ?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="656"/>
+        <location filename="../mainwindow.cpp" line="693"/>
         <source>Open File</source>
         <translation>Charger un fichier</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="658"/>
+        <location filename="../mainwindow.cpp" line="695"/>
         <source>NC (*.nc);;All Files (*.*)</source>
         <translation>NC (*.nc);;Tous fichiers (*.*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1128"/>
+        <location filename="../mainwindow.cpp" line="1255"/>
         <source>Spindle On.</source>
         <translation>Marche broche</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1133"/>
+        <location filename="../mainwindow.cpp" line="1260"/>
         <source>Spindle Off.</source>
         <translation>Arrêt broche</translation>
     </message>
@@ -823,7 +847,7 @@ Vos paramètres ont été modifiés pour permettre ce mode. Pourquoi? Parce qu&a
         <translation>Inverser les axes</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="57"/>
+        <location filename="../options.ui" line="71"/>
         <source>Z Axis</source>
         <translation>Axe Z</translation>
     </message>
@@ -833,7 +857,7 @@ Vos paramètres ont été modifiés pour permettre ce mode. Pourquoi? Parce qu&a
         <translation>Axe Y</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="71"/>
+        <location filename="../options.ui" line="57"/>
         <source>X Axis</source>
         <translation>Axe X</translation>
     </message>
@@ -843,71 +867,77 @@ Vos paramètres ont été modifiés pour permettre ce mode. Pourquoi? Parce qu&a
         <translation>Axe C</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="95"/>
+        <location filename="../options.ui" line="290"/>
         <source>Seconds to Wait for Response</source>
         <translation>Secondes d&apos;attente lors d&apos;une réponse</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="127"/>
+        <location filename="../options.ui" line="283"/>
         <source>Z-Jog Rate (inches or mm/min)</source>
         <translation>Vitesse manuelle Z  (pouces ou mmm/min)</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="140"/>
+        <location filename="../options.ui" line="95"/>
         <source>Use millimeters when sending manual commands (v0.8c+ only)</source>
         <translation>Emission des commandes manuelles en millimètre (v0.8c+ seulement)</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="153"/>
+        <location filename="../options.ui" line="108"/>
         <source>Z Rate Limiting</source>
         <translation>Limitation de vitesse</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="168"/>
+        <location filename="../options.ui" line="123"/>
         <source>Limit Z Rate</source>
         <translation>Vitesse max Z</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="213"/>
+        <location filename="../options.ui" line="168"/>
         <source>Z-Rate Limit (inches or mm/min)</source>
         <translation>Vitesse limite Z (pouces ou mmm/min)</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="220"/>
+        <location filename="../options.ui" line="175"/>
         <source>XY Rate (inches or mm/min)</source>
         <translation>Vitesse XY (pouces ou mmm/min)</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="287"/>
+        <location filename="../options.ui" line="211"/>
         <source>Use aggressive preload strategy for Grbl</source>
         <translation>Utiliser une stratégie agressive de pré-chargement pour Grbl</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="294"/>
+        <location filename="../options.ui" line="218"/>
         <source>Write debugging log to home folder (requires restart)</source>
         <translation>Mise au point sauvée dans le répertoire d&apos;accueil (+ redémarrage)</translation>
     </message>
     <message>
+        <location filename="../options.ui" line="225"/>
         <source>Enable 4-axis mode</source>
-        <translation type="obsolete">Valider le mode 4 axes</translation>
+        <translation>Valider le mode 4 axes</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="310"/>
+        <location filename="../options.ui" line="241"/>
         <source>Command Filtering</source>
         <translation>Filtrage des commandes</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="322"/>
+        <location filename="../options.ui" line="253"/>
         <source>Filter file commands before sending</source>
         <translation>Fichier de filtrage des commandes avant l&apos;émission</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="335"/>
+        <location filename="../options.ui" line="266"/>
         <source>Selectively reduce precision for excessively long lines</source>
         <translation>Réduire la précision lors de longues lignes </translation>
     </message>
     <message>
-        <location filename="../options.ui" line="351"/>
+        <location filename="../options.ui" line="347"/>
+        <source>Character send delay ms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../options.ui" line="389"/>
         <source>Grbl Line Buffer Size</source>
         <translation>Taille du tampon d&apos;entrée de Grbl</translation>
     </message>
@@ -915,15 +945,14 @@ Vos paramètres ont été modifiés pour permettre ce mode. Pourquoi? Parce qu&a
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../rs232.cpp" line="162"/>
+        <location filename="../rs232.cpp" line="161"/>
         <source>Unexpected: Told to send %d bytes
 </source>
         <translation>Inattendu : tenu d&apos;envooyer%d octets</translation>
     </message>
     <message>
-        <location filename="../rs232.cpp" line="203"/>
         <source>Error writing to port. Write data lost!</source>
-        <translation>Erreur d&apos;écriture sur le port. Les données à écrire sont perdues</translation>
+        <translation type="obsolete">Erreu d&apos;écriture sur le port. Les données à écrire sont perdues</translation>
     </message>
     <message>
         <location filename="../renderitemlist.cpp" line="156"/>
@@ -976,7 +1005,7 @@ Vos paramètres ont été modifiés pour permettre ce mode. Pourquoi? Parce qu&a
     <message>
         <location filename="../QextSerialPort/qextserialport.cpp" line="733"/>
         <source>The file opened by the port is not a valid device</source>
-        <translation>Le ficheir ouvert pour le port n&apos;est pas un périphérique valide</translation>
+        <translation>Le fichier ouvert pour le port n&apos;est pas un périphérique valide</translation>
     </message>
     <message>
         <location filename="../QextSerialPort/qextserialport.cpp" line="735"/>
@@ -986,7 +1015,7 @@ Vos paramètres ont été modifiés pour permettre ce mode. Pourquoi? Parce qu&a
     <message>
         <location filename="../QextSerialPort/qextserialport.cpp" line="737"/>
         <source>The port detected a framing error (usually caused by incorrect baud rate settings)</source>
-        <translation>Le port a détecté une ereeur de trame (probablement due à une vitesse erronée)</translation>
+        <translation>Le port a détecté une erreur de trame (probablement due à une vitesse erronée)</translation>
     </message>
     <message>
         <location filename="../QextSerialPort/qextserialport.cpp" line="739"/>
@@ -996,12 +1025,12 @@ Vos paramètres ont été modifiés pour permettre ce mode. Pourquoi? Parce qu&a
     <message>
         <location filename="../QextSerialPort/qextserialport.cpp" line="741"/>
         <source>Character buffer overrun</source>
-        <translation>Dépassement du tampon de caractères</translation>
+        <translation>Débordement du tampon de caractères</translation>
     </message>
     <message>
         <location filename="../QextSerialPort/qextserialport.cpp" line="743"/>
         <source>Receive buffer overflow</source>
-        <translation>Dépassement du tampon de réception</translation>
+        <translation>Débordement du tampon de réception</translation>
     </message>
     <message>
         <location filename="../QextSerialPort/qextserialport.cpp" line="745"/>
@@ -1011,7 +1040,7 @@ Vos paramètres ont été modifiés pour permettre ce mode. Pourquoi? Parce qu&a
     <message>
         <location filename="../QextSerialPort/qextserialport.cpp" line="747"/>
         <source>Transmit buffer overflow</source>
-        <translation>Dépassement du tampon d&apos;émission</translation>
+        <translation>Débordement du tampon d&apos;émission</translation>
     </message>
     <message>
         <location filename="../QextSerialPort/qextserialport.cpp" line="749"/>
