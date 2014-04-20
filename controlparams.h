@@ -24,6 +24,7 @@ public:
     int grblLineBufferLen;
     bool useFourAxis;
     int charSendDelayMs;
+    char fourthAxisType;
 };
 
 #endif // CONTROLPARAMS_H

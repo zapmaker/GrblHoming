@@ -20,6 +20,17 @@ build from source.
 Details on how to do this can be found here:
 http://zapmaker.org/
 
+V3.6   + translate 2014-04-20
+Enhancements
+- Options dialog is now tabbed to better fit widgets
+- Ability to handle 4th axis as either A, B, or C (requires correct grbl version for axis),
+  please see https://github.com/zapmaker/GrblHoming/issues/56 and 
+  https://github.com/LETARTARE/Grbl_with_Arduino/tree/master/Grbl84Mega2560
+  which is the A axis grbl variant.
+Bug fix
+- Fixed fourth axis adjust buttons and coordinate display greyed out when they shouldn't
+  be (under specific operating circumstances).
+
 V3.5.1
 Enhancements
 - Made subtle modifications to the command preload when sending a file so that the

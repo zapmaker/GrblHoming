@@ -178,7 +178,7 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_12">
          <item>
-          <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0,0" columnstretch="0,0,0,0">
+          <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0" columnstretch="0,0,0,0">
            <item row="1" column="3">
             <widget class="QPushButton" name="Stop">
              <property name="text">
@@ -952,7 +952,7 @@
          </widget>
         </item>
         <item row="4" column="0">
-         <widget class="QLabel" name="lblC">
+         <widget class="QLabel" name="lblFourth">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -985,7 +985,7 @@
          </widget>
         </item>
         <item row="4" column="2">
-         <widget class="QLCDNumber" name="lcdWorkNumberC">
+         <widget class="QLCDNumber" name="lcdWorkNumberFourth">
           <property name="maximumSize">
            <size>
             <width>16777215</width>
@@ -1051,7 +1051,7 @@
          </widget>
         </item>
         <item row="4" column="1">
-         <widget class="QLCDNumber" name="lcdMachNumberC">
+         <widget class="QLCDNumber" name="lcdMachNumberFourth">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
             <horstretch>0</horstretch>
@@ -1270,7 +1270,7 @@
               <item row="5" column="1">
                <layout class="QHBoxLayout" name="horizontalLayout_5">
                 <item>
-                 <widget class="QLabel" name="lblCJog">
+                 <widget class="QLabel" name="lblFourthJog">
                   <property name="font">
                    <font>
                     <pointsize>10</pointsize>
@@ -1289,7 +1289,7 @@
                </layout>
               </item>
               <item row="5" column="0">
-               <widget class="QPushButton" name="DecCBtn">
+               <widget class="QPushButton" name="DecFourthBtn">
                 <property name="text">
                  <string/>
                 </property>
@@ -1306,7 +1306,7 @@
                </widget>
               </item>
               <item row="5" column="2">
-               <widget class="QPushButton" name="IncCBtn">
+               <widget class="QPushButton" name="IncFourthBtn">
                 <property name="text">
                  <string/>
                 </property>

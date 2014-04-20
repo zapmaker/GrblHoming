@@ -41,6 +41,10 @@
 #define LOG_MSG_TYPE_DIAG       "DIAG"
 #define LOG_MSG_TYPE_STATUS     "STATUS"
 
+#define FOURTH_AXIS_A   'A'
+#define FOURTH_AXIS_B   'B'
+#define FOURTH_AXIS_C   'C'
+
 extern AtomicIntBool g_enableDebugLog;
 
 void status(const char *str, ...);

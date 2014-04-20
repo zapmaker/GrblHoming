@@ -26,8 +26,8 @@ Options::Options(QWidget *parent) :
     QString invY = settings.value(SETTINGS_INVERSE_Y, "false").value<QString>();
     QString invZ = settings.value(SETTINGS_INVERSE_Z, "false").value<QString>();
 
-	QString invC = settings.value(SETTINGS_INVERSE_C, "false").value<QString>();
-	ui->chkInvC->setChecked(invC == "true");
+    QString invFourth = settings.value(SETTINGS_INVERSE_FOURTH, "false").value<QString>();
+    ui->chkInvFourth->setChecked(invFourth == "true");
     ui->chkInvX->setChecked(invX == "true");
     ui->chkInvY->setChecked(invY == "true");
     ui->chkInvZ->setChecked(invZ == "true");
@@ -37,17 +37,35 @@ Options::Options(QWidget *parent) :
     // default aggressive preload behavior to 'true'!
     QString enAggressivePreload = settings.value(SETTINGS_USE_AGGRESSIVE_PRELOAD, "true").value<QString>();
     QString useMmManualCmds = settings.value(SETTINGS_USE_MM_FOR_MANUAL_CMDS, "true").value<QString>();
-    QString enFourAxis = settings.value(SETTINGS_FOUR_AXIS, "false").value<QString>();
+    QString enFourAxis = settings.value(SETTINGS_FOUR_AXIS_USE, "false").value<QString>();
+    char fourthAxisType = settings.value(SETTINGS_FOUR_AXIS_TYPE, FOURTH_AXIS_A).value<char>();
 
     if (enFourAxis == "false")
     {
-        ui->chkInvC->hide();
-        ui->chkInvC->setAttribute(Qt::WA_DontShowOnScreen, true);
+        ui->chkInvFourth->hide();
+        ui->chkInvFourth->setAttribute(Qt::WA_DontShowOnScreen, true);
+
+        ui->groupBoxFourthAxis->setEnabled(false);
     }
     else
     {
-        ui->chkInvC->show();
-        ui->chkInvC->setAttribute(Qt::WA_DontShowOnScreen, false);
+        ui->chkInvFourth->show();
+        ui->chkInvFourth->setAttribute(Qt::WA_DontShowOnScreen, false);
+        ui->groupBoxFourthAxis->setEnabled(true);
+
+        switch (fourthAxisType)
+        {
+            case FOURTH_AXIS_A:
+            default:
+                ui->radioButtonFourthAxisA->setChecked(true);
+                break;
+            case FOURTH_AXIS_B:
+                ui->radioButtonFourthAxisB->setChecked(true);
+                break;
+            case FOURTH_AXIS_C:
+                ui->radioButtonFourthAxisC->setChecked(true);
+                break;
+        }
     }
 
     ui->checkBoxEnableDebugLog->setChecked(enDebugLog == "true");
@@ -95,11 +113,12 @@ void Options::accept()
     settings.setValue(SETTINGS_INVERSE_X, ui->chkInvX->isChecked());
     settings.setValue(SETTINGS_INVERSE_Y, ui->chkInvY->isChecked());
     settings.setValue(SETTINGS_INVERSE_Z, ui->chkInvZ->isChecked());
-	settings.setValue(SETTINGS_INVERSE_C, ui->chkInvC->isChecked());
+    settings.setValue(SETTINGS_INVERSE_FOURTH, ui->chkInvFourth->isChecked());
     settings.setValue(SETTINGS_ENABLE_DEBUG_LOG, ui->checkBoxEnableDebugLog->isChecked());
     settings.setValue(SETTINGS_USE_AGGRESSIVE_PRELOAD, ui->chkAggressivePreload->isChecked());
     settings.setValue(SETTINGS_USE_MM_FOR_MANUAL_CMDS, ui->checkBoxUseMmManualCmds->isChecked());
-    settings.setValue(SETTINGS_FOUR_AXIS, ui->checkBoxFourAxis->isChecked());
+    settings.setValue(SETTINGS_FOUR_AXIS_USE, ui->checkBoxFourAxis->isChecked());
+    settings.setValue(SETTINGS_FOUR_AXIS_TYPE, getFourthAxisType());
 
     settings.setValue(SETTINGS_RESPONSE_WAIT_TIME, ui->spinResponseWaitSec->value());
     settings.setValue(SETTINGS_Z_JOG_RATE, ui->doubleSpinZJogRate->value());
@@ -149,13 +168,34 @@ void Options::toggleFourAxis(bool four)
 {
     if (four)
     {
-        ui->chkInvC->show();
-        ui->chkInvC->setAttribute(Qt::WA_DontShowOnScreen, false);
+        ui->chkInvFourth->show();
+        ui->chkInvFourth->setAttribute(Qt::WA_DontShowOnScreen, false);
+        ui->groupBoxFourthAxis->setEnabled(true);
     }
     else
     {
-        ui->chkInvC->hide();
-        ui->chkInvC->setAttribute(Qt::WA_DontShowOnScreen, true);
+        ui->chkInvFourth->hide();
+        ui->chkInvFourth->setAttribute(Qt::WA_DontShowOnScreen, true);
+        ui->groupBoxFourthAxis->setEnabled(false);
     }
 
+}
+
+char Options::getFourthAxisType()
+{
+    char type = FOURTH_AXIS_A;
+
+    if (ui->radioButtonFourthAxisA->isChecked())
+    {
+        type = FOURTH_AXIS_A;
+    }
+    else if (ui->radioButtonFourthAxisB->isChecked())
+    {
+        type = FOURTH_AXIS_B;
+    }
+    else if (ui->radioButtonFourthAxisC->isChecked())
+    {
+        type = FOURTH_AXIS_C;
+    }
+    return type;
 }

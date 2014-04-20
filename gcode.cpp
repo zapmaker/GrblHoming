@@ -106,9 +106,9 @@ void GCode::grblSetHome()
     clearToHome();
 
     if (numaxis == MAX_AXIS_COUNT)
-		gotoXYZC("G92 x0 y0 z0 c0");
+        gotoXYZFourth(QString("G92 x0 y0 z0 ").append(QString(controlParams.fourthAxisType)).append("0"));
 	else
-		gotoXYZC("G92 x0 y0 z0");
+        gotoXYZFourth("G92 x0 y0 z0");
 }
 
 void GCode::goToHome()
@@ -130,12 +130,12 @@ void GCode::goToHome()
 
     QString zpos = QString::number(maxZOver);
 
-    gotoXYZC(QString("G0 z").append(zpos));
+    gotoXYZFourth(QString("G0 z").append(zpos));
 
     if (numaxis == MAX_AXIS_COUNT)
-		gotoXYZC("G1 x0 y0 z0 c0");
+        gotoXYZFourth(QString("G1 x0 y0 z0 ").append(QString(controlParams.fourthAxisType)).append("0"));
 	else
-		gotoXYZC("G1 x0 y0 z0");
+        gotoXYZFourth("G1 x0 y0 z0");
 
     maxZ -= maxZOver;
 
@@ -909,13 +909,13 @@ void GCode::parseCoordinates(const QString& received, bool aggressive)
 		machineCoord.y = list.at(index++).toFloat();
 		machineCoord.z = list.at(index++).toFloat();
         if (numaxis == MAX_AXIS_COUNT)
-			machineCoord.c = list.at(index++).toFloat();
+            machineCoord.fourth = list.at(index++).toFloat();
 		list = rxWPos.capturedTexts();
 		workCoord.x = list.at(1).toFloat();
 		workCoord.y = list.at(2).toFloat();
 		workCoord.z = list.at(3).toFloat();
         if (numaxis == MAX_AXIS_COUNT)
-			workCoord.c = list.at(4).toFloat();
+            workCoord.fourth = list.at(4).toFloat();
 		if (state != "Run")
 			workCoord.stoppedZ = true;
 		else
@@ -931,8 +931,8 @@ void GCode::parseCoordinates(const QString& received, bool aggressive)
         else if (numaxis == MAX_AXIS_COUNT)
 			diag(qPrintable(tr("Decoded: State:%s MPos: %f,%f,%f,%f WPos: %f,%f,%f,%f\n")),
 				 qPrintable(state),
-				 machineCoord.x, machineCoord.y, machineCoord.z, machineCoord.c,
-				 workCoord.x, workCoord.y, workCoord.z, workCoord.c
+                 machineCoord.x, machineCoord.y, machineCoord.z, machineCoord.fourth,
+                 workCoord.x, workCoord.y, workCoord.z, workCoord.fourth
 				 );
 
 		if (workCoord.z > maxZ)
@@ -1330,7 +1330,7 @@ QString GCode::reducePrecision(QString line)
     if (pos >= 0)
         result = result.left(pos);
 
-    int charsToRemove = result.length() - controlParams.grblLineBufferLen;
+    int charsToRemove = result.length() - (controlParams.grblLineBufferLen - 1);// subtract 1 to account for linefeed sent with command later
 
     if (charsToRemove > 0)
     {
@@ -1672,7 +1672,7 @@ QStringList GCode::doZRateLimit(QString inputLine, QString& msg, bool& xyRateSet
                 gotF = true;
             }
             else
-			if (s.at(0) == 'X' || s.at(0) == 'Y' || s.at(0) == 'C')
+            if (s.at(0) == 'X' || s.at(0) == 'Y' || s.at(0) == 'A' || s.at(0) == 'B' || s.at(0) == 'C')
             {
                 addRateXY = true;
             }
@@ -1703,7 +1703,7 @@ QStringList GCode::doZRateLimit(QString inputLine, QString& msg, bool& xyRateSet
 
 }
 
-void GCode::gotoXYZC(QString line)
+void GCode::gotoXYZFourth(QString line)
 {
     pollPosWaitForIdle(false);
 
@@ -1725,7 +1725,7 @@ void GCode::gotoXYZC(QString line)
             item = getMoveAmountFromString("Z", list.at(i));
             moveDetected = item.length() > 0 ;
             if (numaxis == MAX_AXIS_COUNT)  {
-				item = getMoveAmountFromString("C", list.at(i));
+                item = getMoveAmountFromString(QString(controlParams.fourthAxisType), list.at(i));
 				moveDetected = item.length() > 0;
 			}
         }

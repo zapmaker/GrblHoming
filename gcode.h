@@ -105,7 +105,7 @@ public slots:
     void sendGcode(QString line);
     void sendGcodeAndGetResult(int id, QString line);
     void sendFile(QString path);
-    void gotoXYZC(QString line);
+    void gotoXYZFourth(QString line);
     void axisAdj(char axis, float coord, bool inv, bool absoluteAfterAxisAdj, int sliderZCount);
     void setResponseWait(ControlParams controlParams);
     void grblSetHome();
