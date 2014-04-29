@@ -1,0 +1,7 @@
+GrblController 3 -  Control your Grbl Arduino and other basic CNC 3-axis systems.
+
+Installs a EXE file and support DLLs that communicate via COM port to Grbl Arduino using GCode.
+
+by Zapmaker 
+
+Released under GPL 3.0

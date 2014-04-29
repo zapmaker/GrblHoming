@@ -1,0 +1,13 @@
+GcodeSenderGUIthreads.pro.user
+Makefile
+Makefile.Debug
+Makefile.Release
+debug/
+release/
+favs.txt
+object_script.GcodeSenderGUI.Debug
+object_script.GcodeSenderGUI.Release
+settings
+ui_*.h
+Output/
+android/
