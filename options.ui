@@ -23,19 +23,19 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
-   <widget class="QWidget" name="tab_main">
+   <widget class="QWidget" name="tab_general">
     <attribute name="title">
-     <string>Main</string>
+     <string>General</string>
     </attribute>
     <widget class="QWidget" name="gridLayoutWidget_2">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>120</y>
+       <y>146</y>
        <width>451</width>
-       <height>97</height>
+       <height>71</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout" columnstretch="2,1">
@@ -99,7 +99,7 @@
        <x>10</x>
        <y>10</y>
        <width>451</width>
-       <height>91</height>
+       <height>121</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayoutExtras">
@@ -114,6 +114,16 @@
        <widget class="QCheckBox" name="chkAggressivePreload">
         <property name="text">
          <string>Use aggressive preload strategy for Grbl</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkBoxWaitForJogToComplete">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Wait for each jog/manual command to complete (future feature)</string>
         </property>
        </widget>
       </item>
@@ -372,9 +382,9 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>10</y>
+       <y>111</y>
        <width>451</width>
-       <height>51</height>
+       <height>60</height>
       </rect>
      </property>
      <property name="title">
@@ -425,20 +435,20 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>100</y>
+       <y>41</y>
        <width>451</width>
        <height>51</height>
       </rect>
      </property>
      <property name="title">
-      <string>Fourth Axis</string>
+      <string>Selecting the Fourth axis</string>
      </property>
      <widget class="QRadioButton" name="radioButtonFourthAxisA">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>20</y>
-        <width>61</width>
+        <y>22</y>
+        <width>50</width>
         <height>17</height>
        </rect>
       </property>
@@ -452,9 +462,9 @@
      <widget class="QRadioButton" name="radioButtonFourthAxisB">
       <property name="geometry">
        <rect>
-        <x>110</x>
-        <y>20</y>
-        <width>61</width>
+        <x>80</x>
+        <y>22</y>
+        <width>50</width>
         <height>17</height>
        </rect>
       </property>
@@ -465,14 +475,65 @@
      <widget class="QRadioButton" name="radioButtonFourthAxisC">
       <property name="geometry">
        <rect>
-        <x>210</x>
-        <y>20</y>
-        <width>71</width>
+        <x>150</x>
+        <y>22</y>
+        <width>50</width>
         <height>17</height>
        </rect>
       </property>
+      <property name="contextMenuPolicy">
+       <enum>Qt::PreventContextMenu</enum>
+      </property>
       <property name="text">
        <string>C</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="radioButtonFourthAxisU">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>20</y>
+        <width>50</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="contextMenuPolicy">
+       <enum>Qt::PreventContextMenu</enum>
+      </property>
+      <property name="text">
+       <string>U</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="radioButtonFourthAxisV">
+      <property name="geometry">
+       <rect>
+        <x>310</x>
+        <y>22</y>
+        <width>50</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="contextMenuPolicy">
+       <enum>Qt::PreventContextMenu</enum>
+      </property>
+      <property name="text">
+       <string>V</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="radioButtonFourthAxisW">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>22</y>
+        <width>50</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="contextMenuPolicy">
+       <enum>Qt::PreventContextMenu</enum>
+      </property>
+      <property name="text">
+       <string>W</string>
       </property>
      </widget>
     </widget>
@@ -480,7 +541,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>70</y>
+       <y>11</y>
        <width>421</width>
        <height>17</height>
       </rect>
@@ -488,6 +549,110 @@
      <property name="text">
       <string>Enable 4-axis mode</string>
      </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_display">
+    <attribute name="title">
+     <string>Display</string>
+    </attribute>
+    <widget class="QWidget" name="verticalLayoutWidget_3">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>481</width>
+       <height>141</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QCheckBox" name="checkBoxPositionReportEnabled">
+        <property name="text">
+         <string>Enable position request and report</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="groupBox_ReqPos">
+        <property name="title">
+         <string>Position Request</string>
+        </property>
+        <widget class="QWidget" name="verticalLayoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>461</width>
+           <height>93</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QRadioButton" name="radioButton_ReqAlways">
+            <property name="text">
+             <string>Always Request (most reliable/slightly slower jogging)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="radioButton_ReqAlwaysNoIdleCheck">
+            <property name="text">
+             <string>Always Request but without Idle Check (fast jog/manual operations)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="radioButton_ReqNotDuringManual">
+            <property name="text">
+             <string>Not during manual control (no position update during jog/manual)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QLabel" name="label_ReqFreq">
+              <property name="text">
+               <string>Request frequency (seconds)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="doubleSpinBoxPosRequestFreqSec">
+              <property name="minimum">
+               <double>0.500000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>10.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.500000000000000</double>
+              </property>
+              <property name="value">
+               <double>1.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </widget>
   </widget>

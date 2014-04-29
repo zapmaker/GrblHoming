@@ -391,7 +391,7 @@
        <number>2</number>
       </property>
       <item>
-       <layout class="QGridLayout" name="gridLayout_4">
+       <layout class="QGridLayout" name="gridLayout_CoodPositions">
         <property name="sizeConstraint">
          <enum>QLayout::SetDefaultConstraint</enum>
         </property>
@@ -1735,6 +1735,13 @@
           </property>
           <property name="text">
            <string>Go Home</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButtonRefreshPos">
+          <property name="text">
+           <string>Refresh Pos</string>
           </property>
          </widget>
         </item>

@@ -26,7 +26,8 @@ MainWindow::MainWindow(QWidget *parent) :
     sliderTo(0.0),
     sliderZCount(0),
     scrollRequireMove(true), scrollPressed(false),
-    queuedCommandsStarved(false), lastQueueCount(0), queuedCommandState(QCS_OK)
+    queuedCommandsStarved(false), lastQueueCount(0), queuedCommandState(QCS_OK),
+    lastLcdStateValid(true)
 {
     // Setup our application information to be used by QSettings
     QCoreApplication::setOrganizationName(COMPANY_NAME);
@@ -101,6 +102,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->verticalSliderZJog,SIGNAL(valueChanged(int)),this,SLOT(zJogSliderDisplay(int)));
     connect(ui->verticalSliderZJog,SIGNAL(sliderPressed()),this,SLOT(zJogSliderPressed()));
     connect(ui->verticalSliderZJog,SIGNAL(sliderReleased()),this,SLOT(zJogSliderReleased()));
+    connect(ui->pushButtonRefreshPos,SIGNAL(clicked()),this,SLOT(refreshPosition()));
 
     connect(this, SIGNAL(sendFile(QString)), &gcode, SLOT(sendFile(QString)));
     connect(this, SIGNAL(openPort(QString,QString)), &gcode, SLOT(openPort(QString,QString)));
@@ -136,8 +138,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&gcode, SIGNAL(setLastState(QString)), ui->outputLastState, SLOT(setText(QString)));
     connect(&gcode, SIGNAL(setUnitsWork(QString)), ui->outputUnitsWork, SLOT(setText(QString)));
     connect(&gcode, SIGNAL(setUnitsMachine(QString)), ui->outputUnitsMachine, SLOT(setText(QString)));
-    connect(&gcode, SIGNAL(setLivePoint(double, double, bool)), ui->wgtVisualizer, SLOT(setLivePoint(double, double, bool)));
+    connect(&gcode, SIGNAL(setLivePoint(double, double, bool, bool)), ui->wgtVisualizer, SLOT(setLivePoint(double, double, bool, bool)));
+    connect(&gcode, SIGNAL(setVisualLivenessCurrPos(bool)), ui->wgtVisualizer, SLOT(setVisualLivenessCurrPos(bool)));
     connect(&gcode, SIGNAL(setVisCurrLine(int)), ui->wgtVisualizer, SLOT(setVisCurrLine(int)));
+    connect(&gcode, SIGNAL(setLcdState(bool)), this, SLOT(setLcdState(bool)));
 
     connect(&runtimeTimer, SIGNAL(setRuntime(QString)), ui->outputRuntime, SLOT(setText(QString)));
 
@@ -249,6 +253,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->btnResetGrbl->setEnabled(false);
     ui->btnUnlockGrbl->setEnabled(false);
     ui->btnGoHomeSafe->setEnabled(false);
+    ui->pushButtonRefreshPos->setEnabled(false);
     styleSheet = ui->btnOpenPort->styleSheet();
     ui->statusList->setEnabled(true);
     ui->openFile->setEnabled(true);
@@ -345,6 +350,7 @@ void MainWindow::begin()
         ui->btnUnlockGrbl->setEnabled(false);
         ui->btnSetHome->setEnabled(false);
         ui->btnGoHomeSafe->setEnabled(false);
+        ui->pushButtonRefreshPos->setEnabled(false);
         emit sendFile(ui->filePath->text());
     }
 }
@@ -361,6 +367,7 @@ void MainWindow::stop()
     ui->btnResetGrbl->setEnabled(true);
     ui->btnUnlockGrbl->setEnabled(true);
     ui->btnGoHomeSafe->setEnabled(true);
+    ui->pushButtonRefreshPos->setEnabled(true);
 }
 
 void MainWindow::grblReset()
@@ -405,6 +412,7 @@ void MainWindow::stopSending()
     ui->btnResetGrbl->setEnabled(true);
     ui->btnUnlockGrbl->setEnabled(true);
     ui->btnGoHomeSafe->setEnabled(true);
+    ui->pushButtonRefreshPos->setEnabled(true);
     ui->openFile->setEnabled(true);
 }
 
@@ -506,6 +514,7 @@ void MainWindow::portIsClosed(bool reopen)
     ui->btnResetGrbl->setEnabled(false);
     ui->btnUnlockGrbl->setEnabled(false);
     ui->btnGoHomeSafe->setEnabled(false);
+    ui->pushButtonRefreshPos->setEnabled(false);
 
     if (reopen)
     {
@@ -546,6 +555,7 @@ void MainWindow::adjustedAxis()
     ui->btnResetGrbl->setEnabled(true);
     ui->btnUnlockGrbl->setEnabled(true);
     ui->btnGoHomeSafe->setEnabled(true);
+    ui->pushButtonRefreshPos->setEnabled(true);
 }
 
 void MainWindow::disableAllButtons()
@@ -567,6 +577,7 @@ void MainWindow::disableAllButtons()
     ui->btnResetGrbl->setEnabled(false);
     ui->btnUnlockGrbl->setEnabled(false);
     ui->btnGoHomeSafe->setEnabled(false);
+    ui->pushButtonRefreshPos->setEnabled(false);
 }
 
 void MainWindow::enableGrblDialogButton()
@@ -590,6 +601,7 @@ void MainWindow::enableGrblDialogButton()
     ui->btnResetGrbl->setEnabled(true);
     ui->btnUnlockGrbl->setEnabled(true);
     ui->btnGoHomeSafe->setEnabled(true);
+    ui->pushButtonRefreshPos->setEnabled(true);
 
     if (ui->filePath->text().length() > 0)
     {
@@ -661,15 +673,48 @@ void MainWindow::decZ()
 
 void MainWindow::decFourth()
 {
-    float coord = -ui->comboStep->currentText().toFloat();
+	float coord = ui->comboStep->currentText().toFloat() ;
+/// LETARTARE 25-04-2014
+	char four = controlParams.fourthAxisType;
+	if (four == FOURTH_AXIS_A || four == FOURTH_AXIS_B || four == FOURTH_AXIS_C) {
+		float actual_position = ui->lcdWorkNumberFourth->value() ;
+		if (actual_position >= -360.0 + coord ) {
+			disableAllButtons();
+			emit axisAdj(controlParams.fourthAxisType, -coord, invFourth, absoluteAfterAxisAdj, 0);
+		}
+		else  {
+			ui->DecFourthBtn->setEnabled(false) ;
+			ui->IncFourthBtn->setEnabled(true) ;
+		}
+	}
+/// <--
+	else  {
     disableAllButtons();
-    emit axisAdj(controlParams.fourthAxisType, coord, invFourth, absoluteAfterAxisAdj, 0);
+		emit axisAdj(controlParams.fourthAxisType, -coord, invFourth, absoluteAfterAxisAdj, 0);
+	}
+
 }
 void MainWindow::incFourth()
 {
     float coord = ui->comboStep->currentText().toFloat();
+/// LETARTARE 25-04-2014
+	char four = controlParams.fourthAxisType;
+	if (four == FOURTH_AXIS_A || four == FOURTH_AXIS_B || four == FOURTH_AXIS_C) {
+		float actual_position = ui->lcdWorkNumberFourth->value() ;
+		if (actual_position <= 360.0 - coord ) {
+			disableAllButtons();
+			emit axisAdj(controlParams.fourthAxisType, coord, invFourth, absoluteAfterAxisAdj, 0);
+		}
+		else {
+			ui->DecFourthBtn->setEnabled(true) ;
+			ui->IncFourthBtn->setEnabled(false) ;
+		}
+	}
+/// <-
+	else  {
     disableAllButtons();
     emit axisAdj(controlParams.fourthAxisType, coord, invFourth, absoluteAfterAxisAdj, 0);
+}
 }
 
 void MainWindow::getOptions()
@@ -1008,8 +1053,11 @@ void MainWindow::updateSettingsFromOptionDlg(QSettings& settings)
     controlParams.zJogRate = settings.value(SETTINGS_Z_JOG_RATE, DEFAULT_Z_JOG_RATE).value<double>();
     QString useMmManualCmds = settings.value(SETTINGS_USE_MM_FOR_MANUAL_CMDS, "true").value<QString>();
     controlParams.useMm = useMmManualCmds == "true";
-    QString useAggrPreload = settings.value(SETTINGS_USE_AGGRESSIVE_PRELOAD, "false").value<QString>();
+    QString useAggrPreload = settings.value(SETTINGS_USE_AGGRESSIVE_PRELOAD, "true").value<QString>();
     controlParams.useAggressivePreload = useAggrPreload == "true";
+    QString waitForJogToComplete = settings.value(SETTINGS_WAIT_FOR_JOG_TO_COMPLETE, "true").value<QString>();
+    controlParams.waitForJogToComplete = waitForJogToComplete == "true";
+
     QString useFourAxis = settings.value(SETTINGS_FOUR_AXIS_USE, "false").value<QString>();
     controlParams.useFourAxis = useFourAxis == "true";
     if (controlParams.useFourAxis)
@@ -1067,6 +1115,14 @@ void MainWindow::updateSettingsFromOptionDlg(QSettings& settings)
 
     controlParams.zRateLimitAmount = settings.value(SETTINGS_Z_RATE_LIMIT_AMOUNT, DEFAULT_Z_LIMIT_RATE).value<double>();
     controlParams.xyRateAmount = settings.value(SETTINGS_XY_RATE_AMOUNT, DEFAULT_XY_RATE).value<double>();
+
+    QString enPosReq = settings.value(SETTINGS_ENABLE_POS_REQ, "true").value<QString>();
+    controlParams.usePositionRequest = enPosReq == "true";
+    controlParams.positionRequestType = settings.value(SETTINGS_TYPE_POS_REQ, PREQ_ALWAYS_NO_IDLE_CHK).value<QString>();
+    double posReqFreq = settings.value(SETTINGS_POS_REQ_FREQ_SEC, DEFAULT_POS_REQ_FREQ_SEC).value<double>();
+    controlParams.postionRequestTimeMilliSec = static_cast<int>(posReqFreq) * 1000;
+
+    setLcdState(controlParams.usePositionRequest);
 }
 
 // save last state of settings
@@ -1312,7 +1368,7 @@ void MainWindow::refreshLcd()
     lcdDisplay('Z', false, machineCoordinates.z);
     if (controlParams.useFourAxis) {
         lcdDisplay(controlParams.fourthAxisType, true, workCoordinates.fourth);
-        lcdDisplay(controlParams.fourthAxisType, false, workCoordinates.fourth);
+        lcdDisplay(controlParams.fourthAxisType, false, machineCoordinates.fourth);
 	}
 	else {
         lcdDisplay(controlParams.fourthAxisType, true, 0);
@@ -1344,7 +1400,11 @@ void MainWindow::lcdDisplay(char axis, bool workCoord, float floatVal)
             ui->lcdMachNumberZ->display(value);
         break;
     default:
-        if (axis == FOURTH_AXIS_A || axis == FOURTH_AXIS_B || axis == FOURTH_AXIS_C)
+        if (axis == FOURTH_AXIS_A || axis == FOURTH_AXIS_B || axis == FOURTH_AXIS_C
+///  LETARTARE
+			|| axis == FOURTH_AXIS_U || axis == FOURTH_AXIS_V || axis == FOURTH_AXIS_W
+/// <-
+			)
         {
             if (workCoord)
                 ui->lcdWorkNumberFourth->display(value);
@@ -1516,4 +1576,31 @@ void MainWindow::setQueuedCommands(int commandCount, bool running)
     }
 
     lastQueueCount = commandCount;
+}
+
+void MainWindow::setLcdState(bool valid)
+{
+    if (lastLcdStateValid != valid)
+    {
+        QString ss = "";
+        if (!valid)
+        {
+            ss = "QLCDNumber { background-color: #F8F8F8; color: #F0F0F0; }";
+        }
+        ui->lcdWorkNumberX->setStyleSheet(ss);
+        ui->lcdMachNumberX->setStyleSheet(ss);
+        ui->lcdWorkNumberY->setStyleSheet(ss);
+        ui->lcdMachNumberY->setStyleSheet(ss);
+        ui->lcdWorkNumberZ->setStyleSheet(ss);
+        ui->lcdMachNumberZ->setStyleSheet(ss);
+        ui->lcdWorkNumberFourth->setStyleSheet(ss);
+        ui->lcdMachNumberFourth->setStyleSheet(ss);
+
+        lastLcdStateValid = valid;
+    }
+}
+
+void MainWindow::refreshPosition()
+{
+    gotoXYZFourth(REQUEST_CURRENT_POS);
 }

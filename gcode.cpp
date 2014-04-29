@@ -16,10 +16,13 @@ GCode::GCode()
       incorrectMeasurementUnits(false), incorrectLcdDisplayUnits(false),
       maxZ(0), motionOccurred(false),
       sliderZCount(0),
+      positionValid(false),
       numaxis(DEFAULT_AXIS_COUNT)
 {
     // use base class's timer - use it to capture random text from the controller
     startTimer(1000);
+    // for position polling
+    pollPosTimer.start();
 }
 
 void GCode::openPort(QString commPortStr, QString baudRate)
@@ -195,46 +198,61 @@ void GCode::sendGcode(QString line)
 // keep polling our position and state until we are done running
 void GCode::pollPosWaitForIdle(bool checkMeasurementUnits)
 {
-    bool immediateQuit = false;
-    for (int i = 0; i < 10000; i++)
+    if (controlParams.usePositionRequest
+            && (controlParams.positionRequestType == PREQ_ALWAYS_NO_IDLE_CHK
+                    || controlParams.positionRequestType == PREQ_ALWAYS
+                    || checkMeasurementUnits))
     {
-        bool ret = sendGcodeLocal(REQUEST_CURRENT_POS);
-        if (!ret)
+        bool immediateQuit = false;
+        for (int i = 0; i < 10000; i++)
         {
-            immediateQuit = true;
-            break;
-        }
-
-        if (doubleDollarFormat)
-        {
-            if (lastState.compare("Run") != 0)
-                break;
-        }
-        else
-        {
-            if (machineCoordLastIdlePos == machineCoord
-                && workCoordLastIdlePos == workCoord)
+            GCode::PosReqStatus ret = positionUpdate();
+            if (ret == POS_REQ_RESULT_ERROR || ret == POS_REQ_RESULT_UNAVAILABLE)
             {
+                immediateQuit = true;
                 break;
             }
+            else if (ret == POS_REQ_RESULT_TIMER_SKIP)
+            {
+                SLEEP(250);
+                continue;
+            }
 
-            machineCoordLastIdlePos = machineCoord;
-            workCoordLastIdlePos = workCoord;
+            if (doubleDollarFormat)
+            {
+                if (lastState.compare("Run") != 0)
+                    break;
+            }
+            else
+            {
+                if (machineCoordLastIdlePos == machineCoord
+                    && workCoordLastIdlePos == workCoord)
+                {
+                    break;
+                }
+
+                machineCoordLastIdlePos = machineCoord;
+                workCoordLastIdlePos = workCoord;
+            }
+
+            if (shutdownState.get())
+                return;
         }
 
-        if (shutdownState.get())
+        if (immediateQuit)
             return;
+
+        if (checkMeasurementUnits)
+        {
+            if (doubleDollarFormat)
+                checkAndSetCorrectMeasurementUnits();
+            else
+                setOldFormatMeasurementUnitControl();
+        }
     }
-
-    if (immediateQuit)
-        return;
-
-    if (checkMeasurementUnits)
+    else
     {
-        if (doubleDollarFormat)
-            checkAndSetCorrectMeasurementUnits();
-        else
-            setOldFormatMeasurementUnitControl();
+        setLivenessState(false);
     }
 }
 
@@ -340,9 +358,10 @@ bool GCode::sendGcodeInternal(QString line, QString& result, bool recordResponse
     bool sentReqForSettings = false;
     bool sentReqForParserState = false;
 
-    if (!line.compare(REQUEST_CURRENT_POS))
+    if (checkForGetPosStr(line))
     {
         sentReqForLocation = true;
+        setLivenessState(true);
     }
     else if (!line.compare(REQUEST_PARSER_STATE_V08c))
     {
@@ -939,7 +958,7 @@ void GCode::parseCoordinates(const QString& received, bool aggressive)
 			maxZ = workCoord.z;
 
 		emit updateCoordinates(machineCoord, workCoord);
-		emit setLivePoint(workCoord.x, workCoord.y, controlParams.useMm);
+        emit setLivePoint(workCoord.x, workCoord.y, controlParams.useMm, positionValid);
 		emit setLastState(state);
 
 		lastState = state;
@@ -1049,9 +1068,6 @@ void GCode::sendFile(QString path)
 
         parseCoordTimer.restart();
 
-        QTime pollPosTimer;
-        pollPosTimer.start();
-
         int currLine = 0;
         bool xyRateSet = false;
 
@@ -1129,19 +1145,7 @@ void GCode::sendFile(QString path)
             float percentComplete = (currLine * 100.0) / totalLineCount;
             setProgress((int)percentComplete);
 
-            if (!aggressive)
-            {
-                sendGcodeLocal(REQUEST_CURRENT_POS);
-            }
-            else
-            {
-                int ms = pollPosTimer.elapsed();
-                if (ms >= 1000)
-                {
-                    pollPosTimer.restart();
-                    sendGcodeLocal(REQUEST_CURRENT_POS, false, -1, aggressive);
-                }
-            }
+            positionUpdate();
             currLine++;
         } while ((code.atEnd() == false) && (!abortState.get()));
         file.close();
@@ -1170,7 +1174,7 @@ void GCode::sendFile(QString path)
             }
         }
 
-        sendGcodeLocal(REQUEST_CURRENT_POS);
+        positionUpdate();
 
         emit resetTimer(false);
 
@@ -1705,7 +1709,10 @@ QStringList GCode::doZRateLimit(QString inputLine, QString& msg, bool& xyRateSet
 
 void GCode::gotoXYZFourth(QString line)
 {
-    pollPosWaitForIdle(false);
+    bool queryPos = checkForGetPosStr(line);
+    if (!queryPos && controlParams.usePositionRequest
+            && controlParams.positionRequestType == PREQ_ALWAYS)
+        pollPosWaitForIdle(false);
 
     if (sendGcodeLocal(line))
     {
@@ -1735,7 +1742,8 @@ void GCode::gotoXYZFourth(QString line)
             //emit addList("No movement expected for command.");
         }
 
-        pollPosWaitForIdle(false);
+        if (!queryPos)
+            pollPosWaitForIdle(false);
     }
     else
     {
@@ -1852,7 +1860,7 @@ void GCode::checkAndSetCorrectMeasurementUnits()
             setConfigureInchesMode(true);
         }
         incorrectMeasurementUnits = false;// hope this is ok to do here
-        sendGcodeLocal(REQUEST_CURRENT_POS);
+        positionUpdate(true);
     }
     else
     {
@@ -1888,7 +1896,7 @@ void GCode::setConfigureMmMode(bool setGrblUnits)
     sendGcodeLocal("$13=0");
     if (setGrblUnits)
         sendGcodeLocal("G21");
-    sendGcodeLocal(REQUEST_CURRENT_POS);
+    positionUpdate(true);
 }
 
 void GCode::setConfigureInchesMode(bool setGrblUnits)
@@ -1896,7 +1904,7 @@ void GCode::setConfigureInchesMode(bool setGrblUnits)
     sendGcodeLocal("$13=1");
     if (setGrblUnits)
         sendGcodeLocal("G20");
-    sendGcodeLocal(REQUEST_CURRENT_POS);
+    positionUpdate(true);
 }
 
 void GCode::setUnitsTypeDisplay(bool millimeters)
@@ -1922,4 +1930,42 @@ void GCode::clearToHome()
 int GCode:: getNumaxis()
 {
 	return numaxis;
+}
+
+GCode::PosReqStatus GCode::positionUpdate(bool forceIfEnabled /* = false */)
+{
+    if (controlParams.usePositionRequest)
+    {
+        if (forceIfEnabled)
+        {
+            return sendGcodeLocal(REQUEST_CURRENT_POS) ? POS_REQ_RESULT_OK : POS_REQ_RESULT_ERROR;
+        }
+        else
+        {
+            int ms = pollPosTimer.elapsed();
+            if (ms >= controlParams.postionRequestTimeMilliSec)
+            {
+                pollPosTimer.restart();
+                return sendGcodeLocal(REQUEST_CURRENT_POS) ? POS_REQ_RESULT_OK : POS_REQ_RESULT_ERROR;
+            }
+            else
+            {
+                return POS_REQ_RESULT_TIMER_SKIP;
+            }
+        }
+    }
+    return POS_REQ_RESULT_UNAVAILABLE;
+}
+
+bool GCode::checkForGetPosStr(QString& line)
+{
+    return (!line.compare(REQUEST_CURRENT_POS)
+        || (line.startsWith(REQUEST_CURRENT_POS) && line.endsWith('\r') && line.length() == 2));
+}
+
+void GCode::setLivenessState(bool valid)
+{
+    positionValid = valid;
+    emit setVisualLivenessCurrPos(valid);
+    emit setLcdState(valid);
 }

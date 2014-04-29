@@ -41,9 +41,21 @@
 #define LOG_MSG_TYPE_DIAG       "DIAG"
 #define LOG_MSG_TYPE_STATUS     "STATUS"
 
+/// LETARTARE   : one axis choice U or V or W or A or B or C
+#define FOURTH_AXIS_U   'U'
+#define FOURTH_AXIS_V   'V'
+#define FOURTH_AXIS_W   'W'
+/// <--
 #define FOURTH_AXIS_A   'A'
 #define FOURTH_AXIS_B   'B'
 #define FOURTH_AXIS_C   'C'
+
+#define PREQ_ALWAYS                 "always"
+#define PREQ_ALWAYS_NO_IDLE_CHK     "alwaysWithoutIdleChk"
+#define PREQ_NOT_WHEN_MANUAL        "notWhenManual"
+
+#define DEFAULT_POS_REQ_FREQ_SEC    1.0
+#define DEFAULT_POS_REQ_FREQ_MSEC   1000
 
 extern AtomicIntBool g_enableDebugLog;
 

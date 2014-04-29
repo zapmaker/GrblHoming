@@ -191,12 +191,12 @@
     <message>
         <location filename="../gcode.cpp" line="886"/>
         <source>Incorrect - extra axis present in hardware but options set for only 3 axes. Please fix options.</source>
-        <translation>L&apos;axe supplémentaire existe pas matériellement. Veuillez corriger les options en cochant 4 àme axe.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../gcode.cpp" line="895"/>
         <source>Incorrect - extra axis not present in hardware but options set for &gt; 3 axes. Please fix options.</source>
-        <translation>L&apos;axe supplémentaire n&apos;existe pas matériellement. Veuillez corriger les options  en décochant 4 àme axe.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../gcode.cpp" line="984"/>
@@ -725,17 +725,17 @@ GRBL</translation>
     <message>
         <location filename="../mainwindow.ui" line="251"/>
         <source>%v</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="264"/>
         <source>File progress</source>
-        <translation>Avancement</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="277"/>
         <source>Queued Commands</source>
-        <translation>Commandes en attente</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1631"/>
@@ -824,12 +824,12 @@ Vos paramètres ont été modifiés pour permettre ce mode. Pourquoi? Parce qu&a
         <translation>NC (*.nc);;Tous fichiers (*.*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1268"/>
+        <location filename="../mainwindow.cpp" line="1255"/>
         <source>Spindle On.</source>
         <translation>Marche broche</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1273"/>
+        <location filename="../mainwindow.cpp" line="1260"/>
         <source>Spindle Off.</source>
         <translation>Arrêt broche</translation>
     </message>
@@ -842,137 +842,102 @@ Vos paramètres ont été modifiés pour permettre ce mode. Pourquoi? Parce qu&a
         <translation>Options</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="369"/>
-        <source>Axis</source>
-        <translation>Axes</translation>
-    </message>
-    <message>
-        <location filename="../options.ui" line="381"/>
+        <location filename="../options.ui" line="42"/>
         <source>Invert Axis</source>
         <translation>Inverser les axes</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="410"/>
+        <location filename="../options.ui" line="71"/>
         <source>Z Axis</source>
         <translation>Axe Z</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="403"/>
+        <location filename="../options.ui" line="64"/>
         <source>Y Axis</source>
         <translation>Axe Y</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="396"/>
+        <location filename="../options.ui" line="57"/>
         <source>X Axis</source>
         <translation>Axe X</translation>
     </message>
     <message>
+        <location filename="../options.ui" line="78"/>
         <source>C Axis</source>
-        <translation type="obsolete">Axe C</translation>
+        <translation>Axe C</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="52"/>
+        <location filename="../options.ui" line="290"/>
         <source>Seconds to Wait for Response</source>
         <translation>Secondes d&apos;attente lors d&apos;une réponse</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="45"/>
+        <location filename="../options.ui" line="283"/>
         <source>Z-Jog Rate (inches or mm/min)</source>
         <translation>Vitesse manuelle Z  (pouces ou mmm/min)</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="30"/>
-        <source>Main</source>
-        <translation>Général</translation>
-    </message>
-    <message>
-        <location filename="../options.ui" line="109"/>
+        <location filename="../options.ui" line="95"/>
         <source>Use millimeters when sending manual commands (v0.8c+ only)</source>
         <translation>Emission des commandes manuelles en millimètre (v0.8c+ seulement)</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="132"/>
-        <source>Filtering</source>
-        <translation>Filtre</translation>
-    </message>
-    <message>
-        <location filename="../options.ui" line="144"/>
+        <location filename="../options.ui" line="108"/>
         <source>Z Rate Limiting</source>
         <translation>Limitation de vitesse</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="159"/>
+        <location filename="../options.ui" line="123"/>
         <source>Limit Z Rate</source>
         <translation>Vitesse max Z</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="204"/>
+        <location filename="../options.ui" line="168"/>
         <source>Z-Rate Limit (inches or mm/min)</source>
         <translation>Vitesse limite Z (pouces ou mmm/min)</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="211"/>
+        <location filename="../options.ui" line="175"/>
         <source>XY Rate (inches or mm/min)</source>
         <translation>Vitesse XY (pouces ou mmm/min)</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="116"/>
+        <location filename="../options.ui" line="211"/>
         <source>Use aggressive preload strategy for Grbl</source>
         <translation>Utiliser une stratégie agressive de pré-chargement pour Grbl</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="123"/>
+        <location filename="../options.ui" line="218"/>
         <source>Write debugging log to home folder (requires restart)</source>
         <translation>Mise au point sauvée dans le répertoire d&apos;accueil (+ redémarrage)</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="417"/>
-        <location filename="../options.ui" line="434"/>
-        <source>Fourth Axis</source>
-        <translation>Choix du 4 ème axe</translation>
-    </message>
-    <message>
-        <location filename="../options.ui" line="446"/>
-        <source>A</source>
-        <translation>A</translation>
-    </message>
-    <message>
-        <location filename="../options.ui" line="462"/>
-        <source>B</source>
-        <translation>B</translation>
-    </message>
-    <message>
-        <location filename="../options.ui" line="475"/>
-        <source>C</source>
-        <translation>C</translation>
-    </message>
-    <message>
-        <location filename="../options.ui" line="489"/>
+        <location filename="../options.ui" line="225"/>
         <source>Enable 4-axis mode</source>
         <translation>Valider le mode 4 axes</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="276"/>
+        <location filename="../options.ui" line="241"/>
         <source>Command Filtering</source>
         <translation>Filtrage des commandes</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="288"/>
+        <location filename="../options.ui" line="253"/>
         <source>Filter file commands before sending</source>
-        <translation>Filtrage des commandes du fichier avant l&apos;émission</translation>
+        <translation>Fichier de filtrage des commandes avant l&apos;émission</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="301"/>
+        <location filename="../options.ui" line="266"/>
         <source>Selectively reduce precision for excessively long lines</source>
         <translation>Réduire la précision lors de longues lignes </translation>
     </message>
     <message>
-        <location filename="../options.ui" line="247"/>
+        <location filename="../options.ui" line="347"/>
         <source>Character send delay ms</source>
-        <translation>Delai d&apos;émission des caractères en mS</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../options.ui" line="318"/>
+        <location filename="../options.ui" line="389"/>
         <source>Grbl Line Buffer Size</source>
         <translation>Taille du tampon d&apos;entrée de Grbl</translation>
     </message>

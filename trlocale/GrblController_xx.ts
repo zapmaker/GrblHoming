@@ -772,12 +772,12 @@ What does this mean to you? Arc commands will now run smoother and faster than b
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1268"/>
+        <location filename="../mainwindow.cpp" line="1255"/>
         <source>Spindle On.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1273"/>
+        <location filename="../mainwindow.cpp" line="1260"/>
         <source>Spindle Off.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -790,133 +790,102 @@ What does this mean to you? Arc commands will now run smoother and faster than b
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../options.ui" line="369"/>
-        <source>Axis</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../options.ui" line="381"/>
+        <location filename="../options.ui" line="42"/>
         <source>Invert Axis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../options.ui" line="410"/>
+        <location filename="../options.ui" line="71"/>
         <source>Z Axis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../options.ui" line="403"/>
+        <location filename="../options.ui" line="64"/>
         <source>Y Axis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../options.ui" line="396"/>
+        <location filename="../options.ui" line="57"/>
         <source>X Axis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../options.ui" line="52"/>
+        <location filename="../options.ui" line="78"/>
+        <source>C Axis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../options.ui" line="290"/>
         <source>Seconds to Wait for Response</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../options.ui" line="45"/>
+        <location filename="../options.ui" line="283"/>
         <source>Z-Jog Rate (inches or mm/min)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../options.ui" line="30"/>
-        <source>Main</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../options.ui" line="109"/>
+        <location filename="../options.ui" line="95"/>
         <source>Use millimeters when sending manual commands (v0.8c+ only)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../options.ui" line="132"/>
-        <source>Filtering</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../options.ui" line="144"/>
+        <location filename="../options.ui" line="108"/>
         <source>Z Rate Limiting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../options.ui" line="159"/>
+        <location filename="../options.ui" line="123"/>
         <source>Limit Z Rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../options.ui" line="204"/>
+        <location filename="../options.ui" line="168"/>
         <source>Z-Rate Limit (inches or mm/min)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../options.ui" line="211"/>
+        <location filename="../options.ui" line="175"/>
         <source>XY Rate (inches or mm/min)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../options.ui" line="116"/>
+        <location filename="../options.ui" line="211"/>
         <source>Use aggressive preload strategy for Grbl</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../options.ui" line="123"/>
+        <location filename="../options.ui" line="218"/>
         <source>Write debugging log to home folder (requires restart)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../options.ui" line="417"/>
-        <location filename="../options.ui" line="434"/>
-        <source>Fourth Axis</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../options.ui" line="446"/>
-        <source>A</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../options.ui" line="462"/>
-        <source>B</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../options.ui" line="475"/>
-        <source>C</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../options.ui" line="489"/>
+        <location filename="../options.ui" line="225"/>
         <source>Enable 4-axis mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../options.ui" line="276"/>
+        <location filename="../options.ui" line="241"/>
         <source>Command Filtering</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../options.ui" line="288"/>
+        <location filename="../options.ui" line="253"/>
         <source>Filter file commands before sending</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../options.ui" line="301"/>
+        <location filename="../options.ui" line="266"/>
         <source>Selectively reduce precision for excessively long lines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../options.ui" line="247"/>
+        <location filename="../options.ui" line="347"/>
         <source>Character send delay ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../options.ui" line="318"/>
+        <location filename="../options.ui" line="389"/>
         <source>Grbl Line Buffer Size</source>
         <translation type="unfinished"></translation>
     </message>

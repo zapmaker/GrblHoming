@@ -20,13 +20,25 @@ build from source.
 Details on how to do this can be found here:
 http://zapmaker.org/
 
-V3.6   + translate 2014-04-20
+V3.6
 Enhancements
 - Options dialog is now tabbed to better fit widgets
 - Ability to handle 4th axis as either A, B, or C (requires correct grbl version for axis),
   please see https://github.com/zapmaker/GrblHoming/issues/56 and 
   https://github.com/LETARTARE/Grbl_with_Arduino/tree/master/Grbl84Mega2560
   which is the A axis grbl variant.
+- LETARTARE: Added UVW axes
+- #45: Added ability to completely or partially turn off querying position from grbl to
+  help improve responsiveness. The new default is to disable waiting for idle before a
+  jog or manual command, which speeds up those operations. Additional, you can 
+  completely turn it off position reporting during jog or manual control which will 
+  result in light-greyed LCD numbers. A button to query the position has been
+  added, which will provided up-to-date position at the time the button is pushed.
+  Look in Options | Display tab for new button options. You can also set the rate
+  at which the query takes place from 0.5-10 seconds, if it is enabled. Setting a time
+  that is too long may result in the system waiting too long to retrieve the final position
+  before control is handed back. Also, the current position dot on the Visualizer turns 
+  from red to green when the position is not accurately known to match the color of the path.
 Bug fix
 - Fixed fourth axis adjust buttons and coordinate display greyed out when they shouldn't
   be (under specific operating circumstances).

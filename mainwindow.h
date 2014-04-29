@@ -164,6 +164,8 @@ private slots:
     void statusSliderPressed();
     void statusSliderReleased();
     void setQueuedCommands(int commandCount, bool running);
+    void setLcdState(bool valid);
+    void refreshPosition();
 
 private:
     // enums
@@ -225,6 +227,7 @@ private:
     int lastQueueCount;
     int queuedCommandState;
     QStringList fullStatus;
+    bool lastLcdStateValid;
 
     //methods
     int SendJog(QString strline);

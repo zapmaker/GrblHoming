@@ -20,7 +20,8 @@ signals:
 
 public slots:
     void setItems(QList<PosItem>);
-    void setLivePoint(double x, double y, bool isMM);
+    void setLivePoint(double x, double y, bool isMM, bool isLiveCP);
+    void setVisualLivenessCurrPos(bool isLiveCP);
     void setVisCurrLine(int currLine);
 
 protected:
@@ -29,8 +30,9 @@ protected:
 private:
     QList<PosItem> items;
     RenderItemList listToRender;
-    QPen penProposedPath, penAxes, penCoveredPath, penCurrPos, penMeasure;
+    QPen penProposedPath, penAxes, penCoveredPath, penCurrPosActive, penCurrPosInactive, penMeasure;
     PosItem livePoint;
+    bool isLiveCurrPos;
 };
 
 #endif // RENDERAREA_H

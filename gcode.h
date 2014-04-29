@@ -96,8 +96,10 @@ signals:
     void setLastState(QString state);
     void setUnitsWork(QString value);
     void setUnitsMachine(QString value);
-    void setLivePoint(double x, double y, bool isMM);
+    void setLivePoint(double x, double y, bool isMM, bool isLiveCP);
     void setVisCurrLine(int currLine);
+    void setLcdState(bool valid);
+    void setVisualLivenessCurrPos(bool isLiveCP);
 
 public slots:
     void openPort(QString commPortStr, QString baudRate);
@@ -116,6 +118,14 @@ public slots:
 protected:
     void timerEvent(QTimerEvent *event);
 
+private:
+    enum PosReqStatus
+    {
+        POS_REQ_RESULT_OK,
+        POS_REQ_RESULT_ERROR,
+        POS_REQ_RESULT_TIMER_SKIP,
+        POS_REQ_RESULT_UNAVAILABLE
+    };
 private:
     bool sendGcodeLocal(QString line, bool recordResponseOnFail = false, int waitSec = -1, bool aggressive = false, int currLine = 0);
     bool waitForOk(QString& result, int waitCount, bool sentReqForLocation, bool sentReqForParserState, bool aggressive, bool finalize);
@@ -139,6 +149,9 @@ private:
     void sendStatusList(QStringList& listToSend);
     void clearToHome();
     bool checkGrbl(const QString& result);
+    PosReqStatus positionUpdate(bool forceIfEnabled = false);
+    bool checkForGetPosStr(QString& line);
+    void setLivenessState(bool valid);
 
 private:
     RS232 port;
@@ -162,6 +175,8 @@ private:
     int sliderZCount;
     QStringList grblCmdErrors;
     QStringList grblFilteredCmds;
+    QTime pollPosTimer;
+    bool positionValid;
 
     int sentI;
     int rcvdI;

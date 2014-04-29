@@ -3,10 +3,12 @@
 RenderArea::RenderArea(QWidget *parent)
     : QWidget(parent),
       penProposedPath(QPen(Qt::blue)), penAxes(QPen(QColor(193,97,0))),
-      penCoveredPath(QPen(QColor(60,196,70), 2)), penCurrPos(QPen(Qt::red, 6)),
-      penMeasure(QPen(QColor(151,111,26)))
+      penCoveredPath(QPen(QColor(60,196,70), 2)),
+      penCurrPosActive(QPen(Qt::red, 6)), penCurrPosInactive(QPen(QColor(60,196,70), 6)),
+      penMeasure(QPen(QColor(151,111,26))), isLiveCurrPos(false)
 {
-    penCurrPos.setCapStyle(Qt::RoundCap);
+    penCurrPosActive.setCapStyle(Qt::RoundCap);
+    penCurrPosInactive.setCapStyle(Qt::RoundCap);
 }
 
 void RenderArea::setItems(QList<PosItem> itemsRcvd)
@@ -19,11 +21,18 @@ void RenderArea::setItems(QList<PosItem> itemsRcvd)
     update();
 }
 
-void RenderArea::setLivePoint(double x, double y, bool mm)
+void RenderArea::setLivePoint(double x, double y, bool mm, bool isLiveCP)
 {
+    isLiveCurrPos = isLiveCP;
     livePoint.setCoords(x, y, mm);
     listToRender.setLivePoint(livePoint);
     update();
+
+}
+
+void RenderArea::setVisualLivenessCurrPos(bool isLiveCP)
+{
+    isLiveCurrPos = isLiveCP;
 }
 
 void RenderArea::setVisCurrLine(int currLine)
@@ -57,7 +66,10 @@ void RenderArea::paintEvent(QPaintEvent * /* event */)
 
     //if (!livePoint.isNull()) FIX isNull
     {
-        painter.setPen(penCurrPos);
+        if (isLiveCurrPos)
+            painter.setPen(penCurrPosActive);
+        else
+            painter.setPen(penCurrPosInactive);
         listToRender.drawPoint(painter, livePoint);
     }
 }
