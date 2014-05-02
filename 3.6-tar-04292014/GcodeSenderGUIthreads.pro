@@ -5,7 +5,7 @@
 # (fourth axis modifications and translation added by LETARTARE 2013-08-03)
 #-------------------------------------------------
 
-QT       += core gui # widgets
+QT       += core gui widgets
 
 TARGET = GrblController
 TEMPLATE = app
