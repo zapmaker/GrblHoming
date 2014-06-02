@@ -1,0 +1,29 @@
+                        ---- GrblController ----
+
+GrblController is a gcode sender, monitor and homing tool for GRBL for
+Mac, Windows and Linux systems written using the Qt Desktop Framework in C++.
+
+Enhanced by Zapmaker. Kosme did a great deal of excellent foundation work on this
+project.
+
+Details on how to do this can be found here:
+http://zapmaker.org/
+
+
+V3.6.1-T1   (LETARTARE proposals June 01, 2014)
+
+- 3.6.1 +
+1- Improved to the same card 3 and 4 axis detection
+2- Displays the line numbers of the file if no number exists
+3- Updating of the French translation
+
+- Works with versions Grbl :
+   1- Three axes 0.8c, 0.9d, 0.9e,
+   2- Four axes 0845, future 0.8c1 (0.8c to 4 axes)
+
+
+
+
+
+
+
