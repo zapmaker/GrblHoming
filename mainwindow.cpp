@@ -25,7 +25,6 @@ MainWindow::MainWindow(QWidget *parent) :
     sliderPressed(false),
     sliderTo(0.0),
     sliderZCount(0),
-    scrollRequireMove(true), scrollPressed(false),
     queuedCommandsStarved(false), lastQueueCount(0), queuedCommandState(QCS_OK),
     lastLcdStateValid(true)
 {
@@ -146,28 +145,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(&runtimeTimer, SIGNAL(setRuntime(QString)), ui->outputRuntime, SLOT(setText(QString)));
 
-    // This code generates too many messages and chokes operation on raspberry pi. Do not use.
-    //connect(ui->statusList->model(), SIGNAL(rowsInserted(const QModelIndex&, int, int)), ui->statusList, SLOT(scrollToBottom()));
-
-	// instead, use this one second timer-based approach
-    scrollTimer = new QTimer(this);
-    connect(scrollTimer, SIGNAL(timeout()), this, SLOT(doScroll()));
-    scrollTimer->start(1000);
-    connect(ui->statusList->verticalScrollBar(), SIGNAL(sliderPressed()), this, SLOT(statusSliderPressed()));
-    connect(ui->statusList->verticalScrollBar(), SIGNAL(sliderReleased()), this, SLOT(statusSliderReleased()));
-
     runtimeTimerThread.start();
     gcodeThread.start();
 
-	// Don't use - it will not show horizontal scrollbar for small app size
-    //ui->statusList->setUniformItemSizes(true);
-
-	// Does not work correctly for horizontal scrollbar:
-    //MyItemDelegate *scrollDelegate = new MyItemDelegate(ui->statusList);
-    //scrollDelegate->setWidth(600);
-    //ui->statusList->setItemDelegate(scrollDelegate);
-
-    scrollStatusTimer.start();
     queuedCommandsEmptyTimer.start();
     queuedCommandsRefreshTimer.start();
 
@@ -249,7 +229,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->btnGoHomeSafe->setEnabled(false);
     ui->pushButtonRefreshPos->setEnabled(false);
     styleSheet = ui->btnOpenPort->styleSheet();
-    ui->statusList->setEnabled(true);
+    //ui->statusList->setEnabled(true);
     ui->openFile->setEnabled(true);
 
     this->setWindowTitle(GRBL_CONTROLLER_NAME_AND_VERSION);
@@ -1197,26 +1177,11 @@ void MainWindow::addToStatusList(bool in, QString msg)
     if (!in)
         nMsg = "> " + msg;
 
-    fullStatus.append(msg);
-    ui->statusList->addItem(nMsg);
-
-    status("%s", nMsg.toLocal8Bit().constData());
-
-    if (ui->statusList->count() > MAX_STATUS_LINES_WHEN_ACTIVE)
-    {
-        int count = ui->statusList->count() - MAX_STATUS_LINES_WHEN_ACTIVE;
-        for (int i = 0; i < count; i++)
-        {
-            ui->statusList->takeItem(0);
-        }
-    }
-
-    scrollRequireMove = true;
+    ui->statusLog->appendPlainText( msg );
 }
 
 void MainWindow::addToStatusList(QStringList& list)
 {
-    QStringList cleanList;
     foreach (QString msg, list)
     {
         msg = msg.trimmed();
@@ -1226,91 +1191,10 @@ void MainWindow::addToStatusList(QStringList& list)
         if (msg.length() == 0)
             continue;
 
-        cleanList.append(msg);
-
-        fullStatus.append(msg);
-
+        ui->statusLog->appendPlainText( msg );
         status("%s", msg.toLocal8Bit().constData());
     }
-
-    if (cleanList.size() == 0)
-        return;
-
-    ui->statusList->addItems(cleanList);
-
-    if (ui->statusList->count() > MAX_STATUS_LINES_WHEN_ACTIVE)
-    {
-        int count = ui->statusList->count() - MAX_STATUS_LINES_WHEN_ACTIVE;
-        for (int i = 0; i < count; i++)
-        {
-            ui->statusList->takeItem(0);
-        }
-    }
-
-    scrollRequireMove = true;
 }
-
-void MainWindow::doScroll()
-{
-    if (!scrollPressed && scrollRequireMove)// && scrollStatusTimer.elapsed() > 1000)
-    {
-        ui->statusList->scrollToBottom();
-        QApplication::processEvents();
-        scrollStatusTimer.restart();
-        scrollRequireMove = false;
-    }
-}
-
-void MainWindow::statusSliderPressed()
-{
-    scrollPressed = true;
-
-    if (scrollStatusTimer.elapsed() > 3000)
-    {
-        ui->statusList->clear();
-        ui->statusList->addItems(fullStatus);
-    }
-}
-
-void MainWindow::statusSliderReleased()
-{
-    scrollPressed = false;
-}
-
-/* testing optimizing scrollbar, doesn't work
-int MainWindow::computeListViewMinimumWidth(QAbstractItemView* view)
-{
-    int minWidth = 0;
-    QAbstractItemModel* model = view->model();
-
-    QStyleOptionViewItem option;
-
-    int rowCount = model->rowCount();
-    for (int row = 0; row < rowCount; ++row)
-    {
-        QModelIndex index = model->index(row, 0);
-        QSize size = view->itemDelegate()->sizeHint(option, index);
-        scrollDelegate = new MyItemDelegate(view);
-        view->setItemDelegate(scrollDelegate);
-
-        minWidth = qMax(size.width(), minWidth);
-    }
-
-    if (rowCount > 0)
-    {
-        if (scrollDelegate == NULL)
-        {
-            scrollDelegate = new MyItemDelegate(view);
-            QModelIndex index = model->index(0, 0);
-            view->setItemDelegate(scrollDelegate);
-        }
-
-        scrollDelegate->setWidth(minWidth);
-        info("Width is %d\n", minWidth);
-    }
-    return minWidth;
-}
-*/
 
 void MainWindow::receiveMsg(QString msg)
 {
