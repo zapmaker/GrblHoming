@@ -94,6 +94,8 @@ Options::Options(QWidget *parent) :
     double zJogRate = settings.value(SETTINGS_Z_JOG_RATE, DEFAULT_Z_JOG_RATE).value<double>();
     ui->doubleSpinZJogRate->setValue(zJogRate);
 
+    ui->spinMaxStatusLines->setValue( settings.value( SETTINGS_MAX_STATUS_LINES, 0 ).value<int>() );
+
     QString zRateLimit = settings.value(SETTINGS_Z_RATE_LIMIT, "false").value<QString>();
     ui->chkLimitZRate->setChecked(zRateLimit == "true");
 
@@ -173,6 +175,8 @@ void Options::accept()
     settings.setValue(SETTINGS_ENABLE_POS_REQ, ui->checkBoxPositionReportEnabled->isChecked());
     settings.setValue(SETTINGS_TYPE_POS_REQ, getPosReqType());
     settings.setValue(SETTINGS_POS_REQ_FREQ_SEC, ui->doubleSpinBoxPosRequestFreqSec->value());
+
+    settings.setValue(SETTINGS_MAX_STATUS_LINES, ui->spinMaxStatusLines->value());
 
     connect(this, SIGNAL(setSettings()), parentWidget(), SLOT(setSettings()));
 

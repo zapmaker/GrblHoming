@@ -1005,6 +1005,8 @@ void MainWindow::setSettings()
 
 void MainWindow::updateSettingsFromOptionDlg(QSettings& settings)
 {
+    ui->statusLog->setMaximumBlockCount( settings.value( SETTINGS_MAX_STATUS_LINES, 0 ).value<int>() );
+
     QString sinvX = settings.value(SETTINGS_INVERSE_X, "false").value<QString>();
     QString sinvY = settings.value(SETTINGS_INVERSE_Y, "false").value<QString>();
     QString sinvZ = settings.value(SETTINGS_INVERSE_Z, "false").value<QString>();

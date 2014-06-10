@@ -35,7 +35,7 @@
        <x>10</x>
        <y>146</y>
        <width>451</width>
-       <height>71</height>
+       <height>74</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout" columnstretch="2,1">
@@ -88,6 +88,16 @@
         </property>
         <property name="value">
          <double>260.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QSpinBox" name="spinMaxStatusLines"/>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="labelMaxStatusLines">
+        <property name="text">
+         <string>Max Log Lines ( 0 : unlimited )</string>
         </property>
        </widget>
       </item>

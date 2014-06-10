@@ -53,6 +53,8 @@
 #define SETTINGS_TYPE_POS_REQ               "posRequestType"
 #define SETTINGS_POS_REQ_FREQ_SEC           "posReqFreqSec"
 
+#define SETTINGS_MAX_STATUS_LINES           "maxStatusLines"
+
 
 namespace Ui {
 class Options;
