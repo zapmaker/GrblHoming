@@ -1,0 +1,20 @@
+builWin.txt by LETARTARE
+
+
+To build the executable under Windows, you must have
+1- a 'Qt' version installed and compiled, the tests were performed with 'Qt-4.7.3'.
+2- 'mingw32' installed to use 'mingw32-make.exe', the tests were performed with 'MinGw32-TDM-4.7.1'
+
+You have to adapt the file 'makeWin.bat' for the paths are correct.
+
+Example :
+	set PATH_Qt = ""u:\DONNEES\SVN_COMPILE\qt\4.7.3"
+	set PATH_MINGW32 = "o:\DevCpp\MinGw32-TDM"
+
+Open a DOS console and
+1 - makeWin.bat
+2 - execute.bat
+
+if you want the French translation
+3 - translate.bat
+4 - execute.bat
