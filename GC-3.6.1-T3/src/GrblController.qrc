@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>img/down.PNG</file>
+        <file>img/left.PNG</file>
+        <file>img/logotiny.PNG</file>
+        <file>img/right.PNG</file>
+        <file>img/up.PNG</file>
+        <file>img/zapmaker-logo-130.png</file>
+    </qresource>
+</RCC>
