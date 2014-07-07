@@ -7,18 +7,13 @@
 
 QT       += core gui
 
-unix {
-   QT += widgets
+# LETARTARE  June 12, 2014
+contains(QT_VERSION, "^5.*") {
+   QT *= widgets
 }
-
-# Translations
-	TRANSLATIONS += trlocale/GrblController_xx.ts
-	TRANSLATIONS += trlocale/GrblController_fr.ts
 
 TARGET = GrblController
 TEMPLATE = app
-
-DEFINES *= QT_DEBUG
 
 include(QextSerialPort/qextserialport.pri)
 include(log4qt/log4qt.pri)
@@ -110,4 +105,6 @@ OTHER_FILES += \
     android/src/org/kde/necessitas/origo/QtApplication.java \
     android/version.xml
 
-
+# Translations
+	TRANSLATIONS += trlocale/GrblController_xx.ts
+	TRANSLATIONS += trlocale/GrblController_fr.ts

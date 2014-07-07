@@ -7,9 +7,14 @@ To build the executable under Windows, you must have
 
 You have to adapt the file 'makeWin.bat' for the paths are correct.
 
-Example :
-	set PATH_Qt = ""u:\DONNEES\SVN_COMPILE\qt\4.7.3"
-	set PATH_MINGW32 = "o:\DevCpp\MinGw32-TDM"
+Example Qt4 :
+ 	set PATH_Qt=u:\DONNEES\SVN_COMPILE\qt\4.7.3
+	set PATH_MINGW32=o:\DevCpp\MinGw32-TDM
+
+Example Qt5 :
+ 	set PATH_QT=o:\DevCpp\Qt-5.3\5.2.0\mingw48_32\
+	set PATH_MINGW32=o:\DevCpp\Qt-5.3\Tools\mingw48_32\ 
+
 
 Open a DOS console and
 1 - makeWin.bat
