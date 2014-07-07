@@ -386,11 +386,12 @@ bool GCode::sendGcodeInternal(QString line, QString& result, bool recordResponse
     }
     else if (!sentReqForLocation)// if requesting location, don't add that "noise" to the output view
     {
-/// LETARTARE T1
+/// T1 + fix bug
+        QString nline(line);
         if (currLine && (line.at(0).toLatin1() != 'N') )
-            line = "L" + QString().setNum(currLine) + "  " + line;
+            nline = "L" + QString().setNum(currLine) + "  " + line;
  /// <--
-        emit addListOut(line);
+        emit addListOut(nline);
     }
 
     if (line.size() == 0 || (!line.endsWith('\r') && !ctrlX))
@@ -411,7 +412,8 @@ bool GCode::sendGcodeInternal(QString line, QString& result, bool recordResponse
     if (ctrlX)
         diag(qPrintable(tr("SENDING[%d]: 0x%02X (CTRL-X)\n")), currLine, buf[0]);
     else
-        diag(qPrintable(tr("SENDING[%d]: %s\n")), currLine, buf);
+       // diag(qPrintable(tr("SENDING[%d]: %s\n")), currLine, buf);
+        diag(qPrintable(tr("SENDING[%d]: ->%s<-\n")), currLine, buf);
 
     int waitSecActual = waitSec == -1 ? controlParams.waitTime : waitSec;
 
@@ -1747,7 +1749,7 @@ void GCode::gotoXYZFourth(QString line)
 {
     bool queryPos = checkForGetPosStr(line);
  if (!queryPos && controlParams.usePositionRequest
-            && controlParams.positionRequestType == PREQ_ALWAYS)  
+            && controlParams.positionRequestType == PREQ_ALWAYS)
         pollPosWaitForIdle(false);
 
     if (sendGcodeLocal(line))
