@@ -399,15 +399,16 @@ bool GCode::sendGcodeInternal(QString line, QString& result, bool recordResponse
     }
     else if (!sentReqForLocation)// if requesting location, don't add that "noise" to the output view
     {
-/// LETARTARE T1, T2
+/// T1, T2  + fix bug
+        QString nLine(line);
         if (currLine) {
-            QString numLine = QString().setNum(currLine);
-            emit setLinesFile(numLine);
+            nLine = QString().setNum(currLine);
+            emit setLinesFile(nLine);
             if (line.at(0).toLatin1() != 'N')
-                line = "L" +  numLine + "  " + line;
+                nLine = "L" +  nLine + "  " + line;
         }
+        emit addListOut(nLine);
  /// <--
-        emit addListOut(line);
     }
 
     if (line.size() == 0 || (!line.endsWith('\r') && !ctrlX))

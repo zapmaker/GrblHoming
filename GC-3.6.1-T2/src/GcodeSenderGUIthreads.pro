@@ -5,7 +5,12 @@
 # (fourth axis modifications and translation added by LETARTARE 2013-08-03)
 #-------------------------------------------------
 
-QT       += core gui # widgets
+QT       += core gui
+
+# LETARTARE  June 12, 2014
+contains(QT_VERSION, "^5.*") {
+   QT *= widgets
+}
 
 TARGET = GrblController
 TEMPLATE = app
