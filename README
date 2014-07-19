@@ -10,6 +10,26 @@ Details on how to do this can be found here:
 http://zapmaker.org/
 
 --------------------------------------------------------------------------------
+v3.6.1-T4  (LETARTARE proposals July 19, 2014)
+
+An executable 'Win32' into 'GCV-3.6.1-T4-cb.jt'.  
+This is a file Win32 compressed, change the extension 'jt -> 7z' to decompress.
+
+* 3.6.1-T3 +
+
+1- Analyzes the gcode with 4 axes X, Y, Z, T
+2- Visualize the gcode XYZ on 3D
+3- Animate the gcode XYZ on 3D
+3- Updating of the French translation
+
+- Works with versions Grbl :
+   1- Three axes 0.8c, 0.9d, 0.9e, 09f
+   2- Four axes 0845, 0.8c1, 0.8c2 (0.8c to 4 axes) with MEGA2560
+	  https://github.com/LETARTARE/Grbl-xx_with_Arduino/tree/master/Grbl8c2Mega2560
+
+
+
+--------------------------------------------------------------------------------
 Fix old bug to T1, T2, T3 (July 7, 2014)
 
 V3.6.1-T3   (LETARTARE proposals June 06, 2014)
