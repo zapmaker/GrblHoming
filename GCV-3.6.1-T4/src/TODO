@@ -1,0 +1,68 @@
+This file contains enhancements the developer and user community would like to see:
+
+
+Planned for 3.4.x
+- Bug fixes
+Planned for 3.5:
+- (What is the problem here? Run is shown, then Idle when stopped) Detect machine state at end of run and display it properly (i.e. "transitioning" when it is still moving)
+- Every second or so, if not scrolled to bottom, scroll to bottom of status
+- Allow reload of same file from same location
+- After a run, suppress $$ output with a single line
+- Report system settings at beginning of log file. Include OS.
+- Can't see drill holes under axis, move axes under toolpaths?
+- Create test plan (i.e. verify all text appears correctly on all platforms)
+- Display detected version of Grbl
+- Speed limit for X and Y like the Z speed limit
+
+Planned for 3.6:
+- Implement support for Grbl 0.8c "homing" feature (using limit switches)
+- UI support for homing limit switches
+- Restore "Tool change" feature, including popup dialog
+- Option to engage stepper lock (include fade out rate setting - start time of fade, end time of fade, requires hw mod)
+- Display current feedrate in mm/sec or in/sec
+- Add additional rs232 error logging value (-1 is not very useful)
+- Analyze file ahead of time and determine if it will go beyond extents
+- Update manual since 3.3
+
+Planned for 3.7
+- Switch to compiling using Qt 5
+- Auto-scale widgets to full screen size
+- Localization ready code
+- Don't fail on timeout waiting for command - let user continue if they want
+- Pick up from where left off (if GC dies due to PC falling asleep, etc.)
+- Look at all hardware connection options of Grbl on the shield and make
+  sure that we have some way to control those, i.e. spindle control.
+- Clear log button
+- Print current GRBL settings
+- Add option to always use last working port, even if it isn't currently connected
+
+Primary:
+- Save/Load current GRBL settings from disk
+- Suppress some bookkeeping output from the status window
+- Add local Help linked from main screen and options dialog
+- When parsing for visualizer, if bad value arg, warn user
+- If nothing appears in visualizer, attempt to diagnose and explain to user
+- If get error from grbl, provide command that generated error on same line
+- Allow user to choose how to handle unspecified units in file for visualizer
+- Fix Zero position next to begin?
+- Show drill holes as larger dots?
+- Build in calibration pattern
+- Build in "flatten table feature"
+- File viewer
+- Estimate bounds based on both toolpaths and tool diameter, not just toolpaths
+
+Secondary:
+- Make GC generic to support controllers other than Grbl
+- Recent files list under 'Files'
+- Restore "Favorites" feature
+- Provide diagnostic response view
+- Provide counter showing time waiting for a response if time > 5s
+- Estimated time to completion (this can acutally be computed from feedrates)
+
+Notes pulled from https://github.com/grbl/grbl/issues/202
+
+Move Z to upper clear position. (<- another parameter?)
+Stop the spindle.
+X and Y to the change tool coordinates.
+A way to adjust new Z (manual for me) and perhaps new speed for the spindle (manual for me).
+When ready (~) start cycle? to continue with the new tool with the same X and Y initial coordinates than the last tool.

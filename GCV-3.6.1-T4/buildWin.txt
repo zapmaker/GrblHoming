@@ -1,0 +1,34 @@
+builWin.txt by LETARTARE
+
+
+To build the executable under Windows, you must have
+
+1- a 'Qt' version installed and compiled,
+	the tests were performed with 'Qt-4.7.3' or 'Qt-5.2'.
+
+2- a 'libQGlViever' version installed in 'Qt', the tests were performed with 'QGlViewer-2.5.2'.
+	- 'path_Qt\include\QGlviewer'  received all include
+	- 'path_Qt\lib\libQGLViewer2.a  (libQGLViewerd2.a)
+	- 'path_Qt\bin\QGLViewer2.dll (QGLViewerd2.dll)
+
+3- 'mingw32' installed to use 'mingw32-make.exe',
+	the tests were performed with 'MinGw32-TDM-4.7.1' or  'MinGw32-4.8'
+
+You have to adapt the file 'mw.bat' for the paths are correct.
+
+Example for Qt4 :
+	rem Qt4
+	set PATH_QT=u:\DONNEES\SVN_COMPILE\qt\4.7.3\
+	set PATH_MINGW32o:\DevCpp\MinGw32-TDM\
+
+	rem Qt5
+	rem set PATH_QT=o:\DevCpp\Qt-5.3\5.2.0\mingw48_32\
+	rem set PATH_MINGW32=o:\DevCpp\Qt-5.3\Tools\mingw48_32\
+
+Open a DOS console and
+1 - mw.bat
+2 - execute.bat
+
+if you want the French translation
+3 - translate.bat
+4 - execute.bat

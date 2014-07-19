@@ -1,0 +1,22 @@
+<RCC>
+    <qresource prefix="/">
+        <file>img/down.PNG</file>
+        <file>img/left.PNG</file>
+        <file>img/logotiny.PNG</file>
+        <file>img/right.PNG</file>
+        <file>img/up.PNG</file>
+        <file>img/zapmaker-logo-130.png</file>
+        <file>img/gaia2.jpg</file>
+       <file>img/frontview.png</file>
+        <file>img/backview.png</file>
+        <file>img/leftview.png</file>
+        <file>img/rightview.png</file>
+        <file>img/topview.png</file>
+        <file>img/bottomview.png</file>
+        <file>img/isoview1.png</file>
+        <file>img/isoview2.png</file>
+        <file>img/isoview3.png</file>
+        <file>img/isoview4.png</file>
+        <file>img/upvector.png</file>
+    </qresource>
+</RCC>
