@@ -10,66 +10,34 @@ Details on how to do this can be found here:
 http://zapmaker.org/
 
 --------------------------------------------------------------------------------
-GCV-3.6.1-T4   (LETARTARE proposals July 19, 2014)
+GCV  : Grbl Controller Visualizer  is a 3D extension of GrblController-3.6.1
+--------------------------------------------------------------------------------
+GCV-3.6.1-T4  Grbl Controller Visualizer  (LETARTARE proposals July 19, 2014)
 
-* 3.6.1-T3 +
+* 3.6.1-T3 + 	(https://github.com/LETARTARE/GrblHoming/tree/Letartare)
 
-An executable 'Win32' into 'GCV-3.6.1-T4-cb.jt'.  
-This is a file Win32 compressed, change the extension 'jt -> 7z' to decompress.
+An executable 'Win32' into 'winexe/GCV-3.6.1-T4-cb.jtgcv'.  
+This is a file Win32 compressed, change the extension 'jtgcv -> 7z' to decompress.
 
 
 1- Analyzes the gcode with 4 axes X, Y, Z, T
 2- Visualize the gcode XYZ on 3D
+	- viewer 3D, X,Y,Z use LibGlViewer
+	- choice of 3D visualization tool
+	- display the execution speed of the current line Gcode
+	- new query mode display positions by 'synchronous simulation
+	- choice of display tolerance for interpolation
+	- indicates the number of equivalent segments in 3D
 3- Animate the gcode XYZ on 3D
+	- independent visualization 3D animation
 3- Updating of the French translation
+
 
 - Works with versions Grbl :
    1- Three axes 0.8c, 0.9d, 0.9e, 09f
    2- Four axes 0845, 0.8c1, 0.8c2 (0.8c to 4 axes) with MEGA2560
 	  https://github.com/LETARTARE/Grbl-xx_with_Arduino/tree/master/Grbl8c2Mega2560
 
-
-V3.6.1-T3   (LETARTARE proposals June 03, 2014)
-
-* 3.6.1-T2 +
-
-1- Complete analysis of the Grbl version for 0.8cx versions
-2- Use 'Check' Grbl mode "$C"
-3- Updating of the French translation
-
-- Works with versions Grbl :
-   1- Three axes 0.8c, 0.9d, 0.9e,
-   2- Four axes 0845, 0.8c1 (0.8c to 4 axes) with MEGA2560
-	  https://github.com/LETARTARE/Grbl-xx_with_Arduino/tree/master/Grbl8c1Mega2560
-
---------------------------------------------------------------------------------
-
-V3.6.1-T2   (LETARTARE proposals June 03, 2014)
-
-* 3.6.1-T1 +
-
-1- Display Grbl version bottom right of the window    (Firmware : Grbl 0.8c)
-2- displays the total number of lines of loaded file, on the line runtime  (Lines : 1245)
-3- Displays the current line of the file read, on the line runtime  (Lines : 150/1245)
-4- Updating of the French translation
-
-- Works with versions Grbl :
-   1- Three axes 0.8c, 0.9d, 0.9e,
-   2- Four axes 0845, 0.8c1 (0.8c to 4 axes) with MEGA2560
-	  https://github.com/LETARTARE/Grbl-xx_with_Arduino/tree/master/Grbl8c1Mega2560
-
---------------------------------------------------------------------------------
-
-V3.6.1-T1   (LETARTARE proposals June 01, 2014)
-
-- 3.6.1 +
-1- Improved to the same card 3 and 4 axis detection
-2- Displays the line numbers of the file if no number exists
-3- Updating of the French translation
-
-- Works with versions Grbl :
-   1- Three axes 0.8c, 0.9d, 0.9e,
-   2- Four axes 0845, future 0.8c1 (0.8c to 4 axes)
 
 --------------------------------------------------------------------------------
 
