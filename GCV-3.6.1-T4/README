@@ -16,7 +16,7 @@ GCV-3.6.1-T4  Grbl Controller Visualizer  (LETARTARE proposals July 19, 2014)
 
 * 3.6.1-T3 + 	(https://github.com/LETARTARE/GrblHoming/tree/Letartare)
 
-An executable 'Win32' into 'winexe/GCV-3.6.1-T4-cb.jtgcv'.  
+An executable 'Win32' into 'GCV-3.6.1-T4-cb.jtgcv'.  
 This is a file Win32 compressed, change the extension 'jtgcv -> 7z' to decompress.
 
 
