@@ -14,6 +14,10 @@ GCV-3.6.1-T4   (LETARTARE proposals July 19, 2014)
 
 * 3.6.1-T3 +
 
+An executable 'Win32' into 'GCV-3.6.1-T4-cb.jt'.  
+This is a file Win32 compressed, change the extension 'jt -> 7z' to decompress.
+
+
 1- Analyzes the gcode with 4 axes X, Y, Z, T
 2- Visualize the gcode XYZ on 3D
 3- Animate the gcode XYZ on 3D
