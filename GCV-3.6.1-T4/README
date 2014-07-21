@@ -14,6 +14,9 @@ GCV  : Grbl Controller Visualizer  is a 3D extension of GrblController-3.6.1
 --------------------------------------------------------------------------------
 GCV-3.6.1-T4  Grbl Controller Visualizer  (LETARTARE proposals July 19, 2014)
 
+*********** BUG ==> NO USE G20 only G21 ******************
+
+
 * 3.6.1-T3 + 	(https://github.com/LETARTARE/GrblHoming/tree/Letartare)
 
 An executable 'Win32' into 'GCV-3.6.1-T4-cb.jtgcv'.  
