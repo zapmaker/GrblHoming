@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>484</width>
-    <height>325</height>
+    <height>333</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -25,7 +25,7 @@
      <x>10</x>
      <y>10</y>
      <width>461</width>
-     <height>271</height>
+     <height>281</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -35,7 +35,7 @@
     </sizepolicy>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab_general">
     <attribute name="title">
@@ -632,7 +632,7 @@
        <x>1</x>
        <y>97</y>
        <width>451</width>
-       <height>140</height>
+       <height>151</height>
       </rect>
      </property>
      <property name="sizePolicy">
@@ -885,7 +885,7 @@
    <property name="geometry">
     <rect>
      <x>280</x>
-     <y>290</y>
+     <y>297</y>
      <width>191</width>
      <height>30</height>
     </rect>

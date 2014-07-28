@@ -28,13 +28,18 @@
 #define PRE_HOME_Z_ADJ_MM       5.0
 
 #define REQUEST_CURRENT_POS             "?"
-#define SETTINGS_COMMAND_V08a           "$"
-#define SETTINGS_COMMAND_V08c           "$$"
+/// T4
+//#define SETTINGS_COMMAND_V08a           "$"
+//#define SETTINGS_COMMAND_V08c           "$$"
+#define SETTINGS_COMMAND_V$           	"$"
+#define SETTINGS_COMMAND_V$$           	"$$"
 /// T3
 #define REQUEST_MODE_CHECK       		"$C"
-///
-#define REQUEST_PARSER_STATE_V08c       "$G"
-#define SET_UNLOCK_STATE_V08c           "$X"
+/// T4
+//#define REQUEST_PARSER_STATE_V08c       "$G"
+//#define SET_UNLOCK_STATE_V08c           "$X"
+#define REQUEST_PARSER_STATE_V$$       "$G"
+#define SET_UNLOCK_STATE_V$$           "$X"
 
 #define REGEXP_SETTINGS_LINE    "(\\d+)\\s*=\\s*([\\w\\.]+)\\s*\\(([^\\)]*)\\)"
 
@@ -60,8 +65,18 @@
 /// T4 speed
 #define SPEED_DEFAULT	0	// mm per mn
 #define SPEED_MIN		0
-#define SPEED_MAX		24000
-#define SPEED_FAST		2000
+#define SPEED_MAX		24000.0
+#define SPEED_FAST		2000.0
+/// T4 tolerance
+#define TOL_MM			0.01
+#define TOL_MM_STEP     0.01
+#define TOL_MM_MIN		0.01
+#define TOL_MM_MAX		1.0
+#define TOL_IN			0.0004
+#define TOL_IN_STEP		0.0004
+#define TOL_IN_MIN		0.0004
+#define TOL_IN_MAX		0.04
+
 
 #define PREQ_ALWAYS           "always"
 #define PREQ_ALWAYS_NO_IDLE_CHK     "alwaysWithoutIdleChk"

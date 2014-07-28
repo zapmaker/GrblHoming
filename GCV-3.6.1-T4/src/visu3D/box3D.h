@@ -17,7 +17,7 @@
 class Box3D
 {
 public:
-	Box3D(const QVector3D p1, const QVector3D p2, QColor c = Qt::red);
+	Box3D(const QVector3D p1, const QVector3D p2, bool mm1 = true, QColor c = Qt::red);
 
 	void gdraw3D() const;
 
@@ -25,11 +25,13 @@ public:
 
 	void setDim (QVector3D p1, QVector3D p2);
 
+	void setMm (bool);
+
 private:
 
 	QVector3D pmin, pmax;
+	bool mm;
 	QColor color;
-
 };
 
 #endif

@@ -94,8 +94,8 @@ signals:
     void enableGrblDialogButton();
     void updateCoordinates(Coord3D maposReqKindchineCoord, Coord3D workCoord);
     void setLastState(QString state);
-    void setUnitsWork(QString value);
-    void setUnitsMachine(QString value);
+  //  void setUnitsWork(QString value);
+  //  void setUnitsMachine(QString value);
     void setLivePoint(double x, double y, bool isMM, bool isLiveCP);
 /// T4
     void setLivePoint(QVector3D);
@@ -108,7 +108,8 @@ signals:
 	void setVersionGrbl(QString versionGrbl );
 /// T3
     void setLinesFile(QString  nbline, bool check);
-
+/// T4
+    void setUnitsAll(bool usemm);
 
 public slots:
     void openPort(QString commPortStr, QString baudRate);
@@ -158,7 +159,7 @@ private:
     void pollPosWaitForIdle(bool checkMeasurementUnits);
     void checkAndSetCorrectMeasurementUnits();
     void setOldFormatMeasurementUnitControl();
-    void setUnitsTypeDisplay(bool millimeters);
+ //   void setUnitsTypeDisplay(bool millimeters);
     void setConfigureMmMode(bool setGrblUnits);
     void setConfigureInchesMode(bool setGrblUnits);
     QStringList doZRateLimit(QString strline, QString& msg, bool& xyRateSet);
@@ -168,6 +169,8 @@ private:
     PosReqStatus positionUpdate(bool forceIfEnabled = false);
     bool checkForGetPosStr(QString& line);
     void setLivenessState(bool valid);
+/// T4
+    QString getNumGrblUnit();
 
 private:
     RS232 port;
@@ -201,6 +204,7 @@ private:
     bool checkState;
 /// T4
     int posReqKind;
+    QString versionGrbl;
 };
 
 #endif // GCODE_H

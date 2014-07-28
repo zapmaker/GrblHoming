@@ -45,7 +45,7 @@ void Viewer::init()
 	npoint = -1;
 	linecodeText = linecodeTextmax = 0;
 	posPath = 0;
-	pcurr = pprev = QVector3D(); //vecBanned;
+	pcurr = pprev = QVector3D();
 	// timer animator
 	repeatVisu = new QTimer(this);
 	//setPeriod(250);
@@ -55,25 +55,37 @@ void Viewer::init()
 	connect(repeatPoint, SIGNAL(timeout()), this, SLOT(drawItem()));
 }
 
-void Viewer::setTool(bool with)
+/// called by 'MainWindow::preProcessFile(...)' with 'emit setItems(posList)'
+void Viewer::setItems(QList<PosItem> itemsRcvd)
 {
-	withtool = with;
-	update();
-}
-void Viewer::setBbox(bool with)
-{
-	withbbox = with;
-	update();
-}
-void Viewer::setG0(bool with)
-{
-	withg0 = with;
-	if (created) {
-		gcreateScene();
-		update();
+	// all items
+    items = itemsRcvd ;
+    foreach(PosItem item, items) {
+		mm = item.mm ;
 	}
+	if (!mm) {
+		vmax /= MM_IN_AN_INCH;
+		radius /= MM_IN_AN_INCH;
+		setSceneRadius(radius);
+		vecBanned /= MM_IN_AN_INCH;
+	}
+    // create all
+	gcreateScene();
+	gcreateBbox();
+	/// z + 10 mm
+	float dz = 10;
+	if (!mm)
+		dz /= MM_IN_AN_INCH;
+	pprev = pcurr = QVector3D(0, 0, pmax.z()+ dz);
+	Tool.setUnit(mm);
+	Tool.setPos(pcurr);
+	gcreateTool();
+    //
+    setTextIsEnabled(true);
+    first = true;
+    itemrec  = true;
 }
-
+/// main routine
 void Viewer::draw()
 {
 	if (itemrec)  {
@@ -104,37 +116,23 @@ void Viewer::drawDimBbox()
 	color= Qt::red;
 	glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
 	QString unit;
-	if (mm)
-		unit = " mm";
-	else
-		unit = " in";
+	QVector3D bpmin(pmin), bpmax(pmax);
+	uint8_t n;
+	if (mm) {
+		unit = " mm"; n = 3;
+	}
+	else  {
+		unit = " in"; n = 4;
+	}
 
-	drawText(10, height()-10 , "BoxMin : " + QString().setNum(pmin.x(), 'f', 2) + "/"
-							   + QString().setNum(pmin.y(), 'f', 2) + "/"
-							   + QString().setNum(pmin.z(), 'f', 2)  + unit
+	drawText(10, height()-10 , "BoxMin : " + QString().setNum(bpmin.x(), 'f', n) + "/"
+							   + QString().setNum(bpmin.y(), 'f', n) + "/"
+							   + QString().setNum(bpmin.z(), 'f', n)  + unit
 			);
-	drawText(10, height()-25, "BoxMax : " + QString().setNum(pmax.x(), 'f', 2) + "/"
-							   + QString().setNum(pmax.y(), 'f', 2) + "/"
-							   + QString().setNum(pmax.z(), 'f', 2) + unit
+	drawText(10, height()-25, "BoxMax : " + QString().setNum(bpmax.x(), 'f', n) + "/"
+							   + QString().setNum(bpmax.y(), 'f', n) + "/"
+							   + QString().setNum(bpmax.z(), 'f', n) + unit
 			);
-}
-
-/// called by 'MainWindow::preProcessFile(...)' with 'emit setItems(posList)'
-void Viewer::setItems(QList<PosItem> itemsRcvd)
-{
-	// all items
-    items = itemsRcvd ;
-    // create all
-	gcreateScene();
-	gcreateBbox();
-	 /// z + 10 mm
-	pprev = pcurr = QVector3D(0, 0, pmax.z()+10);
-	Tool.setPos(pcurr);
-	gcreateTool();
-    //
-    setTextIsEnabled(true);
-    first = true;
-    itemrec  = true;
 }
 
 void Viewer::gcreateScene(int nl)
@@ -148,7 +146,7 @@ void Viewer::gcreateBbox()
 {
 	glNewList(_LBBOX, GL_COMPILE) ;
 	/// bounding box of items
-		Box3D box(pmin, pmax, Qt::red);
+		Box3D box(pmin, pmax, mm, Qt::red);
 		box.gdraw3D();
 	glEndList();
 }
@@ -160,38 +158,37 @@ void Viewer::gcreateTool()
 		Tool.gdraw3D();
 	glEndList();
 }
-// slot
+
+// slot called by 'ui->doubleSpinBoxTol::valueChanged(double)'
 void Viewer::setTolerance(double t)
 {
-	tol = t;
-//diag("Viewer::tol %0.3f", tol);
+	if (t != tol)  {
+		tol = t;
+		if (created) {
+			gcreateScene();
+			update();
+		}
+	}
+//diag("viewer::tol %.3f", tol);
 }
-// slot
+
+// slot called by 'MainWindow::::setSpeedToLine(QList<double>)'
 void Viewer::setSpeedToLine(QList<double> stl)
 {
 	speedToLine = stl ;
 }
 
-/// called for Gcode line alid
+// called for Gcode line valid
 void Viewer::Scene(int nlColor){
     //
     if (items.size() == 0)
         return;
-
-	// unit
-	mm = items.at(0).mm;
+    // point last
 	QVector3D plast(items.at(0).x, items.at(0).y, items.at(0).z);
-
 	// min and max values
 	pmin = QVector3D(vmax, vmax, vmax);
     pmax = QVector3D(-vmax,-vmax, -vmax);;
-    // tolerance mm
-	if (!mm) {
-        pmin *= MM_IN_AN_INCH;
-        pmax *= MM_IN_AN_INCH;
-        tol*= MM_IN_AN_INCH;
-    }
-//diag("tol = %0.3f", tol);
+
     uint8_t plane(NO_PLANE);
 
 	Arc3D arc;
@@ -207,11 +204,14 @@ void Viewer::Scene(int nlColor){
 	// speed
 	speed = prevspeed = 0; // SPEED_DEFAUL ?
 	bool element;
-	uint32_t seg=0;
+	uint32_t seg = 0;
 
 	/// all items
     foreach (PosItem item, items) {
     	pathItem.clear();
+    	// unit
+    	mm = item.mm;
+//diag("Scene::mm = %s", mm==true?"true":"false");
     	pend = QVector3D(item.x, item.y, item.z);
 		element = item.g == 0 || item.g == 1 || item.g == 2 || item.g == 3 ;
 		/// Fxxxx
@@ -279,7 +279,7 @@ void Viewer::Scene(int nlColor){
 				line.gdraw3D() ;
 			}
 			else
-		/// arcs  G2, G3  work
+		/// arcs, helix :  G2, G3  work
 			if (item.g == 2 || item.g == 3)  // G2, G3
 			{
 				poffset = QVector3D(item.i, item.j, item.k);
@@ -303,7 +303,7 @@ void Viewer::Scene(int nlColor){
 			}
 		/// another ...
 			else {
-			//	spline G5, G5.1, G5.2
+			//	spline G5, G5.1, G5.2  ...
 			}
 			/// path item
 			pathItem.append(pend);
@@ -329,6 +329,8 @@ void Viewer::Scene(int nlColor){
     pvmin = qglviewer::Vec (pmin.x(), pmin.y(), pmin.z());
     pvmax = qglviewer::Vec (pmax.x(), pmax.y(), pmax.z());
     pvcenter = (pvmax - pvmin )/2.0;
+
+
     /// created scene
     created = true;
 /*
@@ -452,7 +454,6 @@ void Viewer::setLivePoint(QVector3D xyz, int nl)   /// + bool mm  , bool isLiveC
 		else   {
 			gcreateScene() ;
 		}
-
 		update();
 	}
 	// display colored line to 'visuGcode'
@@ -471,9 +472,11 @@ void Viewer::setTotalNumLine(QString str)
 double Viewer::getSpeed(int nl)
 {
 	double s(SPEED_FAST);
-	if (nl >= 0 && nl <= linecodeTextmax )
+	if (!mm)
+		s /= MM_IN_AN_INCH;
+	if (nl >= 0 && nl <= linecodeTextmax )  {
 		s = speedToLine.value(nl);
-
+	}
 	return s;
 }
 
@@ -775,4 +778,33 @@ void Viewer::sharpTool()
 	withtool = true;
 	gcreateTool();
 }
+
+void Viewer::shortTool()
+{
+	Tool.setTool(Tools3D::_SHARP_SHORT);
+	withtool = true;
+	gcreateTool();
+}
+
+void Viewer::setTool(bool with)
+{
+	withtool = with;
+	update();
+}
+
+void Viewer::setBbox(bool with)
+{
+	withbbox = with;
+	update();
+}
+
+void Viewer::setG0(bool with)
+{
+	withg0 = with;
+	if (created) {
+		gcreateScene();
+		update();
+	}
+}
+
 ///-----------------------------------------------------------------------------

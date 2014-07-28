@@ -45,7 +45,8 @@ GrblDialog::~GrblDialog()
 
 void GrblDialog::getSettings()
 {
-    emit sendGcodeAndGetResult(GDLG_CMD_ID_GET, SETTINGS_COMMAND_V08a);
+  //  emit sendGcodeAndGetResult(GDLG_CMD_ID_GET, SETTINGS_COMMAND_V08a);
+    emit sendGcodeAndGetResult(GDLG_CMD_ID_GET, SETTINGS_COMMAND_V$);
 }
 
 void GrblDialog::gcodeResult(int id, QString result)

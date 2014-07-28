@@ -5,7 +5,7 @@ mingw32-make clean
 
 del release\GrblController.exe
 
-del debug\GrblController.exe
+rem del debug\GrblController.exe
 
 cd ..
 

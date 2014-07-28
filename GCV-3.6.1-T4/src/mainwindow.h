@@ -130,6 +130,7 @@ signals:
     void setPause(bool);
     void setTol(double);
     void setPosReqKind(int);
+  //  void setUnits(QString);
 /// <-
 
 private slots:
@@ -160,8 +161,8 @@ private slots:
     void portIsClosed(bool reopen);
     void adjustedAxis();
 
+    void toggleSpindle(bool);
     //check boxes
-    void toggleSpindle();
     void toggleRestoreAbsolute();
 
     //communications
@@ -193,7 +194,7 @@ private slots:
     void setQueuedCommands(int commandCount, bool running);
     void setLcdState(bool valid);
     void refreshPosition();
-    void comboStepChanged(const QString& text);
+//    void comboStepChanged(const QString& text);
 /// T2
     void setLinesFile(QString linesFile, bool check);
 /// T4 3D
@@ -205,8 +206,11 @@ private slots:
     void on_cursorVisuGcode();
     void setActiveLineVisuGcode(int, bool);
     void setLCDValue(int value);
-   /// for test
- //   void setTolerance(double) ;
+    // change  text "mm" <=> "in"
+    void setUnitsAll(bool);
+    void stepChanged(int);
+    void enableManualControl(bool);
+    void enableTabVisuControls(bool);
 
 private:
     // enums
@@ -285,7 +289,7 @@ private:
     void writeSettings();
     void addToStatusList(bool in, QString msg);
     void addToStatusList(QStringList& list);
-    void disableAllButtons();
+    void disableAllButtons();void setUnits(bool);
     void openPortCtl(bool reopen);
     void resetProgress();
     void refreshLcd();
@@ -312,6 +316,7 @@ private:
 /// <-
     double decodeLineItem(const QString& item, const int next, bool& valid, int& nextIsValue);
     double decodeDouble(QString value, bool& valid);
+
 };
 
 

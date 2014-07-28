@@ -228,7 +228,7 @@ uint32_t Arc3D::interpolateS(const double tol, QList<QVector3D>& path1)
 		/// radians
 		double dda =  2*qAcos(1- (tol/radius));
         seg = qRound(qAbs(da/dda)+ 0.5);
-//diag("tol, radius, dda, seg  : %f, %f, %f, %d", tol, radius, dda, seg);
+//diag("tol, radius, dda, seg  : %.3f, %.2f, %.2f, %d", tol, radius, dda, seg);
 	/// <--
 		// new increment dda
          dda = da / double(seg);

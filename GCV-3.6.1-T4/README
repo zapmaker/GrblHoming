@@ -12,37 +12,45 @@ http://zapmaker.org/
 --------------------------------------------------------------------------------
 GCV  : Grbl Controller Visualizer  is a 3D extension of GrblController-3.6.1
 --------------------------------------------------------------------------------
-GCV-3.6.1-T4  Grbl Controller Visualizer  (LETARTARE proposals July 19, 2014)
+GCV-3.6.1-T4   (LETARTARE proposals July 29, 2014)
 
-*********** BUG ==> NO USE G20 only G21 ******************
+* 3.6.1-T3 +
 
+	1- Analyzes the gcode with 4 axes X, Y, Z, T   ( fourth axis )
 
-* 3.6.1-T3 + 	(https://github.com/LETARTARE/GrblHoming/tree/Letartare)
+	2- New display console ('Console') commands, with the ability to cut, copy,
+	   paste, delete text part
 
-An executable 'Win32' into 'GCV-3.6.1-T4-cb.jtgcv'.  
-This is a file Win32 compressed, change the extension 'jtgcv -> 7z' to decompress.
+	3- Display speed rate XYZ with 'Lcd'
 
+	4- Visualizes the 'Gcode' XYZ 3D with motion mouse
+		- A help button to explain the multiple possible actions on the drawing
+		  by utilsation keyboard and mouse
+		- You can see it or not the box limits the drawing
+		- Choosing a particuler tool
+		- Different views are available by buttons
+		- Display axes oriented
+		- Display a grid in the XY plane
+		- Choice of deleting lines G0
 
-1- Analyzes the gcode with 4 axes X, Y, Z, T
-2- Visualize the gcode XYZ on 3D
-	- viewer 3D, X,Y,Z use LibGlViewer
-	- choice of 3D visualization tool
-	- display the execution speed of the current line Gcode
-	- new query mode display positions by 'synchronous simulation
-	- choice of display tolerance for interpolation
-	- indicates the number of equivalent segments in 3D
-3- Animate the gcode XYZ on 3D
-	- independent visualization 3D animation
-3- Updating of the French translation
+	5- Animation 3D XYZ axes, regardless of the connection
+		- When loading a file, you can read its contents in the console 'Visual'
+		  which will launch the manual or automatic animation.
+		- In manual mode you can use the mouse to select a line of code or the
+		  navigation buttons or sliders keyboard arrows
+		- In automatic mode has a period setting reading 'Gcode'
 
+    	6- In addition to the periodic polling of 'Grbl', a new method is proposed
+       	   EXPERIMENTAL display named 'Synchronous simulation' based on motion prediction
+      		- This mode is for use rather large arcs or helical path
+      		- It is accessed via 'Tools->Options->Display->Synchronous simulation'
+
+	7- The visual presentation of 'GCV has been modified
 
 - Works with versions Grbl :
-   1- Three axes 0.8c, 0.9d, 0.9e, 09f
+   1- Three axes 0.8c, 0.9d, 0.9e, 0.9f, 0.9g
    2- Four axes 0845, 0.8c1, 0.8c2 (0.8c to 4 axes) with MEGA2560
 	  https://github.com/LETARTARE/Grbl-xx_with_Arduino/tree/master/Grbl8c2Mega2560
 
 
 --------------------------------------------------------------------------------
-
-
-

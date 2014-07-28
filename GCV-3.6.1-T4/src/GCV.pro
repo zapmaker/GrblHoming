@@ -2,8 +2,15 @@
 #
 # Project created by QtCreator 2012-02-13 T17:48:40
 #
-# (fourth axis moifications and translation added by LETARTARE 2013-08-03)
+# Rename by LETARTARE  July 28, 2014
+# GCV.pro
+#
 #-------------------------------------------------
+
+TEMPLATE = app
+TARGET = GrblController
+
+DEFINES = QT_NO_DEBUG
 
 QT   += core gui
 
@@ -16,7 +23,24 @@ contains(QT_VERSION, "^5.*") {
    QT *= widgets
 }
 
-DEFINES *= QT_DEBUG
+# LETARTARE  July 28, 2014
+DESTDIR = bin
+
+CONFIG(debug, debug|release) {
+    #  TARGET =
+    OBJECTS_DIR = build/debug/obj
+    MOC_DIR = build/debug/moc
+    RCC_DIR = build/debug/rcc
+    UI_DIR = build/debug/ui
+}
+else {
+  #  TARGET =
+    OBJECTS_DIR = build/release/obj
+    MOC_DIR = build/release/moc
+    RCC_DIR = build/release/rcc
+    UI_DIR = build/release/ui
+}
+
 # QGlViewer
 QT += xml opengl
 INCLUDEPATH += QGLViewer QGLWidget
@@ -29,12 +53,8 @@ SOURCES += visu3D/Point3D.cpp visu3D/Line3D.cpp visu3D/Arc3D.cpp visu3D/Tools3D.
 	TRANSLATIONS += trlocale/GrblController_xx.ts
 	TRANSLATIONS += trlocale/GrblController_fr.ts
 
-TARGET = GrblController
-TEMPLATE = app
-
 include(QextSerialPort/qextserialport.pri)
 include(log4qt/log4qt.pri)
-
 
 SOURCES += main.cpp\
     mainwindow.cpp \

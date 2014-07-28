@@ -10,15 +10,21 @@
 #include "box3D.h"
 #include <QtOpenGL>
 
-Box3D::Box3D(const QVector3D p1, const QVector3D p2, QColor c)
+Box3D::Box3D(const QVector3D p1, const QVector3D p2, bool mm1, QColor c)
 		: pmin(p1), pmax(p2),
-		  color(c)
+		  mm(mm1), color(c)
+
 {
 }
 
 void Box3D::setColor(QColor c)
 {
     color = c ;
+}
+
+void Box3D::setMm (bool bm)
+{
+  mm = bm;
 }
 
 void Box3D::setDim (QVector3D p1, QVector3D p2)

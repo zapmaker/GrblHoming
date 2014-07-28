@@ -17,11 +17,11 @@
 class Tools3D
 {
 	public:
-		enum typeTool {_MINI=0, _RIGHT, _HEMI, _SHARP};
+		enum typeTool {_MINI=0, _RIGHT, _HEMI, _SHARP, _SHARP_SHORT};
 
 		Tools3D();
 
-		Tools3D(uint8_t plane, QVector3D s, typeTool type=_SHARP);
+		Tools3D(uint8_t plane, QVector3D s, typeTool type=_SHARP_SHORT);
 
 		virtual ~Tools3D();
 
@@ -35,6 +35,7 @@ class Tools3D
 		void setPos(qglviewer::Vec);
 		void setPos(double x, double y, double z);
 		void setTool(typeTool);
+		void setUnit(bool mm);
 
 	private:
 
@@ -42,6 +43,7 @@ class Tools3D
 		QVector3D start;
 		typeTool type;
 		QColor color;
+		bool mm;
 };
 
 #endif // POINT3D_H

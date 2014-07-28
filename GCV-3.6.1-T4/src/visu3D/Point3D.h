@@ -32,6 +32,7 @@ class Point3D
 
 		const QVector3D p ;
 		QColor color;
+		bool mm;
 };
 
 #endif // POINT3D_H

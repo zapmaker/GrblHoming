@@ -22,7 +22,8 @@ Tools3D::Tools3D(uint8_t pl, QVector3D s, typeTool t) :
 	plane(pl),
 	start(s),
 	type(t),
-	color (Qt::black)
+	color (Qt::black),
+	mm(true)
 {
 }
 
@@ -60,7 +61,12 @@ void Tools3D::setTool(typeTool t)
 {
 	type = t;
 }
+void Tools3D::setUnit(bool mm1)
+{
+	mm = mm1;
+}
 
+//
 void Tools3D::gdraw3D() const
 {
 	float X = start.x();
@@ -68,11 +74,15 @@ void Tools3D::gdraw3D() const
 	float Z = start.z();
 	/// mm
 	float D = 3.0;
-	float R = D/2.0;
 	float L = 10.0;
+	if (!mm) {
+		D /= MM_IN_AN_INCH;
+		L /= MM_IN_AN_INCH;
+	}
+	float R = D/2.0;
 	float H = 3*D;
 
-	QColor color(Qt::red);
+	QColor color(Qt::red);  color.setRgb(255, 90, 40, 255);
 	glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
 	// a quadratic object in the heap for caps
 	GLUquadricObj * temp = gluNewQuadric ();
@@ -119,6 +129,7 @@ void Tools3D::gdraw3D() const
 			// the top disc
 			gluDisk (temp, 0.0, R, 64, 1);
 		}
+		else
 		if (type == _SHARP)	 {
 		//3- sharp milling cutter
 			glTranslated (0, 0, -H);
@@ -130,6 +141,20 @@ void Tools3D::gdraw3D() const
 			gluCylinder(temp, R, R, L, 64, 1);
 			// the top disc
 			gluDisk (temp, 0.0, R, 64, 1);
+		}
+		else
+		if (type == _SHARP_SHORT)	 {
+		//3- sharp milling cutter
+			H /= 2.0;  R /= 2.0;
+			glTranslated (0, 0, -H);
+			// lower cone , radius base, radius top, length,  number of sides, number of section
+			gluCylinder (temp, R, 0, H, 64, 1);
+			// vertical cylinder axis Z on
+			glTranslated (0, 0, -L);
+			// cylinder
+			//gluCylinder(temp, R, R, L, 64, 1);
+			// the top disc
+			//gluDisk (temp, 0.0, R, 64, 1);
 		}
 		else
 		if (type == _MINI) {	// diameter = 1 mm

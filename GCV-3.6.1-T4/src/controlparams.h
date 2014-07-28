@@ -24,7 +24,8 @@ public:
     int grblLineBufferLen;
     bool useFourAxis;
     int charSendDelayMs;
-    char fourthAxisType;
+    char fourthAxisName;
+    bool fourthAxisRotate;
 /// T4
     int posReqKind;
     bool positionSyncSimu, positionNoDisplay;

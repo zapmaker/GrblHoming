@@ -26,7 +26,6 @@ Options::Options(QWidget *parent) :
     QString invX = settings.value(SETTINGS_INVERSE_X, "false").value<QString>();
     QString invY = settings.value(SETTINGS_INVERSE_Y, "false").value<QString>();
     QString invZ = settings.value(SETTINGS_INVERSE_Z, "false").value<QString>();
-
     QString invFourth = settings.value(SETTINGS_INVERSE_FOURTH, "false").value<QString>();
     ui->chkInvFourth->setChecked(invFourth == "true");
     ui->chkInvX->setChecked(invX == "true");
@@ -40,7 +39,7 @@ Options::Options(QWidget *parent) :
     QString waitForJogToComplete = settings.value(SETTINGS_WAIT_FOR_JOG_TO_COMPLETE, "true").value<QString>();
     QString useMmManualCmds = settings.value(SETTINGS_USE_MM_FOR_MANUAL_CMDS, "true").value<QString>();
     QString enFourAxis = settings.value(SETTINGS_FOUR_AXIS_USE, "false").value<QString>();
-    char fourthAxisType = settings.value(SETTINGS_FOUR_AXIS_TYPE, FOURTH_AXIS_A).value<char>();
+    char fourthAxisType = settings.value(SETTINGS_FOUR_AXIS_NAME, FOURTH_AXIS_A).value<char>();
 
     if (enFourAxis == "false")
     {
@@ -169,7 +168,8 @@ void Options::accept()
     settings.setValue(SETTINGS_WAIT_FOR_JOG_TO_COMPLETE, ui->checkBoxWaitForJogToComplete->isChecked());
     settings.setValue(SETTINGS_USE_MM_FOR_MANUAL_CMDS, ui->checkBoxUseMmManualCmds->isChecked());
     settings.setValue(SETTINGS_FOUR_AXIS_USE, ui->checkBoxFourAxis->isChecked());
-    settings.setValue(SETTINGS_FOUR_AXIS_TYPE, getFourthAxisType());
+    settings.setValue(SETTINGS_FOUR_AXIS_NAME, getFourthAxisName());
+    settings.setValue(SETTINGS_FOUR_AXIS_ROTATE, getFourthAxisRotate());
 
 // tab General
     settings.setValue(SETTINGS_RESPONSE_WAIT_TIME, ui->spinResponseWaitSec->value());
@@ -257,7 +257,16 @@ void Options::togglePosReporting(bool usePosReporting)
     }
 }
 
-char Options::getFourthAxisType()
+/// T4
+bool Options::getFourthAxisRotate()
+{
+    char name = getFourthAxisName();
+
+    return (name == FOURTH_AXIS_A || name == FOURTH_AXIS_B || name == FOURTH_AXIS_C );
+
+}
+
+char Options::getFourthAxisName()
 {
     char type = FOURTH_AXIS_A;
 
@@ -292,6 +301,7 @@ char Options::getFourthAxisType()
 
     return type;
 }
+
 /// T4
 int Options::getPosReqKind()
 {

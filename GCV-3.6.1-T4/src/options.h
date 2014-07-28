@@ -33,7 +33,10 @@
 #define SETTINGS_Z_RATE_LIMIT_AMOUNT        "zRateLimitAmount"
 #define SETTINGS_XY_RATE_AMOUNT             "xyRateAmount"
 #define SETTINGS_FOUR_AXIS_USE              "fourAxis"
-#define SETTINGS_FOUR_AXIS_TYPE             "fourAxisType"
+/// T4
+// #define SETTINGS_FOUR_AXIS_TYPE             "fourAxisType"
+#define SETTINGS_FOUR_AXIS_NAME             "fourAxisName"
+#define SETTINGS_FOUR_AXIS_ROTATE             "fourAxisRotate"
 
 #define SETTINGS_FILE_OPEN_DIALOG_STATE     "fileopendialogstate"
 #define SETTINGS_NAME_FILTER                "namefilter"
@@ -80,10 +83,12 @@ private slots:
     void togglePosReporting(bool usePosReporting);
 
 private:
-    char getFourthAxisType();
+    // char getFourthAxisType();
+    char getFourthAxisName();
     QString getPosReqType();
 /// T4
     int getPosReqKind();
+    bool getFourthAxisRotate();
 private:
     Ui::Options *ui;
     //variables

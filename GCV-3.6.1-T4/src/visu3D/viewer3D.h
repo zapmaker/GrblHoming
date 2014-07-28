@@ -18,8 +18,6 @@
 
 #include "positem.h"
 
-class Fel_rep;
-
 class Viewer : public QGLViewer
 {
 	Q_OBJECT
@@ -84,6 +82,7 @@ public Q_SLOTS:
 	void hemiTool();
 	void rightTool();
 	void sharpTool();
+	void shortTool();
 
 	void setPeriod(int);
 	void setTolerance(double);
@@ -107,7 +106,7 @@ private:
 
 /// attributs
 	QWidget * parent;
-	const float radius ;
+	float radius ;
 	//  tolerance
     double tol;
     bool mm;
@@ -115,9 +114,9 @@ private:
 	bool itemrec, withtool, withbbox, withg0, created, first;
 
     // scene size max
-    const uint16_t vmax ;
+    uint16_t vmax ;
     // vectors
-    const QVector3D  vecBanned;
+    QVector3D  vecBanned;
     QVector3D pmax, pmin, pcurr, pprev, ptemp, pp;
 	qglviewer::Vec pvmax, pvmin, pvcenter;
 	Tools3D Tool;

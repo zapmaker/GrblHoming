@@ -76,6 +76,9 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->lcdMachNumberFourth->setAttribute(Qt::WA_DontShowOnScreen, true);
         ui->lblFourth->hide();
         ui->lblFourth->setAttribute(Qt::WA_DontShowOnScreen, true);
+/// T4
+        ui->unitFourth->hide();
+        ui->unitFourth->setAttribute(Qt::WA_DontShowOnScreen, true);
     }
 
     //buttons
@@ -99,7 +102,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->Begin,SIGNAL(clicked()),this,SLOT(begin()));
     connect(ui->openFile,SIGNAL(clicked()),this,SLOT(openFile()));
     connect(ui->Stop,SIGNAL(clicked()),this,SLOT(stop()));
-    connect(ui->SpindleOn,SIGNAL(toggled(bool)),this,SLOT(toggleSpindle()));
+/// T4
+   // connect(ui->SpindleOn,SIGNAL(toggled(bool)),this,SLOT(toggleSpindle()));
+    connect(ui->spindleButton,SIGNAL(toggled(bool)),this,SLOT(toggleSpindle(bool)));
     connect(ui->chkRestoreAbsolute,SIGNAL(toggled(bool)),this,SLOT(toggleRestoreAbsolute()));
     connect(ui->actionOptions,SIGNAL(triggered()),this,SLOT(getOptions()));
     connect(ui->actionExit,SIGNAL(triggered()),this,SLOT(close()));
@@ -111,7 +116,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->verticalSliderZJog,SIGNAL(sliderPressed()),this,SLOT(zJogSliderPressed()));
     connect(ui->verticalSliderZJog,SIGNAL(sliderReleased()),this,SLOT(zJogSliderReleased()));
     connect(ui->pushButtonRefreshPos,SIGNAL(clicked()),this,SLOT(refreshPosition()));
-    connect(ui->comboStep,SIGNAL(currentIndexChanged(QString)),this,SLOT(comboStepChanged(QString)));
+/// T4
+  //  connect(ui->comboStep,SIGNAL(currentIndexChanged(QString)),this,SLOT(comboStepChanged(QString)));
+     connect(ui->sliderStep, SIGNAL(valueChanged(int)), this, SLOT(stepChanged(int)) );
 /// T3
     connect(this, SIGNAL(sendFile(QString, bool)), &gcode, SLOT(sendFile(QString, bool)));
     connect(this, SIGNAL(openPort(QString,QString)), &gcode, SLOT(openPort(QString,QString)));
@@ -165,8 +172,8 @@ MainWindow::MainWindow(QWidget *parent) :
 /// T4  3D animator
     connect(ui->visu3D, SIGNAL(updateLCD(QVector3D)), this, SLOT(updateLCD(QVector3D)));
     connect(&gcode, SIGNAL(setLastState(QString)), ui->outputLastState, SLOT(setText(QString)));
-    connect(&gcode, SIGNAL(setUnitsWork(QString)), ui->outputUnitsWork, SLOT(setText(QString)));
-    connect(&gcode, SIGNAL(setUnitsMachine(QString)), ui->outputUnitsMachine, SLOT(setText(QString)));
+    connect(&gcode, SIGNAL(setUnitsAll(bool)), this, SLOT(setUnitsAll(bool)));
+
     /// 2D
     connect(&gcode, SIGNAL(setLivePoint(double, double, bool, bool)), ui->wgtVisualizer, SLOT(setLivePoint(double, double, bool, bool)));
     connect(&gcode, SIGNAL(setVisualLivenessCurrPos(bool)), ui->wgtVisualizer, SLOT(setVisualLivenessCurrPos(bool)));
@@ -209,8 +216,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->visu3D, SIGNAL(setSpeedGcode(double)), ui->lcdSpeedGcode, SLOT(display(double)) );
     connect(ui->visu3D, SIGNAL(setSegments(int)), ui->lcdSegments, SLOT(display(int)) );
     connect (ui->doubleSpinBoxTol, SIGNAL(valueChanged(double)), ui->visu3D, SLOT(setTolerance(double) ));
-    connect (ui->doubleSpinBoxTol, SIGNAL(valueChanged(double)), this, SLOT(setTolerance(double) ));
-   // connect (this, SIGNAL(setTol(double)), ui->visu3D, SLOT(setTolerance(double) ));
 
 /// T4  m4444x
 /*
@@ -291,6 +296,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->comboBoxBaudRate->setCurrentIndex(baudRateIndex);
 
     ui->tabAxisVisualizer->setEnabled(false);
+/// T4
+    // invalid manual controls
+    enableManualControl(false);
+
     if (!controlParams.useFourAxis)
     {
         ui->lcdWorkNumberFourth->setEnabled(false);;
@@ -368,6 +377,8 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(rightToolAction, SIGNAL(triggered()), ui->visu3D, SLOT(rightTool()));
     QAction * sharpToolAction = new QAction(tr("Sharp 3 mm"), this);
         connect(sharpToolAction, SIGNAL(triggered()), ui->visu3D, SLOT(sharpTool()) );
+    QAction * shortToolAction = new QAction(tr("Short 3 mm"), this);
+        connect(shortToolAction, SIGNAL(triggered()), ui->visu3D, SLOT(shortTool()) );
     /// menus
 
     QMenu * menuTool = new QMenu(this);
@@ -376,15 +387,18 @@ MainWindow::MainWindow(QWidget *parent) :
         menuTool->addAction(hemiToolAction);
         menuTool->addAction(rightToolAction);
         menuTool->addAction(sharpToolAction);
+        menuTool->addAction(shortToolAction);
     /// associate 'menuTool' and 'toolButton'
     ui->toolButton->setMenu(menuTool);
 /// <-- T4
-/// T4  tolerance  init 'float Viewer::tol'
-    ui->doubleSpinBoxTol->setValue(0.01);
-
+/// T4
+    setUnitsAll (true);
+    // period animation mS
     ui->dialPeriodRepeat->setValue(100);
 
     emit setResponseWait(controlParams);
+/// T4
+    ui->tabAxisVisualizer->setTabEnabled(TAB_AXIS_INDEX, false);
 
 }
 
@@ -413,10 +427,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::begin()
 {
+
     if (!checkState)
         setLcdState(controlParams.usePositionRequest);
     else
         setLcdState(false);
+
     // 2D
     ui->wgtVisualizer->setEnabled(!checkState);
     ui->wgtVisualizer->setAutoFillBackground(!checkState);
@@ -429,17 +445,17 @@ void MainWindow::begin()
 
     ui->visualButton->setChecked(false);
     ui->pauseButton->setChecked(true);
-  //  ui->tabGcode->setEnabled(false);
-
+    // ui->tabGcode->setEnabled(false);
     // ui->tabGcode->setEnabled(true);
-   //  ui->tabVisu->setTabEnabled(TAB_VISUGCODE_INDEX, true);
-
+    // ui->tabVisu->setTabEnabled(TAB_VISUGCODE_INDEX, true);
+    // invalid manual controls
+    enableManualControl(false);
 
     if (!checkState) {
         ui->tabAxisVisualizer->setTabEnabled(TAB_AXIS_INDEX, false);
         ui->tabAxisVisualizer->setTabEnabled(TAB_ADVANCED_INDEX, false);
+      //  ui->tabAxisVisualizer->setTabEnabled(TAB_VISUALIZER_INDEX, true);
         ui->tabAxisVisualizer->setTabEnabled(TAB_VISU3D_INDEX, true);
-       // ui->tabVisu->setTabEnabled(TAB_VISUGCODE_INDEX, false);
 
         if (ui->tabAxisVisualizer->currentIndex() != TAB_VISU3D_INDEX)
         {
@@ -490,7 +506,9 @@ void MainWindow::begin()
         ui->btnGoHomeSafe->setEnabled(false);
         ui->pushButtonRefreshPos->setEnabled(false);
 /// T4
-        ui->visualButton->setEnabled(false);
+      //  ui->visualButton->setEnabled(false);
+        // invalid commands 'tabVisu'
+        enableTabVisuControls(false);
 
         emit sendFile(ui->filePath->text(), checkState);
     }
@@ -521,10 +539,14 @@ void MainWindow::stop()
     ui->pushButtonRefreshPos->setEnabled(true);
     ui->openFile->setEnabled(true);
 /// T4
-    ui->visualButton->setEnabled(true);
-    ui->tabAxisVisualizer->setTabEnabled(TAB_AXIS_INDEX, true);
+  //  ui->visualButton->setEnabled(true);
+    // valid commands 'tabVisu'
+    enableTabVisuControls(true);
+  //  ui->tabAxisVisualizer->setTabEnabled(TAB_AXIS_INDEX, true);
     ui->tabAxisVisualizer->setTabEnabled(TAB_ADVANCED_INDEX, true);
     ui->tabVisu->setTabEnabled(TAB_VISUGCODE_INDEX, true);
+    // valid manual controls
+    enableManualControl(true);
 }
 
 void MainWindow::grblReset()
@@ -548,6 +570,11 @@ void MainWindow::goHomeSafe()
 void MainWindow::stopSending()
 {
     ui->tabAxisVisualizer->setEnabled(true);
+    ui->tabAxisVisualizer->setTabEnabled(TAB_ADVANCED_INDEX, true);
+    // valid manual controls
+    enableManualControl(true);
+
+    // lcd
     ui->lcdWorkNumberFourth->setEnabled(controlParams.useFourAxis);
     ui->lcdMachNumberFourth->setEnabled(controlParams.useFourAxis);
     ui->IncFourthBtn->setEnabled(controlParams.useFourAxis);
@@ -573,6 +600,10 @@ void MainWindow::stopSending()
     ui->btnGoHomeSafe->setEnabled(true);
     ui->pushButtonRefreshPos->setEnabled(true);
     ui->openFile->setEnabled(true);
+/// T4
+   // ui->visualButton->setEnabled(true);
+    // valid commands 'tabVisu'
+    enableTabVisuControls(true);
 }
 
 // User has asked to open the port
@@ -588,7 +619,8 @@ void MainWindow::openPort()
 void MainWindow::setHome()
 {
     resetProgress();
-    sendSetHome();
+   // sendSetHome();  // ?
+    emit sendSetHome();
 }
 
 void MainWindow::resetProgress()
@@ -660,6 +692,8 @@ void MainWindow::openPortCtl(bool reopen)
         //ui->comboBoxBaudRate->setEnabled(false);
         //ui->btnOpenPort->setEnabled(false);
         ui->btnGRBL->setEnabled(false);
+        // invalid manual controls
+        enableManualControl(false);
 /// T2
 		ui->GrblVersion->setText(tr("none"));
 
@@ -676,7 +710,10 @@ void MainWindow::portIsClosed(bool reopen)
     SLEEP(100);
 
     ui->tabAxisVisualizer->setEnabled(false);
+
 /// T4
+     // invalid manual controls
+    enableManualControl(false);
    // ui->groupBoxSendFile->setEnabled(false);
     ui->comboCommand->setEnabled(false);
     ui->labelCommand->setEnabled(false);
@@ -737,6 +774,10 @@ void MainWindow::portIsOpen(bool sendCode)
 void MainWindow::adjustedAxis()
 {
     ui->tabAxisVisualizer->setEnabled(true);
+/// T4
+    // valid manual controls
+    enableManualControl(true);
+
     ui->comboCommand->setEnabled(true);
     ui->labelCommand->setEnabled(true);
 
@@ -788,6 +829,10 @@ void MainWindow::disableAllButtons()
     ui->btnUnlockGrbl->setEnabled(false);
     ui->btnGoHomeSafe->setEnabled(false);
     ui->pushButtonRefreshPos->setEnabled(false);
+/// T4
+     // invalid manual controls
+    enableManualControl(false);
+
 }
 // called by 'GCode::waitForStartupBanner( ...)'
 void MainWindow::enableGrblDialogButton()
@@ -799,6 +844,9 @@ void MainWindow::enableGrblDialogButton()
     ui->cmbPort->setEnabled(false);
     ui->comboBoxBaudRate->setEnabled(false);
     ui->tabAxisVisualizer->setEnabled(true);
+     // valid manual controls
+    enableManualControl(true);
+
     ui->lcdWorkNumberFourth->setEnabled(controlParams.useFourAxis);
     ui->lcdMachNumberFourth->setEnabled(controlParams.useFourAxis);
     ui->IncFourthBtn->setEnabled(controlParams.useFourAxis);
@@ -855,48 +903,65 @@ void MainWindow::enableGrblDialogButton()
 void MainWindow::incX()
 {
     disableAllButtons();
+/// T4
+    ui->lcdSpeedGcode->display(controlParams.xyRateAmount);
     emit axisAdj('X', jogStep, invX, absoluteAfterAxisAdj, 0);
+
 }
 
 void MainWindow::incY()
 {
     disableAllButtons();
+/// T4
+    ui->lcdSpeedGcode->display(controlParams.xyRateAmount);
     emit axisAdj('Y', jogStep, invY, absoluteAfterAxisAdj, 0);
 }
 
 void MainWindow::incZ()
 {
     disableAllButtons();
+/// T4
+    ui->lcdSpeedGcode->display(controlParams.zJogRate);
     emit axisAdj('Z', jogStep, invZ, absoluteAfterAxisAdj, sliderZCount++);
 }
 
 void MainWindow::decX()
 {
     disableAllButtons();
+/// T4
+    ui->lcdSpeedGcode->display(controlParams.xyRateAmount);
     emit axisAdj('X', -jogStep, invX, absoluteAfterAxisAdj, 0);
 }
 
 void MainWindow::decY()
 {
     disableAllButtons();
+/// T4
+    ui->lcdSpeedGcode->display(controlParams.xyRateAmount);
     emit axisAdj('Y', -jogStep, invY, absoluteAfterAxisAdj, 0);
 }
 
 void MainWindow::decZ()
 {
     disableAllButtons();
+/// T4
+    ui->lcdSpeedGcode->display(controlParams.zJogRate);
     emit axisAdj('Z', -jogStep, invZ, absoluteAfterAxisAdj, sliderZCount++);
 }
 
 void MainWindow::decFourth()
 {
 	disableAllButtons();
-	emit axisAdj(controlParams.fourthAxisType, -jogStep, invFourth, absoluteAfterAxisAdj, 0);
+/// T4
+    ui->lcdSpeedGcode->display(controlParams.xyRateAmount);
+	emit axisAdj(controlParams.fourthAxisName, -jogStep, invFourth, absoluteAfterAxisAdj, 0);
 }
 void MainWindow::incFourth()
 {
 	disableAllButtons();
-    emit axisAdj(controlParams.fourthAxisType, jogStep, invFourth, absoluteAfterAxisAdj, 0);
+/// T4
+    ui->lcdSpeedGcode->display(controlParams.xyRateAmount);
+    emit axisAdj(controlParams.fourthAxisName, jogStep, invFourth, absoluteAfterAxisAdj, 0);
 }
 
 void MainWindow::getOptions()
@@ -1027,7 +1092,8 @@ void MainWindow::preProcessFile(QString filepath)
         double f; // speed 'Fxxxx'
         double prevf = 0.0;
         QList<double> speedToLine;
-        speedToLine.append(SPEED_FAST);
+        // case 0
+        speedToLine.append(prevf);
 
 /// T4 animator
         QString codeText;
@@ -1066,7 +1132,7 @@ void MainWindow::preProcessFile(QString filepath)
             GCode::trimToEnd(strline, '%');
 
             strline = strline.trimmed();
-
+            p = 0; f=0.0;
             if (strline.size() == 0)
             {   // ignore the white lines
             }
@@ -1077,28 +1143,18 @@ void MainWindow::preProcessFile(QString filepath)
                 strline.replace(QRegExp("([A-Z])"), " \\1");
                 strline.replace(QRegExp("\\s+"), " ");
 /// T4
-                //g=100;
-                p = 0; f=0.0;
                 if (processGCode(strline, x, y, z, i, j, k, p, arc, cw, mm, g, plane, helix, f))
                 /// no works ??
                //if (processGCode(strline, xyz, ijk, p, arc, cw, mm, g, plane, helix))
                 {
-//diag("g = %d", g);
                     if (!zeroInsert)
                     {
                         // insert 0,0 position
                         posList.append(PosItem());
                         zeroInsert = true;
                     }
-               // diag("plane2 = %d", plane);
                     //posList.append(PosItem(strline, x, y, z, i, j, k, p, arc, cw, mm, index, plane, helix));
                     xyz = QVector3D(x, y, z); ijk = QVector3D(i,j,k);
-                    if (!mm) {
-                       xyz *= MM_IN_AN_INCH;
-                       ijk *= MM_IN_AN_INCH;
-                       if (f)
-                          f *= MM_IN_AN_INCH;
-                    }
                     posList.append(PosItem(strline, xyz, ijk, p, arc, cw, mm, g, plane, helix, index, f));
                 }
             }
@@ -1106,7 +1162,6 @@ void MainWindow::preProcessFile(QString filepath)
             if (f > 0)
                 prevf = f;
             speedToLine.append(prevf);
-//diag("nl : %d -> f = %0.2f", index, prevf);
 
         } while (code.atEnd() == false);
 
@@ -1124,6 +1179,8 @@ void MainWindow::preProcessFile(QString filepath)
         emit setItems(posList);
         /// to to 'ui-visu3D::setSpeedToLine(QList<double>)'
         emit setSpeedToLine(speedToLine);
+        // display the correct unit
+        setUnitsAll(mm);
     }
     else
         printf("Can't open file\n");
@@ -1215,8 +1272,7 @@ bool MainWindow::processGCode(QString inputLine,
             p = decodeLineItem(s, P_ITEM, valid, nextIsValue);
         }
 /// Fxxxx
-
-        else if ((g == 2 || g == 3) && s.at(0) == 'F')
+        else if ((g == 1 || g == 2 || g == 3) && s.at(0) == 'F')
         {
             f = decodeLineItem(s, F_ITEM, valid, nextIsValue);
         }
@@ -1312,7 +1368,8 @@ void MainWindow::readSettings()
 
     jogStepStr = settings.value(SETTINGS_JOG_STEP, "1").value<QString>();
     jogStep = jogStepStr.toFloat();
-
+/// T4
+  /*
     int indexDesired = 0;
     QString steps[] = { "0.01", "0.1", "1", "10", "100" };
     for (unsigned int i = 0; i < (sizeof (steps) / sizeof (steps[0])); i++) {
@@ -1322,6 +1379,11 @@ void MainWindow::readSettings()
         }
     }
     ui->comboStep->setCurrentIndex(indexDesired);
+   */
+  //  ui->labelStep->setText(QString("%1").arg(jogStep, 6, 'f', 2, ' '));
+    ui->lcdStep->display(jogStep);
+    int posslider = jogStep*100;
+    ui->sliderStep->setValue(posslider);
 
     settings.beginGroup( "mainwindow" );
 
@@ -1391,11 +1453,11 @@ void MainWindow::updateSettingsFromOptionDlg(QSettings& settings)
 
     QString useFourAxis = settings.value(SETTINGS_FOUR_AXIS_USE, "false").value<QString>();
     controlParams.useFourAxis = useFourAxis == "true";
-    if (controlParams.useFourAxis)
-    {
-        char type = settings.value(SETTINGS_FOUR_AXIS_TYPE, FOURTH_AXIS_A).value<char>();
-        controlParams.fourthAxisType = type;
-    }
+
+    char name = settings.value(SETTINGS_FOUR_AXIS_NAME, FOURTH_AXIS_A).value<char>();
+    controlParams.fourthAxisName = name;
+    bool rot = settings.value(SETTINGS_FOUR_AXIS_ROTATE, true).value<bool>();
+    controlParams.fourthAxisRotate = rot;
 
     ui->lcdWorkNumberFourth->setEnabled(controlParams.useFourAxis);
     ui->lcdMachNumberFourth->setEnabled(controlParams.useFourAxis);
@@ -1414,6 +1476,9 @@ void MainWindow::updateSettingsFromOptionDlg(QSettings& settings)
         ui->lcdMachNumberFourth->setAttribute(Qt::WA_DontShowOnScreen, true);
         ui->lblFourth->hide();
         ui->lblFourth->setAttribute(Qt::WA_DontShowOnScreen, true);
+/// T4 ui->chkRestoreAbsolute->setEnabled(v);
+        ui->unitFourth->hide();
+        ui->unitFourth->setAttribute(Qt::WA_DontShowOnScreen, true);
     }
     else
     {
@@ -1426,22 +1491,38 @@ void MainWindow::updateSettingsFromOptionDlg(QSettings& settings)
         ui->lcdMachNumberFourth->setAttribute(Qt::WA_DontShowOnScreen, false);
         ui->lblFourth->show();
         ui->lblFourth->setAttribute(Qt::WA_DontShowOnScreen, false);
-        ui->lblFourth->setText(QString(controlParams.fourthAxisType));
+        ui->lblFourth->setText(QString(controlParams.fourthAxisName));
+        ui->unitFourth->setText(controlParams.fourthAxisRotate == true ?QString("deg."):QString("mm") );
+/// T4
+        ui->unitFourth->show();
+        ui->unitFourth->setAttribute(Qt::WA_DontShowOnScreen, false);
 
         QString axisJog(tr("Z Jog"));// not correct, but a default placeholder we have a translation for already
-        char axis = controlParams.fourthAxisType;
-        if (axis == FOURTH_AXIS_A)
+        char axis = controlParams.fourthAxisName;
+        if (axis == FOURTH_AXIS_A)  {
             axisJog = tr("A Jog");
-        else if (axis == FOURTH_AXIS_B)
+          //  controlParams.fourthAxisRotate = true;
+        }
+        else if (axis == FOURTH_AXIS_B){
             axisJog = tr("B Jog");
-        else if (axis == FOURTH_AXIS_C)
+          //  controlParams.fourthAxisRotate = true;
+        }
+        else if (axis == FOURTH_AXIS_C) {
             axisJog = tr("C Jog");
-        else if (axis == FOURTH_AXIS_U)
+          //  controlParams.fourthAxisRotate = true;
+        }
+        else if (axis == FOURTH_AXIS_U) {
             axisJog = tr("U Jog");
-        else if (axis == FOURTH_AXIS_V)
+          //  controlParams.fourthAxisRotate = false;
+        }
+        else if (axis == FOURTH_AXIS_V) {
             axisJog = tr("V Jog");
-        else if (axis == FOURTH_AXIS_W)
+          //  controlParams.fourthAxisRotate = false;
+        }
+        else if (axis == FOURTH_AXIS_W){
             axisJog = tr("W Jog");
+          //  controlParams.fourthAxisRotate = false;
+        }
 
         ui->lblFourthJog->setText(axisJog);
     }
@@ -1507,7 +1588,12 @@ void MainWindow::writeSettings()
 
     settings.setValue(SETTINGS_PROMPTED_AGGR_PRELOAD, promptedAggrPreload);
     settings.setValue(SETTINGS_ABSOLUTE_AFTER_AXIS_ADJ, ui->chkRestoreAbsolute->isChecked());
-    settings.setValue(SETTINGS_JOG_STEP, ui->comboStep->currentText());
+/// T4
+  //  settings.setValue(SETTINGS_JOG_STEP, ui->comboStep->currentText());
+  //  settings.setValue(SETTINGS_JOG_STEP, ui->labelStep->text());
+  //  QString val;
+  //  val.number(ui->sliderStep->value()/100.0);
+  //  settings.setValue(SETTINGS_JOG_STEP, val);
 
     // From http://stackoverflow.com/questions/74690/how-do-i-store-the-window-size-between-sessions-in-qt
     settings.beginGroup("mainwindow");
@@ -1693,19 +1779,31 @@ void MainWindow::showAbout()
     About about(this);
     about.exec();
 }
-
-void MainWindow::toggleSpindle()
+///  called by 'ui->spindleButton::toggled(valid)'
+void MainWindow::toggleSpindle(bool)
 {
-    if (ui->SpindleOn->QAbstractButton::isChecked())
+/// T4
+  //  if (ui->SpindleOn->QAbstractButton::isChecked())
+    QPalette palette;
+    QString stateon(tr("Spindle On")), stateoff(tr("Spindle Off"));
+    if (ui->spindleButton->isChecked())
     {
-        sendGcode("M03\r");
-        receiveList(tr("Spindle On."));
+        sendGcode("M05\r");
+        receiveList(stateoff);
+
+        ui->spindleButton->setText(stateon) ;
+        palette.setColor(QPalette::Button,Qt::gray) ;
     }
     else
     {
-        sendGcode("M05\r");
-        receiveList(tr("Spindle Off."));
+        sendGcode("M03\r");
+         receiveList(stateon);
+
+        ui->spindleButton->setText(stateoff) ;
+         palette.setColor(QPalette::Button,Qt::yellow) ;
     }
+     // color 'spindleButton'
+    ui->spindleButton->setPalette(palette);
 }
 
 void MainWindow::toggleRestoreAbsolute()
@@ -1714,7 +1812,7 @@ void MainWindow::toggleRestoreAbsolute()
 }
 
 /// T4 animator
-void MainWindow::updateLCD(QVector3D Coord)
+void MainWindow::updateLCD(QVector3D coord)
 {
     ui->lcdWorkNumberFourth->setEnabled(controlParams.useFourAxis);
     ui->lcdMachNumberFourth->setEnabled(controlParams.useFourAxis);
@@ -1723,7 +1821,7 @@ void MainWindow::updateLCD(QVector3D Coord)
     ui->lblFourthJog->setEnabled(controlParams.useFourAxis);
     //
     machineCoordinates = Coord3D();
-    workCoordinates = Coord3D(Coord);
+    workCoordinates = Coord3D(coord);
 //diag ("updateLCD(QVector3D Coord) ...");
     refreshLcd();
 }
@@ -1751,12 +1849,12 @@ void MainWindow::refreshLcd()
     lcdDisplay('Y', false, machineCoordinates.y);
     lcdDisplay('Z', false, machineCoordinates.z);
     if (controlParams.useFourAxis) {
-        lcdDisplay(controlParams.fourthAxisType, true, workCoordinates.fourth);
-        lcdDisplay(controlParams.fourthAxisType, false, machineCoordinates.fourth);
+        lcdDisplay(controlParams.fourthAxisName, true, workCoordinates.fourth);
+        lcdDisplay(controlParams.fourthAxisName, false, machineCoordinates.fourth);
 	}
 	else {
-        lcdDisplay(controlParams.fourthAxisType, true, 0);
-        lcdDisplay(controlParams.fourthAxisType, false, 0);
+        lcdDisplay(controlParams.fourthAxisName, true, 0);
+        lcdDisplay(controlParams.fourthAxisName, false, 0);
 	}
 }
 
@@ -1982,14 +2080,28 @@ void MainWindow::setLcdState(bool valid)
 
 void MainWindow::refreshPosition()
 {
+    // gotoXYZFourth(REQUEST_CURRENT_POS);  /// ???
+   // emit
     gotoXYZFourth(REQUEST_CURRENT_POS);
 }
-
+ /*
 void MainWindow::comboStepChanged(const QString& text)
 {
     jogStepStr = text;
     jogStep = jogStepStr.toFloat();
 }
+ */
+// called by 'sliderStep::valueChanged(int)'
+void MainWindow::stepChanged(int newstep)
+{
+    float fs = newstep/100.0;
+    ui->lcdStep->display(fs);
+    jogStep = fs;
+
+  //  QString s = QString("%1").arg(fs, 5, 'f', 2, ' ');
+  //  ui->labelStep->setText(QString("%1").arg(fs, 6, 'f', 2, ' '));
+}
+
 ///-----------------------------------------------------------------------------
 ///  T2
 void MainWindow::setLinesFile(QString linesFile, bool check)
@@ -2010,13 +2122,15 @@ void  MainWindow::toCheck(bool valid)
         ui->Check->setText(tr("Check")) ;
 
     ui->tabAxisVisualizer->setEnabled(valid);
+     // (in)valid manual controls
+    enableManualControl(!valid);
+
     ui->tabVisu->setTabEnabled(TAB_VISUGCODE_INDEX, !valid);
     ui->tabAxisVisualizer->setTabEnabled(TAB_AXIS_INDEX, !valid);
     ui->tabAxisVisualizer->setTabEnabled(TAB_ADVANCED_INDEX, !valid);
 
     /// send '$C' to Grbl
     emit sendGrblCheck(checkState) ;
-//diag("toCheck(%s) ", checkState==true ? "true" : "false");
 }
 
 ///-----------------------------------------------------------------------------
@@ -2034,7 +2148,7 @@ void MainWindow::toVisual(bool valid)
         ui->visualButton->setText(tr("No animate")) ;
     else
         ui->visualButton->setText(tr("Animate")) ;
-    // no openFile
+    // no openFile if valid
     ui->openFile->setEnabled(!valid);
     if (!valid) {  // no animate
         ui->Check->setEnabled(openState);
@@ -2044,12 +2158,25 @@ void MainWindow::toVisual(bool valid)
        ui->Check->setEnabled(!valid);
        ui->Begin->setEnabled(!valid);
     }
-    ///
-    ui->tabAxisVisualizer->setEnabled(valid);
-    ui->tabAxisVisualizer->setTabEnabled(TAB_AXIS_INDEX, !valid);
+    //  tab
+    bool openport = ui->btnOpenPort->text() != "Open" ;
+    if (!openport) {
+        ui->tabAxisVisualizer->setEnabled(valid);
+        ui->tabVisu->setTabEnabled(TAB_CONSOLE_INDEX, !valid);
+        // (in)valid manual controls
+        enableManualControl(false);
+    }
+    else  {
+        ui->tabAxisVisualizer->setEnabled(true);
+        ui->tabAxisVisualizer->setTabEnabled(TAB_VISU3D_INDEX, true);
+        // invalid manual controls
+        enableManualControl(!valid);
+    }
+    ui->tabVisu->setTabEnabled(TAB_CONSOLE_INDEX, !valid);
+  //  ui->tabAxisVisualizer->setTabEnabled(TAB_AXIS_INDEX, !valid);
     ui->tabAxisVisualizer->setTabEnabled(TAB_VISUALIZER_INDEX, !valid);
     ui->tabAxisVisualizer->setTabEnabled(TAB_ADVANCED_INDEX, !valid);
-    ui->tabVisu->setTabEnabled(TAB_CONSOLE_INDEX, !valid);
+
     // to ui->Viewer
     emit setVisual(valid);
 }
@@ -2057,20 +2184,19 @@ void MainWindow::toVisual(bool valid)
 ///  called by 'ui->pauseButton::toggled(valid)'
 void MainWindow::toPause(bool valid)
 {
-//diag("emit setPause( %s) ", valid==true ? "true" : "false");
     QPalette palette;
     ui->prevButton->setEnabled(valid);
     ui->nextButton->setEnabled(valid);
     if (ui->pauseButton->isChecked())  {
         ui->pauseButton->setText(tr("Run")) ;
         palette.setColor(QPalette::Button,Qt::gray) ;
-        /// mouse and keyboard key
+        // mouse and keyboard key
         connect(ui->visuGcode, SIGNAL(cursorPositionChanged() ), this, SLOT(on_cursorVisuGcode()) ) ;
     }
     else  {
         ui->pauseButton->setText(tr("Pause")) ;
         palette.setColor(QPalette::Button,Qt::yellow);
-        /// no mouse and no keyboard key
+        // no mouse and no keyboard key
         disconnect(ui->visuGcode, SIGNAL(cursorPositionChanged() ), this, SLOT(on_cursorVisuGcode()) ) ;
     }
     // color 'pauseButton'
@@ -2091,7 +2217,6 @@ void MainWindow::on_cursorVisuGcode()
 /// by "emit setActiveLineVisuGcode(linecodeText"
 void MainWindow::setActiveLineVisuGcode( int line, bool visu )
 {
-//diag("\n");
     if (!line) return ;
 
     QTextBlock       block;
@@ -2116,15 +2241,10 @@ void MainWindow::setActiveLineVisuGcode( int line, bool visu )
     QString strline = QString().setNum(activeLine) ;
     // to 'ui->lineCode'  (QLabel)
     emit  setLineCode(strline);
-//diag("set:visu = %s ", visu==true ? "true" : "false");
-//diag("set:nl -> %s", qPrintable(strline) );
     // to  Viewer : 'ui->visu3D::setNumLine(activeLine)'
     if (!visu)  {
         emit setNumLine(strline);
-//diag("set:visu2 = %s ", visu==true ? "true" : "false");
-//diag("set:nl2 -> %s", qPrintable(strline) );
     }
-//diag("===> set:activeLine2 = %d", activeLine);
 }
 
 /// display timer period animation
@@ -2132,11 +2252,94 @@ void MainWindow::setLCDValue(int value)
 {
     ui->lcdPeriodAnim->display(value);
 }
- /*
-void MainWindow::setTolerance(double t)
+
+// display the correct unit
+// called by "emit GCode::setUnitsAll(bool)'
+void MainWindow::setUnitsAll (bool mm )
 {
-  //  diag ("MainWindow::setTolerance(%0.3f)", t);
-   // emit setTol(t);
+    QString unit(tr("mm"));
+    double val = ui->doubleSpinBoxTol->value();
+//diag("1-setUnitsAll::tol %.4f", val);
+    if (mm) {
+        ui->doubleSpinBoxTol->setDecimals(3);
+        ui->doubleSpinBoxTol->setSingleStep(TOL_MM_STEP);
+        ui->doubleSpinBoxTol->setMinimum(TOL_MM_MIN);
+        ui->doubleSpinBoxTol->setMaximum(TOL_MM_MAX);
+        if (ui->labelTolUnit->text() != unit)
+           val = TOL_MM ;
+    }
+    else {
+        ui->doubleSpinBoxTol->setDecimals(4);
+        ui->doubleSpinBoxTol->setSingleStep(TOL_IN_STEP);
+        ui->doubleSpinBoxTol->setMinimum(TOL_IN_MIN);
+        ui->doubleSpinBoxTol->setMaximum(TOL_IN_MAX);
+        unit = QString(tr("in"));
+        if (ui->labelTolUnit->text() != unit)
+          val = TOL_IN;
+    }
+    ui->doubleSpinBoxTol->setValue(val) ;
+//diag("2-setUnitsAll::tol %.4f", val);
+
+    ui->lcdSpeedGcode->display(0.0);
+
+    ui->labelSpeedUnit->setText( unit +  "/" + tr("mn"));
+    ui->labelTolUnit->setText(unit);
+  //  ui->labelTolerance->setText( ui->labelTol->text() + ui->labelTolUnit->text());
+    unit += " ";
+    ui->unitX->setText(unit);
+    ui->unitY->setText(unit);
+    ui->unitZ->setText(unit);
+    if (controlParams.fourthAxisRotate)
+        unit = tr("deg.");
+    else
+        unit = tr("mm");
+
+    ui->unitFourth->setText(unit);
 }
-*/
+/// T4
+void MainWindow::enableManualControl(bool v)
+{
+    ui->chkRestoreAbsolute->setEnabled(v);
+    // step
+  //  ui->labelStep->setEnabled(v);
+    ui->sliderStep->setEnabled(v);
+    ui->lcdStep->setEnabled(v);
+    // dZ
+  //  ui->labelDz->setEnabled(v);
+    ui->verticalSliderZJog->setEnabled(v);
+    ui->currentZJogSliderDelta->setEnabled(v);
+    ui->resultingZJogSliderPosition->setEnabled(v);
+    // axes buttons
+    ui->DecXBtn->setEnabled(v); ui->IncXBtn->setEnabled(v);
+    ui->DecYBtn->setEnabled(v); ui->IncYBtn->setEnabled(v);
+    ui->DecZBtn->setEnabled(v); ui->IncZBtn->setEnabled(v);
+    ui->DecFourthBtn->setEnabled(v); ui->IncFourthBtn->setEnabled(v);
+    // spindle
+  //  ui->SpindleOn->setEnabled(v);
+    ui->spindleButton->setEnabled(v);
+}
+
+void MainWindow::enableTabVisuControls(bool v)
+{
+    // animation eriod
+    ui->lcdPeriodAnim->setEnabled(v);
+    ui->labelPeriod->setEnabled(v);
+    ui->dialPeriodRepeat->setEnabled(v);
+    // animation cursors
+    ui->nextButton->setEnabled(v);
+    ui->lineCode->setEnabled(v);
+    ui->nline->setEnabled(v);
+    ui->prevButton->setEnabled(v);
+    // segments interpolation
+    ui->lcdSegments->setEnabled(v);
+    ui->labelSegments->setEnabled(v);
+    // tolerance
+    ui->doubleSpinBoxTol->setEnabled(v);
+    ui->labelTol->setEnabled(v);
+    ui->labelTolUnit->setEnabled(v);
+    ui->lcdTolerance->setEnabled(v);
+    // on off
+    ui->pauseButton->setEnabled(v);
+    ui->visualButton->setEnabled(v);
+}
 ///-----------------------------------------------------------------------------

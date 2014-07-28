@@ -40,6 +40,7 @@ private:
     QColor color;
     int linewidth;
     double speed;
+    bool mm;
 
 };
 

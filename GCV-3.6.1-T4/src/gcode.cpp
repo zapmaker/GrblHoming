@@ -119,7 +119,8 @@ void GCode::sendGrblCheck(bool checkstate)
 
 void GCode::sendGrblUnlock()
 {
-    sendGcodeLocal(SET_UNLOCK_STATE_V08c);
+  //   sendGcodeLocal(SET_UNLOCK_STATE_V08c);
+     sendGcodeLocal(SET_UNLOCK_STATE_V$$);
 }
 
 // Slot for gcode-based 'zero out the current position values without motion'
@@ -127,11 +128,12 @@ void GCode::grblSetHome()
 {
     clearToHome();
 
+    QString  sethome("G92 x0 y0 z0 ");
     if (numaxis == MAX_AXIS_COUNT)
 /// T1
-        gotoXYZFourth(QString("G92 x0 y0 z0 ").append(QString(controlParams.fourthAxisType)).toLower().append("0"));
+        gotoXYZFourth(sethome.append(QString(controlParams.fourthAxisName)).toLower().append("0"));
 	else
-        gotoXYZFourth("G92 x0 y0 z0");
+        gotoXYZFourth(sethome);
 }
 
 void GCode::goToHome()
@@ -157,7 +159,7 @@ void GCode::goToHome()
 
     if (numaxis == MAX_AXIS_COUNT)
 /// T1
-        gotoXYZFourth(QString("G1 x0 y0 z0 ").append(QString(controlParams.fourthAxisType)).toLower().append("0"));
+        gotoXYZFourth(QString("G1 x0 y0 z0 ").append(QString(controlParams.fourthAxisName)).toLower().append("0"));
 	else
         gotoXYZFourth("G1 x0 y0 z0");
 
@@ -185,7 +187,7 @@ void GCode::sendGcode(QString line)
         // signon banner. Force a reset (is this ok?) to get the banner
 
 /// LETARTARE for 0.845 !!
-/*
+///*
             emit addListOut("(CTRL-X)");
 
             char buf[2] = {0};
@@ -201,7 +203,7 @@ void GCode::sendGcode(QString line)
                 emit sendMsg(msg);
                 return;
             }
-*/
+//*/
 /// <--
             if (!waitForStartupBanner(result, SHORT_WAIT_SEC, true))
                 return;
@@ -268,15 +270,19 @@ void GCode::pollPosWaitForIdle(bool checkMeasurementUnits)
             return;
 /// T3 : to avoid loading too display
 /// to review ...
-      /*
+    //  /*
         if (checkMeasurementUnits)
         {
-            if (doubleDollarFormat)
+            if (doubleDollarFormat)  {
                checkAndSetCorrectMeasurementUnits();
-            else
+//diag ("double format ..");
+            }
+            else  {
                setOldFormatMeasurementUnitControl();
+//diag ("old format ..");
+            }
         }
-       */
+     //  */
     }
     else
     {
@@ -366,11 +372,13 @@ bool GCode::checkGrbl(const QString& result)
                             majorVer, minorVer, letter, postVer, doubleDollarFormat);
                 QString resu = list.at(0);
 				emit setVersionGrbl(resu);
+/// T4
+				versionGrbl= resu.mid(5) ;
+//diag("VersionGrbl ->%s<-", qPrintable(versionGrbl) );
 /// <--
             }
-
             if (!doubleDollarFormat)
-                setUnitsTypeDisplay(true);
+                emit setUnitsAll(true);
         }
         return true;
     }
@@ -400,14 +408,17 @@ bool GCode::sendGcodeInternal(QString line, QString& result, bool recordResponse
         sentReqForLocation = true;
         setLivenessState(true);
     }
-    else if (!line.compare(REQUEST_PARSER_STATE_V08c))
+//    else if (!line.compare(REQUEST_PARSER_STATE_V08c))
+    else if (!line.compare(REQUEST_PARSER_STATE_V$$))   // "$G"
     {
         sentReqForParserState = true;
     }
-    else if (!line.compare(SETTINGS_COMMAND_V08a))
+//    else if (!line.compare(SETTINGS_COMMAND_V08a))
+     else if (!line.compare(SETTINGS_COMMAND_V$))     // "$"
     {
         if (doubleDollarFormat)
-            line = SETTINGS_COMMAND_V08c;
+          //  line = SETTINGS_COMMAND_V08c;
+            line = SETTINGS_COMMAND_V$$;       // "$$"
 
         sentReqForSettings = true;
     }
@@ -422,13 +433,14 @@ bool GCode::sendGcodeInternal(QString line, QString& result, bool recordResponse
     else if (!sentReqForLocation)// if requesting location, don't add that "noise" to the output view
     {
 /// T3  + fix bug
-        QString nLine(line);
+        QString nLine;
         if (currLine) {
             nLine = QString().setNum(currLine);
             emit setLinesFile(nLine, true);
-
             if (line.at(0).toLatin1() != 'N')
                 nLine = "L" +  nLine + "  " + line;
+            else
+                nLine = line ;
         }
         if (!checkState)
             emit addListOut(nLine);
@@ -513,7 +525,11 @@ bool GCode::sendGcodeInternal(QString line, QString& result, bool recordResponse
                     if (rx.indexIn(item, 0) != -1 && rx.captureCount() == 3)
                     {
                         QStringList capList = rx.capturedTexts();
-                        if (!capList.at(1).compare("13"))
+/// T4 with 0.9x 13 is not good !!
+/// 0.8c->$13, 0.8c1/2->$14, 0.9d->$20, 0.9e/f->$19
+                        QString val = getNumGrblUnit();
+//diag ("getNumGrblUnit() =  %s", qPrintable(val) ) ;
+                        if (!capList.at(1).compare(val))
                         {
                             if (!capList.at(2).compare("0"))
                             {
@@ -536,6 +552,26 @@ bool GCode::sendGcodeInternal(QString line, QString& result, bool recordResponse
     }
     return true;
 }
+
+/// T4
+QString GCode::getNumGrblUnit()
+{
+    QString resu("13"); // 0.8c  , 09d ??
+    if (versionGrbl == "0.8c1" || versionGrbl == "0.8c2" )
+        resu = "14";
+    else
+    if (versionGrbl == "0.9d")
+        resu = "20";
+    else
+    if (versionGrbl == "0.9e" || versionGrbl == "0.9f")
+        resu = "19";
+    else
+    if (versionGrbl == "0.9g")
+        resu = "13";
+
+    return resu;
+}
+
 ///-----------------------------------------------------------------------------
 bool GCode::waitForOk(QString& result, int waitSec, bool sentReqForLocation, bool sentReqForParserState, bool aggressive, bool finalize)
 {
@@ -992,7 +1028,7 @@ void GCode::parseCoordinates(const QString& received, bool aggressive)
                 emit addList(msg);
                 emit sendMsg(msg);
             }
-   }
+        }
 
 		numaxis = naxis;
 		QStringList list = rxStateMPos.capturedTexts();
@@ -1036,11 +1072,11 @@ void GCode::parseCoordinates(const QString& received, bool aggressive)
 			maxZ = workCoord.z;
 
 /// T4  3D
-		if (posReqKind == POS_REQ)
+	//	if (posReqKind == POS_REQ)
             emit updateCoordinates(machineCoord, workCoord);
-        else  {
+    //    else  {
       //  emit setLivePoint(QVector3D(workCoord.x, workCoord.y, workCoord.z)) ;
-        }
+    //    }
 
         emit setLivePoint(workCoord.x, workCoord.y, controlParams.useMm, positionValid);
 
@@ -1207,19 +1243,19 @@ void GCode::sendFile(QString path, bool checkfile)
                         outputList.append(strline);
                     }
                     if (!checkfile)
-                emit setNumLine(QString::number(currLine +1));
+                        emit setNumLine(QString::number(currLine +1));
 
                     bool ret = false;
                     if (outputList.size() == 1)
                     {
-             //   diag("AAAAAAAAAAAAA envoi grbl => %s",qPrintable(outputList.at(0)) );
+             //   diag("AAAAAAAAAAAAA  grbl => %s",qPrintable(outputList.at(0)) );
                         ret = sendGcodeLocal(outputList.at(0), false, -1, aggressive, currLine + 1);
                     }
                     else
                     {
                         foreach (QString outputLine, outputList)
                         {
-             //   diag("BBBBBBBBBBBBB envoi grbl => %s",qPrintable(outputLine) );
+             //   diag("BBBBBBBBBBBBB  grbl => %s",qPrintable(outputLine) );
                             ret = sendGcodeLocal(outputLine, false, -1, aggressive, currLine + 1);
 
                             if (!ret)
@@ -1243,6 +1279,7 @@ void GCode::sendFile(QString path, bool checkfile)
 /// T3
             if (!checkfile)
                 positionUpdate();
+
             currLine++;
         } while ((code.atEnd() == false) && (!abortState.get()));
 
@@ -1834,7 +1871,7 @@ void GCode::gotoXYZFourth(QString line)
             item = getMoveAmountFromString("Z", list.at(i));
             moveDetected = item.length() > 0 ;
             if (numaxis == MAX_AXIS_COUNT)  {
-                item = getMoveAmountFromString(QString(controlParams.fourthAxisType), list.at(i));
+                item = getMoveAmountFromString(QString(controlParams.fourthAxisName), list.at(i));
 				moveDetected = item.length() > 0;
 			}
         }
@@ -1880,6 +1917,11 @@ void GCode::axisAdj(char axis, float coord, bool inv, bool absoluteAfterAxisAdj,
     if (axis == 'Z')
     {
         cmd.append(" F").append(QString::number(controlParams.zJogRate));
+    }
+/// T4 mandatory with '0.9f'
+    else   // X, Y, T
+    {
+        cmd.append(" F").append(QString::number(controlParams.xyRateAmount));
     }
 
     SendJog(cmd, absoluteAfterAxisAdj);
@@ -1936,7 +1978,8 @@ void GCode::setResponseWait(ControlParams controlParamsIn)
     controlParams.useMm = controlParamsIn.useMm;
     numaxis = controlParams.useFourAxis ? MAX_AXIS_COUNT : DEFAULT_AXIS_COUNT;
 
-    setUnitsTypeDisplay(controlParams.useMm);
+   // setUnitsTypeDisplay(controlParams.useMm);
+    emit setUnitsAll(controlParams.useMm);
 }
 
 int GCode::getSettingsItemCount()
@@ -1947,8 +1990,9 @@ int GCode::getSettingsItemCount()
 // 0.8c and above only!
 void GCode::checkAndSetCorrectMeasurementUnits()
 {
-    sendGcodeLocal(REQUEST_PARSER_STATE_V08c, false);    // "$G"
-
+/// T4
+  //  sendGcodeLocal(REQUEST_PARSER_STATE_V08c, false);    // "$G"
+    sendGcodeLocal(REQUEST_PARSER_STATE_V$$, false);    // "$G"
     if (incorrectMeasurementUnits)
     {
         if (controlParams.useMm)
@@ -1966,7 +2010,9 @@ void GCode::checkAndSetCorrectMeasurementUnits()
     }
     else
     {
-        sendGcodeLocal(SETTINGS_COMMAND_V08c);   // "$$"
+/// T4
+       // sendGcodeLocal(SETTINGS_COMMAND_V08c);   // "$$"
+        sendGcodeLocal(SETTINGS_COMMAND_V$$);
 
         if (incorrectLcdDisplayUnits)
         {
@@ -1995,7 +2041,10 @@ void GCode::setOldFormatMeasurementUnitControl()
 
 void GCode::setConfigureMmMode(bool setGrblUnits)
 {
-    sendGcodeLocal("$13=0");
+/// T4
+  //  sendGcodeLocal("$13=0");
+    QString val = getNumGrblUnit();
+    sendGcodeLocal("$" + val + "=0");
     if (setGrblUnits)
         sendGcodeLocal("G21");
     positionUpdate(true);
@@ -2003,26 +2052,20 @@ void GCode::setConfigureMmMode(bool setGrblUnits)
 
 void GCode::setConfigureInchesMode(bool setGrblUnits)
 {
-    sendGcodeLocal("$13=1");
+/// T4
+  //  sendGcodeLocal("$13=1");
+    QString val = getNumGrblUnit();
+    sendGcodeLocal("$" + val + "=1");
     if (setGrblUnits)
         sendGcodeLocal("G20");
     positionUpdate(true);
 }
-
-void GCode::setUnitsTypeDisplay(bool millimeters)
+/*
+void GCode::setUnitsTypeDisplay(bool usemm)
 {
-    if (millimeters)
-    {
-        emit setUnitsWork(tr("(mm)"));
-        emit setUnitsMachine(tr("(mm)"));
-    }
-    else
-    {
-        emit setUnitsWork(tr("(in)"));
-        emit setUnitsMachine(tr("(in)"));
-    }
+   emit setUnitsAll(usemm);
 }
-
+*/
 void GCode::clearToHome()
 {
     maxZ = 0;
@@ -2071,6 +2114,7 @@ void GCode::setLivenessState(bool valid)
     emit setVisualLivenessCurrPos(valid);
     emit setLcdState(valid);
 }
+
 // slot
 void GCode::setPosReqKind(int posreqkind)
 {
