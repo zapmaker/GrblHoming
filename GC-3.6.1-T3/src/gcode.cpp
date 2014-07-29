@@ -425,9 +425,10 @@ bool GCode::sendGcodeInternal(QString line, QString& result, bool recordResponse
         if (currLine) {
             nLine = QString().setNum(currLine);
             emit setLinesFile(nLine, true);
-
             if (line.at(0).toLatin1() != 'N')
                 nLine = "L" +  nLine + "  " + line;
+            else
+                nLine = line ;
         }
         if (!checkState)
             emit addListOut(nLine);

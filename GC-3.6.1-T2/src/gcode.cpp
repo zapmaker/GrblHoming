@@ -406,6 +406,8 @@ bool GCode::sendGcodeInternal(QString line, QString& result, bool recordResponse
             emit setLinesFile(nLine);
             if (line.at(0).toLatin1() != 'N')
                 nLine = "L" +  nLine + "  " + line;
+            else
+                nLine = line ;
         }
         emit addListOut(nLine);
  /// <--
