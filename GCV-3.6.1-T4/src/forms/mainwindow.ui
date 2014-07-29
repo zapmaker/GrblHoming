@@ -469,7 +469,7 @@
       <item>
        <widget class="QTabWidget" name="tabVisu">
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="tabList">
          <attribute name="title">
@@ -712,7 +712,7 @@
                    </sizepolicy>
                   </property>
                   <property name="text">
-                   <string>Arc segments</string>
+                   <string>Item segments</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>

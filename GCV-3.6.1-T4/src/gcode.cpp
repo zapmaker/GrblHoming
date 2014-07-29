@@ -433,7 +433,7 @@ bool GCode::sendGcodeInternal(QString line, QString& result, bool recordResponse
     else if (!sentReqForLocation)// if requesting location, don't add that "noise" to the output view
     {
 /// T3  + fix bug
-        QString nLine;
+        QString nLine(line);
         if (currLine) {
             nLine = QString().setNum(currLine);
             emit setLinesFile(nLine, true);
