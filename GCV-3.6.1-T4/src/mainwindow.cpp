@@ -45,10 +45,11 @@ MainWindow::MainWindow(QWidget *parent) :
     checkState = ui->btnCheck->isChecked() ;
 /// T4 to display the comma correctly : before read 'sliderStep->value'
     connect(ui->sliderStep, SIGNAL(valueChanged(int)), this, SLOT(stepChanged(int)) );
-
-    readSettings();
     // 'Options'
     opt.init();
+
+    readSettings();
+    
 
     info(qPrintable(tr("%s has started")), GRBL_CONTROLLER_NAME_AND_VERSION);
 
