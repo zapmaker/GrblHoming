@@ -26,7 +26,9 @@ GrblDialog::GrblDialog(QWidget *parent, GCode *gc) :
     ui->btnOk->setEnabled(false);
 
     QStringList labels;
-    labels << tr("Value") << tr("Item");
+/// T4
+    labels << tr("Rank");
+    labels << tr("Value") << tr("Description");
     ui->table->setHorizontalHeaderLabels(labels);
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     ui->table->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
@@ -45,8 +47,8 @@ GrblDialog::~GrblDialog()
 
 void GrblDialog::getSettings()
 {
-  //  emit sendGcodeAndGetResult(GDLG_CMD_ID_GET, SETTINGS_COMMAND_V08a);
-    emit sendGcodeAndGetResult(GDLG_CMD_ID_GET, SETTINGS_COMMAND_V$);
+/// T4 0.8a -> 0.8c !!!
+    emit sendGcodeAndGetResult(GDLG_CMD_ID_GET, SETTINGS_COMMAND_V$$);
 }
 
 void GrblDialog::gcodeResult(int id, QString result)
@@ -60,8 +62,11 @@ void GrblDialog::gcodeResult(int id, QString result)
 
         if (result.size() > 0)
         {
+            /// #define REGEXP_SETTINGS_LINE    "(\\d+)\\s*=\\s*([\\w\\.]+)\\s*\\(([^\\)]*)\\)"
             QRegExp rx(QString("\\$") + REGEXP_SETTINGS_LINE);
             int pos = 0;
+/// T4
+            QStringList fieldRank;
             QStringList fieldValues;
             QStringList descriptions;
             while ((pos = rx.indexIn(result, pos)) != -1)
@@ -75,36 +80,45 @@ void GrblDialog::gcodeResult(int id, QString result)
                     QStringList list = rx.capturedTexts();
                     if (list.size() == 4)
                     {
+/// T4
+                        fieldRank.append(list.at(1));
                         fieldValues.append(list.at(2));
                         descriptions.append(list.at(3));
                     }
                 }
             }
 
-            tableRowCount = fieldValues.size();
+            tableRowCount = fieldValues.size() ;
             ui->table->setRowCount(0);
-            ui->table->setColumnCount(2);
+            /// 2 -> 3
+            ui->table->setColumnCount(3);
 
             int i;
             for (i = 0; i < tableRowCount; i++)
             {
                 ui->table->insertRow(i);
-                ui->table->setItem(i, 0, new QTableWidgetItem(fieldValues.at(i)));
 
-                QTableWidgetItem *descWidget = new QTableWidgetItem(descriptions.at(i));
-                descWidget->setFlags(Qt::NoItemFlags);
+                QTableWidgetItem *descWidget0 = new QTableWidgetItem(fieldRank.at(i));
+                descWidget0->setFlags(Qt::NoItemFlags);
+                 ui->table->setItem(i, 0, descWidget0);
 
-                ui->table->setItem(i, 1, descWidget);
+                ui->table->setItem(i, 1, new QTableWidgetItem(fieldValues.at(i)));
 
-                ui->table->item(i, 0)->setFont(QFont("Tahoma",10,87,false));
-                ui->table->item(i, 1)->setFont(QFont("Tahoma",10,-1,false));
+                QTableWidgetItem *descWidget2 = new QTableWidgetItem(descriptions.at(i));
+                descWidget2->setFlags(Qt::NoItemFlags);
+
+                ui->table->setItem(i, 2, descWidget2);
+
+                ui->table->item(i, 0)->setFont(QFont("Tahoma",10,-1,false));
+                ui->table->item(i, 1)->setFont(QFont("Tahoma",10,87,false));
+                ui->table->item(i, 2)->setFont(QFont("Tahoma",10,-1,false));
 
                 originalValues.append(fieldValues.at(i));
                 changeFlags.append(false);
             }
 
             ui->table->resizeColumnsToContents();
-            int colWidthValues = ui->table->columnWidth(0);
+            int colWidthValues = ui->table->columnWidth(1);
             ui->table->setColumnWidth(0, colWidthValues + 10);
 
             connect(ui->table,SIGNAL(cellChanged(int,int)),this,SLOT(changeValues(int,int)));
@@ -112,7 +126,7 @@ void GrblDialog::gcodeResult(int id, QString result)
         else
         {
             ui->table->setRowCount(0);
-            ui->table->setColumnCount(2);
+            ui->table->setColumnCount(3);
         }
         ui->btnCancel->setEnabled(true);
         ui->btnOk->setEnabled(true);
@@ -132,8 +146,8 @@ void GrblDialog::changeValues(int row, int col)
 {
     Q_UNUSED(col);
 
-    if ((ui->table->item(row,0)->text() != originalValues.at(row))
-        && ui->table->item(row,0)->text().length() > 0)
+    if ((ui->table->item(row,1)->text() != originalValues.at(row))
+        && ui->table->item(row,1)->text().length() > 0)
     {
         changeFlags.replace(row, true);
     }
@@ -146,7 +160,8 @@ void GrblDialog::Ok()
         if (changeFlags.at(i) == true)
         {
             QString strline = "$";
-            strline.append(QString::number(i)).append("=").append(ui->table->item(i,0)->text()).append('\r');
+            strline.append(ui->table->item(i,0)->text());
+            strline.append("=").append(ui->table->item(i,1)->text()).append('\r');
             emit sendGcodeAndGetResult(GDLG_CMD_ID_SET, strline);
         }
     }

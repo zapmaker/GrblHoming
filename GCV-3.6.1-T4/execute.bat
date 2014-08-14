@@ -1,7 +1,7 @@
 rem execute.bat 
 rem by LETARTARE
 
-cd src\bin
+cd src\release
 
 GrblController.exe
 

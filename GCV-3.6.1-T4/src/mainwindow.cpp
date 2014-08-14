@@ -16,7 +16,7 @@ extern Log4Qt::FileAppender *p_fappender;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow),
+    ui(new Ui::MainWindow), opt(this),
     open_button_text(tr("Open")),
     close_button_text(tr("Close / Reset")),
     absoluteAfterAxisAdj(false),
@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
  //   scrollRequireMove(true), scrollPressed(false),
     queuedCommandsStarved(false), lastQueueCount(0), queuedCommandState(QCS_OK),
     lastLcdStateValid(true),
-    activeLine(0)
+    activeLine(0), cmdMan(false)
 {
     // Setup our application information to be used by QSettings
     QCoreApplication::setOrganizationName(COMPANY_NAME);
@@ -40,12 +40,15 @@ MainWindow::MainWindow(QWidget *parent) :
     qRegisterMetaType<PosItem>("PosItem");
     qRegisterMetaType<ControlParams>("ControlParams");
 
-
     ui->setupUi(this);
 /// T3
-    checkState = ui->Check->isChecked() ;
+    checkState = ui->btnCheck->isChecked() ;
+/// T4 to display the comma correctly : before read 'sliderStep->value'
+    connect(ui->sliderStep, SIGNAL(valueChanged(int)), this, SLOT(stepChanged(int)) );
 
     readSettings();
+    // 'Options'
+    opt.init();
 
     info(qPrintable(tr("%s has started")), GRBL_CONTROLLER_NAME_AND_VERSION);
 
@@ -69,7 +72,7 @@ MainWindow::MainWindow(QWidget *parent) :
     {
         ui->DecFourthBtn->hide();
         ui->IncFourthBtn->hide();
-        ui->lblFourthJog->hide();
+        ui->HomeFourthBtn->hide();
         ui->lcdWorkNumberFourth->hide();
         ui->lcdWorkNumberFourth->setAttribute(Qt::WA_DontShowOnScreen, true);
         ui->lcdMachNumberFourth->hide();
@@ -80,10 +83,41 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->unitFourth->hide();
         ui->unitFourth->setAttribute(Qt::WA_DontShowOnScreen, true);
     }
+///************************ connect ***********************************
+///T4
+    connect(ui->btnPause,SIGNAL(toggled(bool)),this,SLOT(pauseSend(bool)));
+    // GRbl command
+    connect(ui->btnHelp,SIGNAL(clicked()),this,SLOT(grblHelp()));
+    connect(ui->btnGrblSettings,SIGNAL(clicked()),this,SLOT(grblSettings()));
+    connect(ui->btnParameters, SIGNAL(clicked()),this, SLOT(grblParameters()));
+    connect(ui->btnParserState, SIGNAL(clicked()),this, SLOT(grblParserState()));
+    connect(ui->btnBuildInfo, SIGNAL(clicked()),this, SLOT(grblBuildInfo()));
+    connect(ui->btnStartupBlocks, SIGNAL(clicked()),this, SLOT(grblStartupBlocks()));
+    connect(ui->btnCheck,SIGNAL(toggled(bool)),this,SLOT(grblCheck(bool) ));
+    connect(ui->btnUnlockGrbl,SIGNAL(clicked()),this,SLOT(grblUnlock()));
+    connect(ui->btnHomingCycle, SIGNAL(clicked()),this,SLOT(grblHomingCycle()));
+  //  connect(ui->btnCycleStart, SIGNAL(clicked()),this, SLOT(grblCycleStart()));
+  //  connect(ui->btnFeedHold, SIGNAL(clicked()),this, SLOT(grblFeedHold()));
+    connect(ui->btnStatus, SIGNAL(clicked()),this,SLOT(grblStatus()));
+    connect(ui->btnResetGrbl,SIGNAL(clicked()),this,SLOT(grblReset()));
+    /// to gcode
+  //  connect(this, SIGNAL(sendGrblPause(bool)), &gcode, SLOT(sendGrblPause(bool)));
+    connect(this, SIGNAL(sendGrblHelp()), &gcode, SLOT(sendGrblHelp()));
 
+    connect(this, SIGNAL(sendGrblParameters()), &gcode, SLOT(sendGrblParameters()));
+    connect(this, SIGNAL(sendGrblParserState()), &gcode, SLOT(sendGrblParserState()));
+    connect(this, SIGNAL(sendGrblBuildInfo()), &gcode, SLOT(sendGrblBuildInfo()));
+    connect(this, SIGNAL(sendGrblStartupBlocks()), &gcode, SLOT(sendGrblStartupBlocks()));
+   // connect(this, SIGNAL(sendGrblCheck(bool)), &gcode, SLOT(grblCheck(bool)));
+    connect(this, SIGNAL(sendGrblCheck(bool)), &gcode, SLOT(sendGrblCheck(bool)));
+    connect(this, SIGNAL(sendGrblUnlock()), &gcode, SLOT(sendGrblUnlock()));
+    connect(this, SIGNAL(sendGrblHomingCycle()), &gcode, SLOT(sendGrblHomingCycle()));
+    connect(this, SIGNAL(sendGrblCycleStart()), &gcode, SLOT(sendGrblCycleStart()));
+    connect(this, SIGNAL(sendGrblFeedHold()), &gcode, SLOT(sendGrblFeedHold()));
+    connect(this, SIGNAL(sendGrblStatus()), &gcode, SLOT(sendGrblStatus()));
+    connect(this, SIGNAL(sendGrblReset()), &gcode, SLOT(sendGrblReset()));
     //buttons
     connect(ui->btnOpenPort,SIGNAL(clicked()),this,SLOT(openPort()));
-    connect(ui->btnGRBL,SIGNAL(clicked()),this,SLOT(setGRBL()));
     connect(ui->DecXBtn,SIGNAL(clicked()),this,SLOT(decX()));
     connect(ui->DecYBtn,SIGNAL(clicked()),this,SLOT(decY()));
     connect(ui->DecZBtn,SIGNAL(clicked()),this,SLOT(decZ()));
@@ -92,33 +126,34 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->IncZBtn,SIGNAL(clicked()),this,SLOT(incZ()));
     connect(ui->DecFourthBtn,SIGNAL(clicked()),this,SLOT(decFourth()));
     connect(ui->IncFourthBtn,SIGNAL(clicked()),this,SLOT(incFourth()));
-    connect(ui->btnSetHome,SIGNAL(clicked()),this,SLOT(setHome()));
-    connect(ui->comboCommand->lineEdit(),SIGNAL(editingFinished()),this,SLOT(gotoXYZFourth()));
-/// T3
-    connect(ui->Check,SIGNAL(toggled(bool)),this,SLOT(toCheck(bool) ));
-   /// undetected by gcc 4.7.1 error
-   ///  connect(ui->Check,SIGNAL(toggled(bool)),this,SLOT(toCheck((bool)) ));
+/// T4
+    connect(ui->HomeXBtn,SIGNAL(clicked()),this,SLOT(homeX()));
+    connect(ui->HomeYBtn,SIGNAL(clicked()),this,SLOT(homeY()));
+    connect(ui->HomeZBtn,SIGNAL(clicked()),this,SLOT(homeZ()));
+    connect(ui->HomeFourthBtn,SIGNAL(clicked()),this,SLOT(homeFourth()));
+    connect(this, SIGNAL(goToHomeAxis(char)), &gcode, SLOT(goToHomeAxis(char) ));
+    connect(&gcode, SIGNAL(endHomeAxis()), this, SLOT(endHomeAxis() ));
 
+    connect(ui->btnSetHome,SIGNAL(clicked()),this,SLOT(setHome()));
+    connect(ui->comboCommand->lineEdit(), SIGNAL(editingFinished()),this, SLOT(gotoXYZFourth()));
+/// T3
     connect(ui->Begin,SIGNAL(clicked()),this,SLOT(begin()));
     connect(ui->openFile,SIGNAL(clicked()),this,SLOT(openFile()));
     connect(ui->Stop,SIGNAL(clicked()),this,SLOT(stop()));
+
 /// T4
-   // connect(ui->SpindleOn,SIGNAL(toggled(bool)),this,SLOT(toggleSpindle()));
     connect(ui->spindleButton,SIGNAL(toggled(bool)),this,SLOT(toggleSpindle(bool)));
     connect(ui->chkRestoreAbsolute,SIGNAL(toggled(bool)),this,SLOT(toggleRestoreAbsolute()));
     connect(ui->actionOptions,SIGNAL(triggered()),this,SLOT(getOptions()));
     connect(ui->actionExit,SIGNAL(triggered()),this,SLOT(close()));
     connect(ui->actionAbout,SIGNAL(triggered()),this,SLOT(showAbout()));
-    connect(ui->btnResetGrbl,SIGNAL(clicked()),this,SLOT(grblReset()));
-    connect(ui->btnUnlockGrbl,SIGNAL(clicked()),this,SLOT(grblUnlock()));
+
     connect(ui->btnGoHomeSafe,SIGNAL(clicked()),this,SLOT(goHomeSafe()));
     connect(ui->verticalSliderZJog,SIGNAL(valueChanged(int)),this,SLOT(zJogSliderDisplay(int)));
     connect(ui->verticalSliderZJog,SIGNAL(sliderPressed()),this,SLOT(zJogSliderPressed()));
     connect(ui->verticalSliderZJog,SIGNAL(sliderReleased()),this,SLOT(zJogSliderReleased()));
-    connect(ui->pushButtonRefreshPos,SIGNAL(clicked()),this,SLOT(refreshPosition()));
-/// T4
-  //  connect(ui->comboStep,SIGNAL(currentIndexChanged(QString)),this,SLOT(comboStepChanged(QString)));
-     connect(ui->sliderStep, SIGNAL(valueChanged(int)), this, SLOT(stepChanged(int)) );
+  //  connect(ui->pushButtonRefreshPos,SIGNAL(clicked()),this,SLOT(refreshPosition()));
+
 /// T3
     connect(this, SIGNAL(sendFile(QString, bool)), &gcode, SLOT(sendFile(QString, bool)));
     connect(this, SIGNAL(openPort(QString,QString)), &gcode, SLOT(openPort(QString,QString)));
@@ -132,10 +167,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(setProgress(int)), ui->progressFileSend, SLOT(setValue(int)));
     connect(this, SIGNAL(setRuntime(QString)), ui->outputRuntime, SLOT(setText(QString)));
     connect(this, SIGNAL(sendSetHome()), &gcode, SLOT(grblSetHome()));
-    connect(this, SIGNAL(sendGrblReset()), &gcode, SLOT(sendGrblReset()));
+
 /// T3
-    connect(this, SIGNAL(sendGrblCheck(bool)), &gcode, SLOT(sendGrblCheck(bool)));
-    connect(this, SIGNAL(sendGrblUnlock()), &gcode, SLOT(sendGrblUnlock()));
     connect(this, SIGNAL(goToHome()), &gcode, SLOT(goToHome()));
     connect(this, SIGNAL(setItems(QList<PosItem>)), ui->wgtVisualizer, SLOT(setItems(QList<PosItem>)));
 /// T4
@@ -155,7 +188,7 @@ MainWindow::MainWindow(QWidget *parent) :
 /// ==> undetected by gcc 4.7.1 error                                           --->
    // connect(ui->BBcheckBox, SIGNAL(clicked(bool)), ui->visu3D, SLOT(setBbox(bool)() ) ) ;
 
-    connect(&gcode, SIGNAL(sendMsg(QString)),this,SLOT(receiveMsg(QString)));
+    connect(&gcode, SIGNAL(sendMsgSatusBar(QString)),this,SLOT(receiveMsgSatusBar(QString)));
     connect(&gcode, SIGNAL(portIsClosed(bool)), this, SLOT(portIsClosed(bool)));
     connect(&gcode, SIGNAL(portIsOpen(bool)), this, SLOT(portIsOpen(bool)));
     connect(&gcode, SIGNAL(addList(QString)),this,SLOT(receiveList(QString)));
@@ -172,7 +205,7 @@ MainWindow::MainWindow(QWidget *parent) :
 /// T4  3D animator
     connect(ui->visu3D, SIGNAL(updateLCD(QVector3D)), this, SLOT(updateLCD(QVector3D)));
     connect(&gcode, SIGNAL(setLastState(QString)), ui->outputLastState, SLOT(setText(QString)));
-    connect(&gcode, SIGNAL(setUnitsAll(bool)), this, SLOT(setUnitsAll(bool)));
+    connect(&gcode, SIGNAL(setUnitMmAll(bool)), this, SLOT(setUnitMmAll(bool)));
 
     /// 2D
     connect(&gcode, SIGNAL(setLivePoint(double, double, bool, bool)), ui->wgtVisualizer, SLOT(setLivePoint(double, double, bool, bool)));
@@ -180,6 +213,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&gcode, SIGNAL(setVisCurrLine(int)), ui->wgtVisualizer, SLOT(setVisCurrLine(int)));
 /// T4  for visu3D
     connect(&gcode, SIGNAL(setLivePoint(QVector3D)), ui->visu3D, SLOT(setLivePoint(QVector3D)));
+  //  connect(this, SIGNAL(setLiveRelPoint(QVector3D)), ui->visu3D, SLOT(setLiveRelPoint(QVector3D)));
+    connect(this, SIGNAL(setLivePoint(QVector3D, bool)), ui->visu3D, SLOT(setLivePoint(QVector3D, bool)));
 
     connect(&gcode, SIGNAL(setLcdState(bool)), this, SLOT(setLcdState(bool)));
     connect(&runtimeTimer, SIGNAL(setRuntime(QString)), ui->outputRuntime, SLOT(setText(QString)));
@@ -191,12 +226,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->visuGcode, SIGNAL(cursorPositionChanged() ), this, SLOT(on_cursorVisuGcode()) ) ;
     connect(this, SIGNAL(setLineCode(QString) ), ui->lineCode, SLOT(setText(QString)) ) ;
     connect(this, SIGNAL(setNumLine(QString) ), ui->visu3D, SLOT(setNumLine(QString)) ) ;
-
-     connect(&gcode, SIGNAL(setNumLine(QString) ), ui->visu3D, SLOT(setNumLine(QString)) ) ;
-
+    connect(&gcode, SIGNAL(setNumLine(QString) ), ui->visu3D, SLOT(setNumLine(QString)) ) ;
     connect(ui->visu3D, SIGNAL(setLineNum(QString) ), ui->lineCode, SLOT(setText(QString)) ) ;
     connect(this, SIGNAL(setTotalNumLine(QString) ), ui->visu3D, SLOT(setTotalNumLine(QString)) ) ;
-    connect(this, SIGNAL(setSpeedToLine(QList<double>)), ui->visu3D, SLOT(setSpeedToLine(QList<double>))) ;
+    connect(this, SIGNAL(setFeedRateToLine(QList<double>)), ui->visu3D, SLOT(setFeedRateToLine(QList<double>))) ;
+    connect(this, SIGNAL(setSpeedSpindleToLine(QList<double>)), ui->visu3D, SLOT(setSpeedSpindleToLine(QList<double>))) ;
     connect(ui->visu3D, SIGNAL(setActiveLineVisuGcode(int, bool)), this, SLOT(setActiveLineVisuGcode(int, bool)) );
 /// T4 for animator
     connect(ui->visualButton, SIGNAL(toggled(bool) ), this, SLOT(toVisual(bool)) ) ;
@@ -213,36 +247,21 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->visu3D, SIGNAL(setPauseVisual(bool)), ui->pauseButton, SLOT(setChecked(bool)) );
 
-    connect(ui->visu3D, SIGNAL(setSpeedGcode(double)), ui->lcdSpeedGcode, SLOT(display(double)) );
+    connect(ui->visu3D, SIGNAL(setFeedRateGcode(double)), ui->lcdFeedRateGcode, SLOT(display(double)) );
+    connect(ui->visu3D, SIGNAL(setSpeedSpindleGcode(double)), ui->lcdSpeedSpindleGcode, SLOT(display(double)) );
+
     connect(ui->visu3D, SIGNAL(setSegments(int)), ui->lcdSegments, SLOT(display(int)) );
     connect (ui->doubleSpinBoxTol, SIGNAL(valueChanged(double)), ui->visu3D, SLOT(setTolerance(double) ));
 
-/// T4  m4444x
-/*
-    // This code generates too many messages and chokes operation on raspberry pi. Do not use.
-    //connect(ui->statusList->model(), SIGNAL(rowsInserted(const QModelIndex&, int, int)), ui->statusList, SLOT(scrollToBottom()));
+    connect(ui->btnClearStatusList, SIGNAL(clicked() ), this, SLOT(toClearSatusList()) ) ;
+    connect(ui->btnPrintStatusList, SIGNAL(clicked() ), this, SLOT(toPrintStatusList()) ) ;
+    connect(ui->btnPrintVisual, SIGNAL(clicked() ), this, SLOT(toPrintVisual()) ) ;
 
-	// instead, use this one second timer-based approach
-    scrollTimer = new QTimer(this);
-    connect(scrollTimer, SIGNAL(timeout()), this, SLOT(doScroll()));
-    scrollTimer->start(1000);
-    connect(ui->statusList->verticalScrollBar(), SIGNAL(sliderPressed()), this, SLOT(statusSliderPressed()));
-    connect(ui->statusList->verticalScrollBar(), SIGNAL(sliderReleased()), this, SLOT(statusSliderReleased()));
-*/
+/// end connect
+    /// start threads
     runtimeTimerThread.start();
     gcodeThread.start();
-/// T4 m4444x
-/*
-	// Don't use - it will not show horizontal scrollbar for small app size
-    //ui->statusList->setUniformItemSizes(true);
 
-	// Does not work correctly for horizontal scrollbar:
-    //MyItemDelegate *scrollDelegate = new MyItemDelegate(ui->statusList);
-    //scrollDelegate->setWidth(600);
-    //ui->statusList->setItemDelegate(scrollDelegate);
-
-    scrollStatusTimer.start();
-*/
     queuedCommandsEmptyTimer.start();
     queuedCommandsRefreshTimer.start();
 
@@ -252,16 +271,16 @@ MainWindow::MainWindow(QWidget *parent) :
     int portIndex = -1;
     for (int i = 0; i < ports.size(); i++)
     {
-        ui->cmbPort->addItem(ports.at(i).portName.toLocal8Bit().constData());
+        ui->cmbPort->addItem(qPrintable(ports.at(i).portName));
 
         if (ports.at(i).portName == lastOpenPort)
             portIndex = i;
 
-        //diag("port name: %s\n", ports.at(i).portName.toLocal8Bit().constData());
-        //diag("friendly name: %s\n", ports.at(i).friendName.toLocal8Bit().constData());
-        //diag("physical name: %s\n", ports.at(i).physName.toLocal8Bit().constData());
-        //diag("enumerator name: %s\n", ports.at(i).enumName.toLocal8Bit().constData());
-        //diag("===================================\n\n");
+//diag("port name: %s\n", qPrintable(ports.at(i).portName));
+//diag("friendly name: %s\n", qPrintable(ports.at(i).friendName));
+//diag("physical name: %s\n", qPrintable(ports.at(i).physName)));
+//diag("enumerator name: %s\n", qPrintable(ports.at(i).enumName)));
+//diag("===================================\n\n");
     }
 
     if (portIndex >= 0)
@@ -273,7 +292,7 @@ MainWindow::MainWindow(QWidget *parent) :
     {
         // did not find matching port
         // This code block is used to restore a port to view that isn't visible to QextSerialEnumerator
-        ui->cmbPort->addItem(lastOpenPort.toLocal8Bit().constData());
+        ui->cmbPort->addItem(qPrintable(lastOpenPort));
         if (ports.size() > 0)
             ui->cmbPort->setCurrentIndex(ports.size());
         else
@@ -292,12 +311,11 @@ MainWindow::MainWindow(QWidget *parent) :
             baudRateIndex = i;
         }
     }
-
     ui->comboBoxBaudRate->setCurrentIndex(baudRateIndex);
 
     ui->tabAxisVisualizer->setEnabled(false);
 /// T4
-    // invalid manual controls
+    // manual controls
     enableManualControl(false);
 
     if (!controlParams.useFourAxis)
@@ -306,7 +324,7 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->lcdMachNumberFourth->setEnabled(false);;
         ui->IncFourthBtn->setEnabled(false);
         ui->DecFourthBtn->setEnabled(false);
-        ui->lblFourthJog->setEnabled(false);
+        ui->HomeFourthBtn->setEnabled(false);
     }
     ui->groupBoxSendFile->setEnabled(true);
     ui->comboCommand->setEnabled(false);
@@ -315,30 +333,28 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->labelLines->setEnabled(false);
     ui->outputLines->setEnabled(false);
 /// T3
-    ui->Check->setEnabled(false);
-
+    {
     ui->Begin->setEnabled(false);
     ui->Stop->setEnabled(false);
+    ui->btnPause->setEnabled(false);
     ui->progressFileSend->setEnabled(false);
     ui->progressQueuedCommands->setEnabled(false);
     ui->labelFileSendProgress->setEnabled(false);
     ui->labelQueuedCommands->setEnabled(false);
-
     ui->outputRuntime->setEnabled(false);
     ui->labelRuntime->setEnabled(false);
-    ui->btnGRBL->setEnabled(false);
-    ui->btnSetHome->setEnabled(false);
-    ui->btnResetGrbl->setEnabled(false);
-    ui->btnUnlockGrbl->setEnabled(false);
-    ui->btnGoHomeSafe->setEnabled(false);
-    ui->pushButtonRefreshPos->setEnabled(false);
+    }
+/// T4
+    // Grbl commands
+    enableButtonGrblControls(false);
+
     styleSheet = ui->btnOpenPort->styleSheet();
     ui->statusList->setEnabled(true);
     ui->openFile->setEnabled(true);
 /// T4 animator
     ui->tabGcode->setEnabled(false);
 
-    this->setWindowTitle(GRBL_CONTROLLER_NAME_AND_VERSION);
+    this->setWindowTitle(GRBL_CONTROLLER_NAME_AND_VERSION VERSION_BUILD);
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint);
 
     QSettings settings;
@@ -390,16 +406,12 @@ MainWindow::MainWindow(QWidget *parent) :
         menuTool->addAction(shortToolAction);
     /// associate 'menuTool' and 'toolButton'
     ui->toolButton->setMenu(menuTool);
-/// <-- T4
 /// T4
-    setUnitsAll (true);
     // period animation mS
     ui->dialPeriodRepeat->setValue(100);
 
+/// <-- T4  call 'setUnitMmAll(..)'
     emit setResponseWait(controlParams);
-/// T4
-    ui->tabAxisVisualizer->setTabEnabled(TAB_AXIS_INDEX, false);
-
 }
 
 MainWindow::~MainWindow()
@@ -427,7 +439,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::begin()
 {
-
+    // TODO : verify 'ui->filePath->text()'
+    // ...
     if (!checkState)
         setLcdState(controlParams.usePositionRequest);
     else
@@ -439,24 +452,20 @@ void MainWindow::begin()
 
 /// T4  3D
     /// -> ui->visu3D::runCode(true, posRegKind);
-    emit runCode(true, posReqKind);
-    /// -> gcode::setPosReqKind(posRegKind);
+    runFile = true;
+    cmdMan = false;
+    emit runCode(runFile, posReqKind);
+
+    // -> 'gcode::setPosReqKind(posRegKind)'
     emit setPosReqKind(posReqKind);
 
     ui->visualButton->setChecked(false);
     ui->pauseButton->setChecked(true);
-    // ui->tabGcode->setEnabled(false);
-    // ui->tabGcode->setEnabled(true);
-    // ui->tabVisu->setTabEnabled(TAB_VISUGCODE_INDEX, true);
     // invalid manual controls
     enableManualControl(false);
-
-    if (!checkState) {
-        ui->tabAxisVisualizer->setTabEnabled(TAB_AXIS_INDEX, false);
-        ui->tabAxisVisualizer->setTabEnabled(TAB_ADVANCED_INDEX, false);
-      //  ui->tabAxisVisualizer->setTabEnabled(TAB_VISUALIZER_INDEX, true);
+    if (!checkState)
+    {
         ui->tabAxisVisualizer->setTabEnabled(TAB_VISU3D_INDEX, true);
-
         if (ui->tabAxisVisualizer->currentIndex() != TAB_VISU3D_INDEX)
         {
              emit ui->tabAxisVisualizer->setCurrentIndex(TAB_VISU3D_INDEX);
@@ -486,28 +495,30 @@ void MainWindow::begin()
     }
     if(ret!=QMessageBox::Cancel)
     {
-       // ui->tabAxisVisualizer->setEnabled(false);
+        ui->btnClearStatusList->setEnabled(false);
+        ui->btnPrintStatusList->setEnabled(false);
+        ui->btnPrintVisual->setEnabled(false) ;
+
         ui->comboCommand->setEnabled(false);
         ui->labelCommand->setEnabled(false);
 /// T3
-        ui->Check->setEnabled(false);
+        ui->openFile->setEnabled(false);
+        {
         ui->Begin->setEnabled(false);
         ui->Stop->setEnabled(true);
+        ui->btnPause->setEnabled(true);
         ui->progressFileSend->setEnabled(true);
         ui->progressQueuedCommands->setEnabled(true);
         ui->labelFileSendProgress->setEnabled(true);
         ui->labelQueuedCommands->setEnabled(true);
         ui->outputRuntime->setEnabled(true);
         ui->labelRuntime->setEnabled(true);
-        ui->openFile->setEnabled(false);
-        ui->btnGRBL->setEnabled(false);
-        ui->btnUnlockGrbl->setEnabled(false);
-        ui->btnSetHome->setEnabled(false);
-        ui->btnGoHomeSafe->setEnabled(false);
-        ui->pushButtonRefreshPos->setEnabled(false);
+        }
+
 /// T4
-      //  ui->visualButton->setEnabled(false);
-        // invalid commands 'tabVisu'
+        // Grbl commands
+        enableButtonGrblControls(false);
+        // commands 'tabVisu'
         enableTabVisuControls(false);
 
         emit sendFile(ui->filePath->text(), checkState);
@@ -520,49 +531,164 @@ void MainWindow::stop()
     ui->wgtVisualizer->setEnabled(true);
     ui->wgtVisualizer->setAutoFillBackground(true);
 /// T4
-    emit runCode(false, posReqKind);
+    runFile = false;
+    emit runCode(runFile, posReqKind);
     ui->visu3D->setEnabled(true);
     ui->tabGcode->setEnabled(true);
+    ui->tabVisu->setTabEnabled(TAB_VISUGCODE_INDEX, true);
 
     gcode.setAbort();
+/// T4
+    if (!ui->btnPause->isChecked())
+        ui->btnPause->setChecked(true);
 
     // Reenable a bunch of UI
 /// T3
-    ui->Check->setEnabled(true);
     ui->Begin->setEnabled(true);
     ui->Stop->setEnabled(false);
-    ui->btnGRBL->setEnabled(true);
-    ui->btnSetHome->setEnabled(true);
-    ui->btnResetGrbl->setEnabled(true);
-    ui->btnUnlockGrbl->setEnabled(true);
-    ui->btnGoHomeSafe->setEnabled(true);
-    ui->pushButtonRefreshPos->setEnabled(true);
+    ui->btnPause->setEnabled(false);
     ui->openFile->setEnabled(true);
+
+    ui->btnClearStatusList->setEnabled(true);
+    ui->btnPrintStatusList->setEnabled(true);
+    ui->btnPrintVisual->setEnabled(true) ;
 /// T4
-  //  ui->visualButton->setEnabled(true);
     // valid commands 'tabVisu'
     enableTabVisuControls(true);
-  //  ui->tabAxisVisualizer->setTabEnabled(TAB_AXIS_INDEX, true);
-    ui->tabAxisVisualizer->setTabEnabled(TAB_ADVANCED_INDEX, true);
-    ui->tabVisu->setTabEnabled(TAB_VISUGCODE_INDEX, true);
+
     // valid manual controls
     enableManualControl(true);
+
+    // Grbl commands
+    enableButtonGrblControls(true);
+}
+//------------------------------------------
+/// T4    suspend/resume 'gcode::sendFile(...)'
+// calls : 'ui->btnPause'
+void MainWindow::pauseSend(bool valid)
+{
+    // to gcode
+    gcode.setPause(!valid);
+
+    QPalette palette;
+    if (ui->btnPause->isChecked())  {
+        ui->btnPause->setText(tr("Pause")) ;
+        palette.setColor(QPalette::Button,Qt::gray) ;
+    }
+    else {
+        ui->btnPause->setText(tr("Resume")) ;
+        palette.setColor(QPalette::Button,Qt::yellow) ;
+    }
+    // color 'pauseButton'
+    ui->btnPause->setPalette(palette);
 }
 
-void MainWindow::grblReset()
+void MainWindow::grblHelp()
 {
-    gcode.setAbort();
-    gcode.setReset();
-    emit sendGrblReset();
+    emit sendGrblHelp();
+}
+void MainWindow::grblParameters()
+{
+    emit sendGrblParameters();
+}
+void MainWindow::grblParserState()
+{
+    emit sendGrblParserState();
+}
+
+void MainWindow::grblBuildInfo()
+{
+    emit sendGrblBuildInfo();
+}
+void MainWindow::grblStartupBlocks()
+{
+    emit sendGrblStartupBlocks();
+}
+
+// calls : 'ui->btnCheck::toggled(valid)'
+void  MainWindow::grblCheck(bool valid)
+{
+/// TODO : fix bug with command '$C'
+    checkState = ui->btnCheck->isChecked();
+    if (checkState)
+    {
+        QString txt(tr("During the mode 'Check 'does not use the command '$C' please"));
+        receiveMsgSatusBar(txt);
+        info(qPrintable(txt));
+        QMessageBox msgBox;
+        msgBox.setIcon(QMessageBox::Information);
+        msgBox.setText(txt);
+        msgBox.exec();
+
+        addToStatusList(true, txt);
+
+        ui->btnCheck->setText(tr("No check")) ;
+    }
+    else  {
+        ui->btnCheck->setText(tr("Check")) ;
+    }
+
+    ui->tabAxisVisualizer->setEnabled(valid);
+
+    enableButtonGrblControls(!valid);
+    if(valid) {
+        ui->btnCheck->setEnabled(true);
+        ui->btnStatus->setEnabled(true);
+        ui->btnResetGrbl->setEnabled(true);
+        ui->btnUnlockGrbl->setEnabled(true);
+    }
+     // (in)valid manual controls
+    enableManualControl(!valid);
+    ui->tabVisu->setTabEnabled(TAB_VISUGCODE_INDEX, !valid);
+
+    /// send '$C' to Grbl
+    emit sendGrblCheck(checkState) ;
 }
 
 void MainWindow::grblUnlock()
 {
     emit sendGrblUnlock();
 }
+void MainWindow::grblHomingCycle()
+{
+    // user message
+    QString msg(tr("With 'Grbl Settings' you must validate the homing cycle" ));
+    info(qPrintable(msg));
+    QMessageBox msgBox;
+    msgBox.setIcon(QMessageBox::Information);
+    msgBox.setText(msg);
+    msgBox.exec();
+
+    addToStatusList(true, msg);
+
+    emit sendGrblHomingCycle();
+}
+///---- not used
+void MainWindow::grblCycleStart()
+{
+    emit sendGrblCycleStart() ;
+}
+void MainWindow::grblFeedHold()
+{
+    emit sendGrblFeedHold() ;
+}
+//--
+void MainWindow::grblStatus()
+{
+    emit sendGrblStatus();
+}
+void MainWindow::grblReset()
+{
+    gcode.setAbort();
+    gcode.setReset();
+    emit sendGrblReset();
+}
+//-------------------------------------------
 
 void MainWindow::goHomeSafe()
 {
+    /// tool position  !!
+    cmdMan = true;
     emit goToHome();
 }
 
@@ -570,39 +696,38 @@ void MainWindow::goHomeSafe()
 void MainWindow::stopSending()
 {
     ui->tabAxisVisualizer->setEnabled(true);
-    ui->tabAxisVisualizer->setTabEnabled(TAB_ADVANCED_INDEX, true);
     // valid manual controls
     enableManualControl(true);
-
+    if (!ui->btnPause->isChecked())
+        ui->btnPause->setChecked(true);
     // lcd
     ui->lcdWorkNumberFourth->setEnabled(controlParams.useFourAxis);
     ui->lcdMachNumberFourth->setEnabled(controlParams.useFourAxis);
     ui->IncFourthBtn->setEnabled(controlParams.useFourAxis);
     ui->DecFourthBtn->setEnabled(controlParams.useFourAxis);
-    ui->lblFourthJog->setEnabled(controlParams.useFourAxis);
+    ui->HomeFourthBtn->setEnabled(controlParams.useFourAxis);
     ui->comboCommand->setEnabled(true);
     ui->labelCommand->setEnabled(true);
 /// T3
-    ui->Check->setEnabled(true);
+    {
     ui->Begin->setEnabled(true);
     ui->Stop->setEnabled(false);
+    ui->btnPause->setEnabled(false);
     ui->progressFileSend->setEnabled(false);
     ui->progressQueuedCommands->setEnabled(false);
     ui->labelFileSendProgress->setEnabled(false);
     ui->labelQueuedCommands->setEnabled(false);
     ui->outputRuntime->setEnabled(false);
     ui->labelRuntime->setEnabled(false);
+    }
     ui->btnOpenPort->setEnabled(true);
-    ui->btnGRBL->setEnabled(true);
-    ui->btnSetHome->setEnabled(true);
-    ui->btnResetGrbl->setEnabled(true);
-    ui->btnUnlockGrbl->setEnabled(true);
-    ui->btnGoHomeSafe->setEnabled(true);
-    ui->pushButtonRefreshPos->setEnabled(true);
+/// T4
+    // Grbl commands
+    enableButtonGrblControls(true);
+
     ui->openFile->setEnabled(true);
 /// T4
-   // ui->visualButton->setEnabled(true);
-    // valid commands 'tabVisu'
+    // commands 'tabVisu'
     enableTabVisuControls(true);
 }
 
@@ -620,6 +745,7 @@ void MainWindow::setHome()
 {
     resetProgress();
    // sendSetHome();  // ?
+    cmdMan = true;
     emit sendSetHome();
 }
 
@@ -648,6 +774,9 @@ void MainWindow::openPortCtl(bool reopen)
 
         ui->btnOpenPort->setEnabled(false);
         ui->comboBoxBaudRate->setEnabled(false);
+
+        ui->btnClearStatusList->setEnabled(true);
+        ui->btnPrintStatusList->setEnabled(true);
 /// T4
         if (ui->tabVisu->currentIndex() != TAB_CONSOLE_INDEX)
         {
@@ -672,31 +801,28 @@ void MainWindow::openPortCtl(bool reopen)
         ui->labelLines->setEnabled(false);
         ui->outputLines->setEnabled(false);
 /// T3
-        ui->Check->setEnabled(false); //checkState = false;
+         ui->openFile->setEnabled(true);
+        {
         ui->Begin->setEnabled(false);
         ui->Stop->setEnabled(false);
+        ui->btnPause->setEnabled(false);
         ui->progressFileSend->setEnabled(false);
         ui->progressQueuedCommands->setEnabled(false);
         ui->labelFileSendProgress->setEnabled(false);
         ui->labelQueuedCommands->setEnabled(false);
         ui->outputRuntime->setEnabled(false);
         ui->labelRuntime->setEnabled(false);
-        //ui->btnOpenPort->setEnabled(false);
-        ui->openFile->setEnabled(true);
+        }
 /// T4
         ui->tabAxisVisualizer->setEnabled(ui->visualButton->isChecked());
-     //   ui->groupBoxSendFile->setEnabled(false);
         ui->comboCommand->setEnabled(false);
         ui->labelCommand->setEnabled(false);
-        //ui->cmbPort->setEnabled(false);
-        //ui->comboBoxBaudRate->setEnabled(false);
-        //ui->btnOpenPort->setEnabled(false);
-        ui->btnGRBL->setEnabled(false);
+
+        enableButtonGrblControls(false) ;
         // invalid manual controls
         enableManualControl(false);
 /// T2
 		ui->GrblVersion->setText(tr("none"));
-
         // Send event to close the port
         emit closePort(reopen);
     }
@@ -711,30 +837,35 @@ void MainWindow::portIsClosed(bool reopen)
 
     ui->tabAxisVisualizer->setEnabled(false);
 
+    ui->btnClearStatusList->setEnabled(false);
+    ui->btnPrintStatusList->setEnabled(false);
+
 /// T4
      // invalid manual controls
     enableManualControl(false);
-   // ui->groupBoxSendFile->setEnabled(false);
+
     ui->comboCommand->setEnabled(false);
     ui->labelCommand->setEnabled(false);
     ui->labelLines->setEnabled(false);
     ui->outputLines->setEnabled(false);
+
     ui->openFile->setEnabled(true);
-    ui->Check->setEnabled(false);
+
+    {
     ui->Begin->setEnabled(false);
     ui->Stop->setEnabled(false);
+    ui->btnPause->setEnabled(false);
     ui->progressFileSend->setEnabled(false);
     ui->progressQueuedCommands->setEnabled(false);
     ui->labelFileSendProgress->setEnabled(false);
     ui->labelQueuedCommands->setEnabled(false);
     ui->outputRuntime->setEnabled(false);
     ui->labelRuntime->setEnabled(false);
-    ui->btnGRBL->setEnabled(false);
-    ui->btnSetHome->setEnabled(false);
-    ui->btnResetGrbl->setEnabled(false);
-    ui->btnUnlockGrbl->setEnabled(false);
-    ui->btnGoHomeSafe->setEnabled(false);
-    ui->pushButtonRefreshPos->setEnabled(false);
+    }
+/// T4
+    // Grbl commands
+    enableButtonGrblControls(false);
+
     styleSheet = ui->btnOpenPort->styleSheet();
     ui->statusList->setEnabled(true);
     ui->tabGcode->setEnabled(true);
@@ -746,12 +877,9 @@ void MainWindow::portIsClosed(bool reopen)
     ui->btnOpenPort->setEnabled(true);
     ui->btnOpenPort->setText(open_button_text);
     ui->btnOpenPort->setStyleSheet(styleSheet);
-    ui->btnGRBL->setEnabled(false);
-    ui->btnSetHome->setEnabled(false);
-    ui->btnResetGrbl->setEnabled(false);
-    ui->btnUnlockGrbl->setEnabled(false);
-    ui->btnGoHomeSafe->setEnabled(false);
-    ui->pushButtonRefreshPos->setEnabled(false);
+/// T4
+    // Grbl commands
+    enableButtonGrblControls(false);
 
     if (reopen)
     {
@@ -770,9 +898,10 @@ void MainWindow::portIsOpen(bool sendCode)
         sendGcode("");
     openState = sendCode;
 }
-
+// called by 'GCode::axisAdj(...)'
 void MainWindow::adjustedAxis()
 {
+    cmdMan = false;
     ui->tabAxisVisualizer->setEnabled(true);
 /// T4
     // valid manual controls
@@ -781,12 +910,12 @@ void MainWindow::adjustedAxis()
     ui->comboCommand->setEnabled(true);
     ui->labelCommand->setEnabled(true);
 
-    if (ui->filePath->text().length() > 0)  {
-        ui->Begin->setEnabled(true);
-/// T3
-        ui->Check->setEnabled(true);
+    if (ui->filePath->text().length() > 0)
+    {
+       ui->Begin->setEnabled(true);
     }
     ui->Stop->setEnabled(false);
+    ui->btnPause->setEnabled(false);
     ui->progressFileSend->setEnabled(false);
     ui->progressQueuedCommands->setEnabled(false);
     ui->labelFileSendProgress->setEnabled(false);
@@ -796,43 +925,37 @@ void MainWindow::adjustedAxis()
 
     ui->btnOpenPort->setEnabled(true);
     ui->openFile->setEnabled(true);
-    ui->btnGRBL->setEnabled(true);
-    ui->btnSetHome->setEnabled(true);
-    ui->btnResetGrbl->setEnabled(true);
-    ui->btnUnlockGrbl->setEnabled(true);
-    ui->btnGoHomeSafe->setEnabled(true);
-    ui->pushButtonRefreshPos->setEnabled(true);
+/// T4
+    // Grbl commands
+    enableButtonGrblControls(true);
 }
 
-void MainWindow::disableAllButtons()
+void MainWindow::enableAllButtons(bool v)
 {
-    //ui->tabAxisVisualizer->setEnabled(false);
-    ui->comboCommand->setEnabled(false);
-    ui->labelCommand->setEnabled(false);
+    ui->comboCommand->setEnabled(v);
+    ui->labelCommand->setEnabled(v);
 /// T2
-    ui->labelLines->setEnabled(false);
-    ui->outputLines->setEnabled(false);
+    ui->labelLines->setEnabled(v);
+    ui->outputLines->setEnabled(v);
 /// T3
-    ui->Check->setEnabled(false);
-    ui->Begin->setEnabled(false);
-    ui->Stop->setEnabled(false);
-    ui->progressFileSend->setEnabled(false);
-    ui->progressQueuedCommands->setEnabled(false);
-    ui->labelFileSendProgress->setEnabled(false);
-    ui->labelQueuedCommands->setEnabled(false);
-    ui->outputRuntime->setEnabled(false);
-    ui->labelRuntime->setEnabled(false);
-   // ui->openFile->setEnabled(false);
-    ui->btnGRBL->setEnabled(false);
-    ui->btnSetHome->setEnabled(false);
-    ui->btnResetGrbl->setEnabled(false);
-    ui->btnUnlockGrbl->setEnabled(false);
-    ui->btnGoHomeSafe->setEnabled(false);
-    ui->pushButtonRefreshPos->setEnabled(false);
+    ui->openFile->setEnabled(v);
+    {  // enableBlockFile
+    ui->Begin->setEnabled(v);
+    ui->Stop->setEnabled(v);
+    ui->btnPause->setEnabled(v);
+    ui->progressFileSend->setEnabled(v);
+    ui->progressQueuedCommands->setEnabled(v);
+    ui->labelFileSendProgress->setEnabled(v);
+    ui->labelQueuedCommands->setEnabled(v);
+    ui->outputRuntime->setEnabled(v);
+    ui->labelRuntime->setEnabled(v);
+    }
 /// T4
-     // invalid manual controls
-    enableManualControl(false);
-
+    // Grbl commands
+    enableButtonGrblControls(v);
+/// T4
+     // manual controls
+    enableManualControl(v);
 }
 // called by 'GCode::waitForStartupBanner( ...)'
 void MainWindow::enableGrblDialogButton()
@@ -843,23 +966,26 @@ void MainWindow::enableGrblDialogButton()
     ui->btnOpenPort->setStyleSheet("* { background-color: rgb(255,125,100) }");
     ui->cmbPort->setEnabled(false);
     ui->comboBoxBaudRate->setEnabled(false);
-    ui->tabAxisVisualizer->setEnabled(true);
-     // valid manual controls
-    enableManualControl(true);
 
+    ui->tabAxisVisualizer->setEnabled(true);
+    // valid manual controls
+    enableManualControl(true);
+    {  // blockCoordinate
     ui->lcdWorkNumberFourth->setEnabled(controlParams.useFourAxis);
     ui->lcdMachNumberFourth->setEnabled(controlParams.useFourAxis);
     ui->IncFourthBtn->setEnabled(controlParams.useFourAxis);
     ui->DecFourthBtn->setEnabled(controlParams.useFourAxis);
-    ui->lblFourthJog->setEnabled(controlParams.useFourAxis);
+    ui->HomeFourthBtn->setEnabled(controlParams.useFourAxis);
+    }
     ui->groupBoxSendFile->setEnabled(true);
+
     ui->comboCommand->setEnabled(true);
     ui->labelCommand->setEnabled(true);
+
     ui->btnSetHome->setEnabled(true);
-    ui->btnResetGrbl->setEnabled(true);
-    ui->btnUnlockGrbl->setEnabled(true);
-    ui->btnGoHomeSafe->setEnabled(true);
-    ui->pushButtonRefreshPos->setEnabled(true);
+///  T4
+    // Grbl commands
+    enableButtonGrblControls(true);
 
     if (ui->filePath->text().length() > 0)
     {
@@ -868,10 +994,11 @@ void MainWindow::enableGrblDialogButton()
         ui->outputLines->setEnabled(true);
 /// T3
         if (!ui->visualButton->isChecked()) {
-            ui->Check->setEnabled(true);
+            ui->btnCheck->setEnabled(true);
             ui->Begin->setEnabled(true);
         }
          ui->Stop->setEnabled(false);
+         ui->btnPause->setEnabled(false);
 
         ui->progressFileSend->setEnabled(false);
         ui->progressQueuedCommands->setEnabled(false);
@@ -886,87 +1013,153 @@ void MainWindow::enableGrblDialogButton()
         ui->labelLines->setEnabled(false);
         ui->outputLines->setEnabled(false);
 /// T3
-        ui->Check->setEnabled(false);
+        {
         ui->Begin->setEnabled(false);
         ui->Stop->setEnabled(false);
+        ui->btnPause->setEnabled(false);
         ui->progressFileSend->setEnabled(false);
         ui->progressQueuedCommands->setEnabled(false);
         ui->labelFileSendProgress->setEnabled(false);
         ui->labelQueuedCommands->setEnabled(false);
         ui->outputRuntime->setEnabled(false);
         ui->labelRuntime->setEnabled(false);
+        }
     }
-
-    ui->btnGRBL->setEnabled(true);
 }
 
 void MainWindow::incX()
 {
-    disableAllButtons();
+    enableAllButtons(false);
 /// T4
-    ui->lcdSpeedGcode->display(controlParams.xyRateAmount);
+    ui->lcdFeedRateGcode->display(controlParams.xyRateAmount);
+    cmdMan = true;
     emit axisAdj('X', jogStep, invX, absoluteAfterAxisAdj, 0);
-
 }
 
 void MainWindow::incY()
 {
-    disableAllButtons();
+    enableAllButtons(false);
 /// T4
-    ui->lcdSpeedGcode->display(controlParams.xyRateAmount);
+    ui->lcdFeedRateGcode->display(controlParams.xyRateAmount);
+    cmdMan = true;
     emit axisAdj('Y', jogStep, invY, absoluteAfterAxisAdj, 0);
 }
 
 void MainWindow::incZ()
 {
-    disableAllButtons();
+    enableAllButtons(false);
 /// T4
-    ui->lcdSpeedGcode->display(controlParams.zJogRate);
+    cmdMan = true;
+    ui->lcdFeedRateGcode->display(controlParams.zJogRate);
     emit axisAdj('Z', jogStep, invZ, absoluteAfterAxisAdj, sliderZCount++);
 }
 
 void MainWindow::decX()
 {
-    disableAllButtons();
+    enableAllButtons(false);
 /// T4
-    ui->lcdSpeedGcode->display(controlParams.xyRateAmount);
+    ui->lcdFeedRateGcode->display(controlParams.xyRateAmount);
+    cmdMan = true;
     emit axisAdj('X', -jogStep, invX, absoluteAfterAxisAdj, 0);
 }
 
 void MainWindow::decY()
 {
-    disableAllButtons();
+    enableAllButtons(false);
 /// T4
-    ui->lcdSpeedGcode->display(controlParams.xyRateAmount);
+    ui->lcdFeedRateGcode->display(controlParams.xyRateAmount);
+    cmdMan = true;
     emit axisAdj('Y', -jogStep, invY, absoluteAfterAxisAdj, 0);
 }
 
 void MainWindow::decZ()
 {
-    disableAllButtons();
+    enableAllButtons(false);
 /// T4
-    ui->lcdSpeedGcode->display(controlParams.zJogRate);
+    ui->lcdFeedRateGcode->display(controlParams.zJogRate);
+    cmdMan = true;
     emit axisAdj('Z', -jogStep, invZ, absoluteAfterAxisAdj, sliderZCount++);
 }
 
 void MainWindow::decFourth()
 {
-	disableAllButtons();
+	enableAllButtons(false);
 /// T4
-    ui->lcdSpeedGcode->display(controlParams.xyRateAmount);
+    ui->lcdFeedRateGcode->display(controlParams.xyRateAmount);
+    cmdMan = true;
 	emit axisAdj(controlParams.fourthAxisName, -jogStep, invFourth, absoluteAfterAxisAdj, 0);
 }
 void MainWindow::incFourth()
 {
-	disableAllButtons();
+	enableAllButtons(false);
 /// T4
-    ui->lcdSpeedGcode->display(controlParams.xyRateAmount);
+    ui->lcdFeedRateGcode->display(controlParams.xyRateAmount);
+    cmdMan = true;
     emit axisAdj(controlParams.fourthAxisName, jogStep, invFourth, absoluteAfterAxisAdj, 0);
+}
+
+// ui->HomeXBtn->clicked() -> homeX()
+void MainWindow::homeX()
+{
+    if (ui->lcdWorkNumberX->value()==0)
+        return;
+	enableAllButtons(false);
+/// T4
+    ui->lcdFeedRateGcode->display(controlParams.xyRateAmount);
+    cmdMan = true;
+    emit goToHomeAxis('X');
+}
+void MainWindow::homeY()
+{
+    if (ui->lcdWorkNumberY->value()==0)
+        return;
+	enableAllButtons(false);
+/// T4
+    ui->lcdFeedRateGcode->display(controlParams.xyRateAmount);
+    cmdMan = true;
+    emit goToHomeAxis('Y');
+}
+
+void MainWindow::homeZ()
+{
+    if (ui->lcdWorkNumberZ->value()==0)
+        return;
+	enableAllButtons(false);
+/// T4
+    ui->lcdFeedRateGcode->display(controlParams.zJogRate);
+    cmdMan = true;
+    emit goToHomeAxis('Z');
+}
+
+void MainWindow::homeFourth()
+{
+    if (ui->lcdWorkNumberFourth->value()==0)
+        return;
+	enableAllButtons(false);
+/// T4
+    ui->lcdFeedRateGcode->display(controlParams.xyRateAmount);
+    cmdMan = true;
+    emit goToHomeAxis(controlParams.fourthAxisName);
+}
+
+// calls : 'GCode::goToHomeAxis()':1,
+void MainWindow::endHomeAxis()
+{
+    cmdMan = false;
+    enableManualControl(true);
+    enableButtonGrblControls(true);
+    ui->comboCommand->setEnabled(true);
+    ui->openFile->setEnabled(true);
+    if (ui->filePath->text().length() > 0)
+        ui->Begin->setEnabled(true);
+    /// others  ... TODO
 }
 
 void MainWindow::getOptions()
 {
-    Options opt(this);
+/// T4
+   // Options opt(this);
+    opt.move(geometry().x(), geometry().y());
     opt.exec();
 }
 
@@ -1008,6 +1201,9 @@ void MainWindow::openFile()
 
         resetProgress();
     }
+/// T4
+    else
+        return ;
 
     int slash = fileName.lastIndexOf('/');
     if (slash == -1)
@@ -1022,42 +1218,32 @@ void MainWindow::openFile()
     }
 
     ui->filePath->setText(fileName);
-    if(ui->filePath->text().length() > 0 && ui->btnOpenPort->text() == close_button_text)
+/// T3   // cpmport open
+    if (ui->btnOpenPort->text() == close_button_text)
     {
-/// T2
-        ui->labelLines->setEnabled(true);
-        ui->outputLines->setEnabled(true);
-/// T3
-        ui->Check->setEnabled(true);
         ui->Begin->setEnabled(true);
-        ui->Stop->setEnabled(false);
-        ui->progressFileSend->setEnabled(false);
-        ui->progressQueuedCommands->setEnabled(false);
-        ui->labelFileSendProgress->setEnabled(false);
-        ui->labelQueuedCommands->setEnabled(false);
-        ui->outputRuntime->setEnabled(false);
-        ui->labelRuntime->setEnabled(false);
     }
-    else
+    else  // close
     {
-/// T2
-        ui->labelLines->setEnabled(false);
-        ui->outputLines->setEnabled(false);
-/// T3
-        ui->Check->setEnabled(false);
-
         ui->Begin->setEnabled(false);
-        ui->Stop->setEnabled(false);
-        ui->progressFileSend->setEnabled(false);
-        ui->progressQueuedCommands->setEnabled(false);
-        ui->labelFileSendProgress->setEnabled(false);
-        ui->labelQueuedCommands->setEnabled(false);
-        ui->outputRuntime->setEnabled(false);
-        ui->labelRuntime->setEnabled(false);
+    }
+
+    {
+    ui->Stop->setEnabled(false);
+    ui->btnPause->setEnabled(false);
+    ui->progressFileSend->setEnabled(false);
+    ui->progressQueuedCommands->setEnabled(false);
+    ui->labelFileSendProgress->setEnabled(false);
+    ui->labelQueuedCommands->setEnabled(false);
+    ui->outputRuntime->setEnabled(false);
+    ui->labelRuntime->setEnabled(false);
     }
 
     if (ui->filePath->text().length() > 0)
     {
+        ui->labelLines->setEnabled(true);
+        ui->outputLines->setEnabled(true);
+        ui->btnPrintVisual->setEnabled(true) ;
 /// T4    visu3D  and visuGcode
         if (ui->tabAxisVisualizer->currentIndex() != TAB_VISU3D_INDEX)
         {
@@ -1068,8 +1254,13 @@ void MainWindow::openFile()
              emit ui->tabVisu->setCurrentIndex(TAB_VISUGCODE_INDEX);
         }
         ui->tabGcode->setEnabled(true);
-        // read in the file to process it
+    // read in the file to process it
         preProcessFile(ui->filePath->text());
+    }
+    else
+    {
+        ui->labelLines->setEnabled(false);
+        ui->outputLines->setEnabled(false);
     }
 }
 
@@ -1089,11 +1280,14 @@ void MainWindow::preProcessFile(QString filepath)
         int p =0;    // arc revolutions
         int g;
         bool helix = false;
-        double f; // speed 'Fxxxx'
-        double prevf = 0.0;
-        QList<double> speedToLine;
-        // case 0
-        speedToLine.append(prevf);
+    // feedrate 'Fxxxx'
+        double fr, prevfr = 0.0;
+        QList<double> feedRateToLine;
+        feedRateToLine.append(prevfr);// case 0
+    // Spindle Speed   Sxxxxx
+        double ss, prevss = 0.0;
+        QList<double> speedSpindleToLine;
+        speedSpindleToLine.append(prevss); // case 0
 
 /// T4 animator
         QString codeText;
@@ -1117,7 +1311,7 @@ void MainWindow::preProcessFile(QString filepath)
         {
             strline = code.readLine();
 
-/// T4 test line analyze
+/// T4 test line analyze    TODO ...
          //   line = gcode.removeUnsupportedCommands(strline);
 //diag("gcode:line = %s", qPrintable(line));
 ///<--
@@ -1132,7 +1326,7 @@ void MainWindow::preProcessFile(QString filepath)
             GCode::trimToEnd(strline, '%');
 
             strline = strline.trimmed();
-            p = 0; f=0.0;
+            p = 0; fr=0.0; ss = 0.0;
             if (strline.size() == 0)
             {   // ignore the white lines
             }
@@ -1143,9 +1337,11 @@ void MainWindow::preProcessFile(QString filepath)
                 strline.replace(QRegExp("([A-Z])"), " \\1");
                 strline.replace(QRegExp("\\s+"), " ");
 /// T4
-                if (processGCode(strline, x, y, z, i, j, k, p, arc, cw, mm, g, plane, helix, f))
-                /// no works ??
-               //if (processGCode(strline, xyz, ijk, p, arc, cw, mm, g, plane, helix))
+                if (processGCode(strline, x, y, z, i, j, k,
+                                  p, arc, cw, mm, g,
+                                  plane, helix, fr, ss
+                                  )
+                    )
                 {
                     if (!zeroInsert)
                     {
@@ -1153,15 +1349,18 @@ void MainWindow::preProcessFile(QString filepath)
                         posList.append(PosItem());
                         zeroInsert = true;
                     }
-                    //posList.append(PosItem(strline, x, y, z, i, j, k, p, arc, cw, mm, index, plane, helix));
                     xyz = QVector3D(x, y, z); ijk = QVector3D(i,j,k);
-                    posList.append(PosItem(strline, xyz, ijk, p, arc, cw, mm, g, plane, helix, index, f));
+                    posList.append(PosItem(strline, xyz, ijk, p, arc, cw, mm, g, plane, helix, index, fr, ss));
                 }
             }
             /// Fxxxx
-            if (f > 0)
-                prevf = f;
-            speedToLine.append(prevf);
+            if (fr > 0)
+                prevfr = fr;
+            feedRateToLine.append(prevfr);
+            /// Sxxxx
+            if (ss > 0)
+                prevss = ss;
+            speedSpindleToLine.append(prevss);
 
         } while (code.atEnd() == false);
 
@@ -1177,10 +1376,12 @@ void MainWindow::preProcessFile(QString filepath)
         emit setTotalNumLine(strline)  ;
         /// to 'ui->wgtVisualizer::setItems(posList)' and 'ui->visu3D::setItems(posList)'
         emit setItems(posList);
-        /// to to 'ui-visu3D::setSpeedToLine(QList<double>)'
-        emit setSpeedToLine(speedToLine);
-        // display the correct unit
-        setUnitsAll(mm);
+        /// to to 'ui-visu3D::setFeedRateToLine(QList<double>)'
+        emit setFeedRateToLine(feedRateToLine);
+        /// to to 'ui-visu3D::setSpeedSpindleToLine(QList<double>)'
+        emit setSpeedSpindleToLine(speedSpindleToLine);
+        // the correct unit
+        setUseMm(mm);
     }
     else
         printf("Can't open file\n");
@@ -1191,16 +1392,16 @@ bool MainWindow::processGCode(QString inputLine,
                             double& x, double& y, double& z,
                             double& i, double& j, double& k,
                             int& p, bool& arc, bool& cw, bool& mm, int& g,
-                            int& plane, bool& helix, double& f
+                            int& plane, bool& helix, double& f, double& sp
                             )
 {
     QString line = inputLine.toUpper();
-//diag("line = %s", qPrintable(line));
     QStringList components = line.split(" ", QString::SkipEmptyParts);
     QString s;
     arc = false;
     bool valid = false;
     f = 0.0;
+    sp = 0.0;
     int nextIsValue = NO_ITEM;
     int value;
     bool bi(false), bj(false), bk(false);
@@ -1210,6 +1411,10 @@ bool MainWindow::processGCode(QString inputLine,
 //diag("s= %s", qPrintable(s) );
         if (s.at(0) == 'F') {
             f = decodeLineItem(s, F_ITEM, valid, nextIsValue);
+        }
+        else
+        if (s.at(0) == 'S') {
+            sp = decodeLineItem(s, S_ITEM, valid, nextIsValue);
         }
         else
         if (s.at(0) == 'G')
@@ -1276,6 +1481,10 @@ bool MainWindow::processGCode(QString inputLine,
         {
             f = decodeLineItem(s, F_ITEM, valid, nextIsValue);
         }
+        else if ((g == 1 || g == 2 || g == 3) && s.at(0) == 'S')
+        {
+            sp = decodeLineItem(s, S_ITEM, valid, nextIsValue);
+        }
 /// <--
         else if (nextIsValue != NO_ITEM)
         {
@@ -1306,6 +1515,9 @@ bool MainWindow::processGCode(QString inputLine,
                 break;
             case F_ITEM:
                 f = decodeDouble(s, valid);
+                break;
+            case S_ITEM:
+                sp = decodeDouble(s, valid);
                 break;
 
             };
@@ -1366,27 +1578,11 @@ void MainWindow::readSettings()
     absoluteAfterAxisAdj = (absAfterAdj == "true");
     ui->chkRestoreAbsolute->setChecked(absoluteAfterAxisAdj);
 
-    jogStepStr = settings.value(SETTINGS_JOG_STEP, "1").value<QString>();
-    jogStep = jogStepStr.toFloat();
-/// T4
-  /*
-    int indexDesired = 0;
-    QString steps[] = { "0.01", "0.1", "1", "10", "100" };
-    for (unsigned int i = 0; i < (sizeof (steps) / sizeof (steps[0])); i++) {
-        ui->comboStep->addItem(steps[i]);
-        if (jogStepStr == steps[i]) {
-            indexDesired = i;
-        }
-    }
-    ui->comboStep->setCurrentIndex(indexDesired);
-   */
-  //  ui->labelStep->setText(QString("%1").arg(jogStep, 6, 'f', 2, ' '));
-    ui->lcdStep->display(jogStep);
-    int posslider = jogStep*100;
-    ui->sliderStep->setValue(posslider);
+    QString jogStepStr = settings.value(SETTINGS_JOG_STEP, "10").value<QString>();
+    jogStep = jogStepStr.toFloat() ;
+    ui->sliderStep->setValue(int(jogStep*100));
 
     settings.beginGroup( "mainwindow" );
-
     restoreGeometry(settings.value( "geometry", saveGeometry() ).toByteArray());
     restoreState(settings.value( "savestate", saveState() ).toByteArray());
     move(settings.value( "pos", pos() ).toPoint());
@@ -1399,17 +1595,30 @@ void MainWindow::readSettings()
     updateSettingsFromOptionDlg(settings);
 }
 
-// Slot called from settings dialog after user made a change. Reload settings from registry.
-void MainWindow::setSettings()
+// calls : 'Options::toggleUseMm(bool useMm'):1,
+void MainWindow::setSettingsOptionsUseMm()
 {
-    QSettings settings;
-
-    updateSettingsFromOptionDlg(settings);
-
+//diag(" MainWindow::setSettingsOptionsUseMm() ...");
+    controlParams.useMm = opt.getUseMm();
+    controlParams.zJogRate = opt.getZJogRate();
+  //  controlParams.zRateLimit = opt.getzRateLimit();
+    controlParams.xyRateAmount = opt.getXYRate();
     // update gcode thread with latest values
     emit setResponseWait(controlParams);
 }
 
+// Slot called from settings 'Options' dialog after user made a change.
+// Reload settings from registry.
+// calls: 'Options::accept()':1,
+void MainWindow::setSettingsOptions()
+{
+    QSettings settings;
+    updateSettingsFromOptionDlg(settings);
+    // update gcode thread with latest values
+    emit setResponseWait(controlParams);
+}
+
+// calls : 'setSettingsOptions()':1,
 void MainWindow::updateSettingsFromOptionDlg(QSettings& settings)
 {
 /// T4
@@ -1463,13 +1672,13 @@ void MainWindow::updateSettingsFromOptionDlg(QSettings& settings)
     ui->lcdMachNumberFourth->setEnabled(controlParams.useFourAxis);
     ui->IncFourthBtn->setEnabled(controlParams.useFourAxis);
     ui->DecFourthBtn->setEnabled(controlParams.useFourAxis);
-    ui->lblFourthJog->setEnabled(controlParams.useFourAxis);
+    ui->HomeFourthBtn->setEnabled(controlParams.useFourAxis);
 
     if (!controlParams.useFourAxis)
     {
         ui->DecFourthBtn->hide();
         ui->IncFourthBtn->hide();
-        ui->lblFourthJog->hide();
+        ui->HomeFourthBtn->hide();
         ui->lcdWorkNumberFourth->hide();
         ui->lcdWorkNumberFourth->setAttribute(Qt::WA_DontShowOnScreen, true);
         ui->lcdMachNumberFourth->hide();
@@ -1484,7 +1693,7 @@ void MainWindow::updateSettingsFromOptionDlg(QSettings& settings)
     {
         ui->DecFourthBtn->show();
         ui->IncFourthBtn->show();
-        ui->lblFourthJog->show();
+        ui->HomeFourthBtn->show();
         ui->lcdWorkNumberFourth->show();
         ui->lcdWorkNumberFourth->setAttribute(Qt::WA_DontShowOnScreen, false);
         ui->lcdMachNumberFourth->show();
@@ -1501,30 +1710,22 @@ void MainWindow::updateSettingsFromOptionDlg(QSettings& settings)
         char axis = controlParams.fourthAxisName;
         if (axis == FOURTH_AXIS_A)  {
             axisJog = tr("A Jog");
-          //  controlParams.fourthAxisRotate = true;
         }
         else if (axis == FOURTH_AXIS_B){
             axisJog = tr("B Jog");
-          //  controlParams.fourthAxisRotate = true;
         }
         else if (axis == FOURTH_AXIS_C) {
             axisJog = tr("C Jog");
-          //  controlParams.fourthAxisRotate = true;
         }
         else if (axis == FOURTH_AXIS_U) {
             axisJog = tr("U Jog");
-          //  controlParams.fourthAxisRotate = false;
         }
         else if (axis == FOURTH_AXIS_V) {
             axisJog = tr("V Jog");
-          //  controlParams.fourthAxisRotate = false;
         }
         else if (axis == FOURTH_AXIS_W){
             axisJog = tr("W Jog");
-          //  controlParams.fourthAxisRotate = false;
         }
-
-        ui->lblFourthJog->setText(axisJog);
     }
 
     QString zRateLimit = settings.value(SETTINGS_Z_RATE_LIMIT, "false").value<QString>();
@@ -1567,8 +1768,7 @@ void MainWindow::updateSettingsFromOptionDlg(QSettings& settings)
             controlParams.positionNoDisplay = true;
             break;
     }
-    //
-//diag("updateSettingsFromOptionDlg() ... posReqKind = %d", posReqKind);
+    // -> 'gcode::setPosReqKind(posRegKind)'
     emit setPosReqKind(posReqKind) ;
 
     setLcdState(controlParams.usePositionRequest /*|| controlParams.positionSyncSimu */ );
@@ -1576,6 +1776,7 @@ void MainWindow::updateSettingsFromOptionDlg(QSettings& settings)
 }
 
 // save last state of settings
+// calls : 'MainWindow::closeEvent()':1,
 void MainWindow::writeSettings()
 {
     QSettings settings;
@@ -1588,12 +1789,7 @@ void MainWindow::writeSettings()
 
     settings.setValue(SETTINGS_PROMPTED_AGGR_PRELOAD, promptedAggrPreload);
     settings.setValue(SETTINGS_ABSOLUTE_AFTER_AXIS_ADJ, ui->chkRestoreAbsolute->isChecked());
-/// T4
-  //  settings.setValue(SETTINGS_JOG_STEP, ui->comboStep->currentText());
-  //  settings.setValue(SETTINGS_JOG_STEP, ui->labelStep->text());
-  //  QString val;
-  //  val.number(ui->sliderStep->value()/100.0);
-  //  settings.setValue(SETTINGS_JOG_STEP, val);
+    settings.setValue(SETTINGS_JOG_STEP, QString().number(jogStep));
 
     // From http://stackoverflow.com/questions/74690/how-do-i-store-the-window-size-between-sessions-in-qt
     settings.beginGroup("mainwindow");
@@ -1636,24 +1832,6 @@ void MainWindow::addToStatusList(bool in, QString msg)
     QString nMsg(msg);
     if (!in)
         nMsg = "> " + msg;
-/// T4  m4444x
-/*
-    fullStatus.append(msg);
-    ui->statusList->addItem(nMsg);
-
-    status("%s", nMsg.toLocal8Bit().constData());
-
-    if (ui->statusList->count() > MAX_STATUS_LINES_WHEN_ACTIVE)
-    {
-        int count = ui->statusList->count() - MAX_STATUS_LINES_WHEN_ACTIVE;
-        for (int i = 0; i < count; i++)
-        {
-            ui->statusList->takeItem(0);
-        }
-    }
-
-    scrollRequireMove = true;
-   */
 
     ui->statusList->appendPlainText( nMsg );
 
@@ -1670,103 +1848,20 @@ void MainWindow::addToStatusList(QStringList& list)
         if (msg.length() == 0)
             continue;
 
-     //  cleanList.append(msg);
-
-     //   fullStatus.append(msg);
-
         ui->statusList->appendPlainText( msg );
 
         status("%s", qPrintable(msg) );
     }
-/// T4  m4444x
-  /*
-    if (cleanList.size() == 0)
-        return;
-
-    ui->statusList->addItems(cleanList);
-
-    if (ui->statusList->count() > MAX_STATUS_LINES_WHEN_ACTIVE)
-    {
-        int count = ui->statusList->count() - MAX_STATUS_LINES_WHEN_ACTIVE;
-        for (int i = 0; i < count; i++)
-        {
-            ui->statusList->takeItem(0);
-        }
-    }
-
-    scrollRequireMove = true;
-    */
 }
-/// T4  m4444x
- /*
-void MainWindow::doScroll()
+
+void MainWindow::receiveMsgSatusBar(QString msg)
 {
-    if (!scrollPressed && scrollRequireMove)// && scrollStatusTimer.elapsed() > 1000)
-    {
-        ui->statusList->scrollToBottom();
-        QApplication::processEvents();
-        scrollStatusTimer.restart();
-        scrollRequireMove = false;
-    }
+  //  ui->centralWidget->setStatusTip(msg);
+/// T4  Status bar leaves old error displayed even after error corrected #57
+    ui->statusBar->showMessage(msg);
 }
 
-void MainWindow::statusSliderPressed()
-{
-    scrollPressed = true;
-
-    if (scrollStatusTimer.elapsed() > 3000)
-    {
-        ui->statusList->clear();
-        ui->statusList->addItems(fullStatus);
-    }
-}
-
-void MainWindow::statusSliderReleased()
-{
-    scrollPressed = false;
-}
-
-// testing optimizing scrollbar, doesn't work
-int MainWindow::computeListViewMinimumWidth(QAbstractItemView* view)
-{
-    int minWidth = 0;
-    QAbstractItemModel* model = view->model();
-
-    QStyleOptionViewItem option;
-
-    int rowCount = model->rowCount();
-    for (int row = 0; row < rowCount; ++row)
-    {
-        QModelIndex index = model->index(row, 0);
-        QSize size = view->itemDelegate()->sizeHint(option, index);
-        scrollDelegate = new MyItemDelegate(view);
-        view->setItemDelegate(scrollDelegate);
-
-        minWidth = qMax(size.width(), minWidth);
-    }
-
-    if (rowCount > 0)
-    {
-        if (scrollDelegate == NULL)
-        {
-            scrollDelegate = new MyItemDelegate(view);
-            QModelIndex index = model->index(0, 0);
-            view->setItemDelegate(scrollDelegate);
-        }
-
-        scrollDelegate->setWidth(minWidth);
-        info("Width is %d\n", minWidth);
-    }
-    return minWidth;
-}
-*/
-
-void MainWindow::receiveMsg(QString msg)
-{
-    ui->centralWidget->setStatusTip(msg);
-}
-
-void MainWindow::setGRBL()
+void MainWindow::grblSettings()
 {
     GrblDialog dlg(this, &gcode);
     dlg.setParent(this);
@@ -1779,11 +1874,11 @@ void MainWindow::showAbout()
     About about(this);
     about.exec();
 }
-///  called by 'ui->spindleButton::toggled(valid)'
+
+// calls : 'ui->spindleButton::toggled(valid)'
 void MainWindow::toggleSpindle(bool)
 {
 /// T4
-  //  if (ui->SpindleOn->QAbstractButton::isChecked())
     QPalette palette;
     QString stateon(tr("Spindle On")), stateoff(tr("Spindle Off"));
     if (ui->spindleButton->isChecked())
@@ -1800,7 +1895,7 @@ void MainWindow::toggleSpindle(bool)
          receiveList(stateon);
 
         ui->spindleButton->setText(stateoff) ;
-         palette.setColor(QPalette::Button,Qt::yellow) ;
+        palette.setColor(QPalette::Button,Qt::yellow) ;
     }
      // color 'spindleButton'
     ui->spindleButton->setPalette(palette);
@@ -1811,18 +1906,21 @@ void MainWindow::toggleRestoreAbsolute()
     absoluteAfterAxisAdj = ui->chkRestoreAbsolute->QAbstractButton::isChecked();
 }
 
-/// T4 animator
+/// T4 animator,
+// calls : 'Viewer::setLivePoint()':1, 'Viewer::setLiveRelPoint()':1,
 void MainWindow::updateLCD(QVector3D coord)
 {
     ui->lcdWorkNumberFourth->setEnabled(controlParams.useFourAxis);
     ui->lcdMachNumberFourth->setEnabled(controlParams.useFourAxis);
     ui->IncFourthBtn->setEnabled(controlParams.useFourAxis);
     ui->DecFourthBtn->setEnabled(controlParams.useFourAxis);
-    ui->lblFourthJog->setEnabled(controlParams.useFourAxis);
+    ui->HomeFourthBtn->setEnabled(controlParams.useFourAxis);
     //
     machineCoordinates = Coord3D();
     workCoordinates = Coord3D(coord);
-//diag ("updateLCD(QVector3D Coord) ...");
+
+// T4   !!!
+    cmdMan = false;
     refreshLcd();
 }
 ///<--
@@ -1833,10 +1931,10 @@ void MainWindow::updateCoordinates(Coord3D machineCoord, Coord3D workCoord)
     ui->lcdMachNumberFourth->setEnabled(controlParams.useFourAxis);
     ui->IncFourthBtn->setEnabled(controlParams.useFourAxis);
     ui->DecFourthBtn->setEnabled(controlParams.useFourAxis);
-    ui->lblFourthJog->setEnabled(controlParams.useFourAxis);
+    ui->HomeFourthBtn->setEnabled(controlParams.useFourAxis);
     machineCoordinates = machineCoord;
     workCoordinates = workCoord;
-//diag ("updateCoordinates(...) ...");
+
     refreshLcd();
 }
 
@@ -1893,9 +1991,18 @@ void MainWindow::lcdDisplay(char axis, bool workCoord, float floatVal)
         }
         else
         {
-            err("Unexpected type %c", axis);
+            err( qPrintable(tr("Unexpected type %c")), axis) ;
         }
         break;
+    }
+/// T4
+    if (cmdMan && !runFile) {
+        // tool
+        float x = ui->lcdWorkNumberX->value(),
+              y = ui->lcdWorkNumberY->value(),
+              z = ui->lcdWorkNumberZ->value();
+        emit setLivePoint(QVector3D(x, y, z), controlParams.useMm );
+//diag(" =====>cmdMan = %s",  cmdMan==true ?"true" : "false");
     }
 }
 
@@ -1968,6 +2075,7 @@ void MainWindow::zJogSliderPressed()
 void MainWindow::zJogSliderReleased()
 {
     info(qPrintable(tr("Released\n")));
+
     if (sliderPressed)
     {
         sliderPressed = false;
@@ -1980,18 +2088,21 @@ void MainWindow::zJogSliderReleased()
 
         if (value != 0)
         {
+/// T4
+            enableAllButtons(false);
+
             if(controlParams.useMm)
                 sliderTo += value;
             else
                 sliderTo += (double)value/10;
             float setTo = value;
+            cmdMan = true;
             if(controlParams.useMm)
                 emit axisAdj('Z', setTo, invZ, absoluteAfterAxisAdj, sliderZCount++);
             else
                 emit axisAdj('Z', setTo/10, invZ, absoluteAfterAxisAdj, sliderZCount++);
         }
     }
-    //ui->resultingZJogSliderPosition->setText("0");
 }
 
 void MainWindow::setQueuedCommands(int commandCount, bool running)
@@ -2007,7 +2118,7 @@ void MainWindow::setQueuedCommands(int commandCount, bool running)
                     {
                         if (!queuedCommandsStarved)
                         {
-                            //diag("DG >>>>Switch to red\n");
+//diag("DG >>>>Switch to red\n");
 
                             queuedCommandsStarved = true;
 
@@ -2025,7 +2136,7 @@ void MainWindow::setQueuedCommands(int commandCount, bool running)
                     {
                         if (queuedCommandsStarved)
                         {
-                            //diag("DG >>>>Switch to green\n");
+//diag("DG >>>>Switch to green\n");
 
                             queuedCommandsStarved = false;
 
@@ -2063,7 +2174,10 @@ void MainWindow::setLcdState(bool valid)
         QString ss = "";
         if (!valid)
         {
-            ss = "QLCDNumber { background-color: #F8F8F8; color: #F0F0F0; }";
+            if (checkState)
+                ss = "QLCDNumber { background-color: #F8F8F8; color: yellow; }";
+            else
+                ss = "QLCDNumber { background-color: #F8F8F8; color: #F0F0F0; }";
         }
         ui->lcdWorkNumberX->setStyleSheet(ss);
         ui->lcdMachNumberX->setStyleSheet(ss);
@@ -2077,33 +2191,27 @@ void MainWindow::setLcdState(bool valid)
         lastLcdStateValid = valid;
     }
 }
-
+/*
 void MainWindow::refreshPosition()
 {
-    // gotoXYZFourth(REQUEST_CURRENT_POS);  /// ???
-   // emit
-    gotoXYZFourth(REQUEST_CURRENT_POS);
+    // gotoXYZFourth(REQUEST_CURRENT_POS); ??
+    emit gotoXYZFourth(REQUEST_CURRENT_POS);
 }
- /*
-void MainWindow::comboStepChanged(const QString& text)
-{
-    jogStepStr = text;
-    jogStep = jogStepStr.toFloat();
-}
- */
-// called by 'sliderStep::valueChanged(int)'
+*/
+
+// calls : 'sliderStep::valueChanged(int)'
 void MainWindow::stepChanged(int newstep)
-{
+{   // newstep into [0..10000]  mm*100
     float fs = newstep/100.0;
+    if (!controlParams.useMm)
+        fs /= MM_IN_AN_INCH ;
     ui->lcdStep->display(fs);
     jogStep = fs;
-
-  //  QString s = QString("%1").arg(fs, 5, 'f', 2, ' ');
-  //  ui->labelStep->setText(QString("%1").arg(fs, 6, 'f', 2, ' '));
 }
 
 ///-----------------------------------------------------------------------------
 ///  T2
+// calls : 'GCode::sendGcodeInternal()':1,
 void MainWindow::setLinesFile(QString linesFile, bool check)
 {
     if (check)   /// T3
@@ -2112,37 +2220,19 @@ void MainWindow::setLinesFile(QString linesFile, bool check)
     ui->outputLines->setText(linesFile);
 }
 
-///  called by 'ui->Check::toggled(valid)'
-void  MainWindow::toCheck(bool valid)
-{
-    checkState = ui->Check->isChecked();
-    if (checkState)
-        ui->Check->setText(tr("No check")) ;
-    else
-        ui->Check->setText(tr("Check")) ;
-
-    ui->tabAxisVisualizer->setEnabled(valid);
-     // (in)valid manual controls
-    enableManualControl(!valid);
-
-    ui->tabVisu->setTabEnabled(TAB_VISUGCODE_INDEX, !valid);
-    ui->tabAxisVisualizer->setTabEnabled(TAB_AXIS_INDEX, !valid);
-    ui->tabAxisVisualizer->setTabEnabled(TAB_ADVANCED_INDEX, !valid);
-
-    /// send '$C' to Grbl
-    emit sendGrblCheck(checkState) ;
-}
-
 ///-----------------------------------------------------------------------------
 /// for visuGode and visu3D
 /// T4
-///  called by 'ui->visualButton::toggled(valid)'
+//  calls : 'ui->visualButton::toggled(valid)'
 void MainWindow::toVisual(bool valid)
 {
-//diag("emit setVisual( %s) ", valid==true ? "true" : "false");
     ui->prevButton->setEnabled(valid);
     ui->nextButton->setEnabled(valid);
     ui->pauseButton->setEnabled(valid);
+
+    ui->btnClearStatusList->setEnabled(!valid);
+    ui->btnPrintStatusList->setEnabled(!valid);
+    ui->btnPrintVisual->setEnabled(!valid) ;
 
     if (ui->visualButton->isChecked())
         ui->visualButton->setText(tr("No animate")) ;
@@ -2151,15 +2241,15 @@ void MainWindow::toVisual(bool valid)
     // no openFile if valid
     ui->openFile->setEnabled(!valid);
     if (!valid) {  // no animate
-        ui->Check->setEnabled(openState);
+        ui->btnCheck->setEnabled(openState);
         ui->Begin->setEnabled(openState);
     }
     else {
-       ui->Check->setEnabled(!valid);
+       ui->btnCheck->setEnabled(!valid);
        ui->Begin->setEnabled(!valid);
     }
     //  tab
-    bool openport = ui->btnOpenPort->text() != "Open" ;
+    bool openport = ui->btnOpenPort->text() != open_button_text ;
     if (!openport) {
         ui->tabAxisVisualizer->setEnabled(valid);
         ui->tabVisu->setTabEnabled(TAB_CONSOLE_INDEX, !valid);
@@ -2173,15 +2263,12 @@ void MainWindow::toVisual(bool valid)
         enableManualControl(!valid);
     }
     ui->tabVisu->setTabEnabled(TAB_CONSOLE_INDEX, !valid);
-  //  ui->tabAxisVisualizer->setTabEnabled(TAB_AXIS_INDEX, !valid);
     ui->tabAxisVisualizer->setTabEnabled(TAB_VISUALIZER_INDEX, !valid);
-    ui->tabAxisVisualizer->setTabEnabled(TAB_ADVANCED_INDEX, !valid);
-
     // to ui->Viewer
     emit setVisual(valid);
 }
 
-///  called by 'ui->pauseButton::toggled(valid)'
+// calls  :'ui->pauseButton::toggled(valid)'
 void MainWindow::toPause(bool valid)
 {
     QPalette palette;
@@ -2205,7 +2292,7 @@ void MainWindow::toPause(bool valid)
     emit setPause(valid);
 }
 
-/// called by  'ui->visuGcode::cursorPositionChanged()'
+// calls : 'ui->visuGcode::cursorPositionChanged()'
 void MainWindow::on_cursorVisuGcode()
 {
     int line = ui->visuGcode->textCursor().blockNumber();
@@ -2213,8 +2300,8 @@ void MainWindow::on_cursorVisuGcode()
         setActiveLineVisuGcode(line +1, false);
 }
 
-/// a slot called inside 'ui->Viewer::setLivePoint(QVector3D xyz)'
-/// by "emit setActiveLineVisuGcode(linecodeText"
+// calls :  MainWindow::on_cursorVisuGcode()':1, 'Viewer::setLivePoint()':1,
+//          'Viewer::setLiveRelPoint()':1
 void MainWindow::setActiveLineVisuGcode( int line, bool visu )
 {
     if (!line) return ;
@@ -2248,19 +2335,21 @@ void MainWindow::setActiveLineVisuGcode( int line, bool visu )
 }
 
 /// display timer period animation
+// calls :  none ?
 void MainWindow::setLCDValue(int value)
 {
     ui->lcdPeriodAnim->display(value);
 }
 
 // display the correct unit
-// called by "emit GCode::setUnitsAll(bool)'
-void MainWindow::setUnitsAll (bool mm )
+// calls : 'GCode::setResponseWait( )':1, 'GCode::checkGrbl()':0,
+void MainWindow::setUnitMmAll (bool useMm )
 {
+//diag("MainWindow::setUnitMmAll (..) ...");
+//1- display
     QString unit(tr("mm"));
     double val = ui->doubleSpinBoxTol->value();
-//diag("1-setUnitsAll::tol %.4f", val);
-    if (mm) {
+    if (useMm) {
         ui->doubleSpinBoxTol->setDecimals(3);
         ui->doubleSpinBoxTol->setSingleStep(TOL_MM_STEP);
         ui->doubleSpinBoxTol->setMinimum(TOL_MM_MIN);
@@ -2278,13 +2367,11 @@ void MainWindow::setUnitsAll (bool mm )
           val = TOL_IN;
     }
     ui->doubleSpinBoxTol->setValue(val) ;
-//diag("2-setUnitsAll::tol %.4f", val);
 
-    ui->lcdSpeedGcode->display(0.0);
+    ui->lcdFeedRateGcode->display(0.0);
 
-    ui->labelSpeedUnit->setText( unit +  "/" + tr("mn"));
+    ui->labelFeedRateUnit->setText( unit +  "/" + tr("mn"));
     ui->labelTolUnit->setText(unit);
-  //  ui->labelTolerance->setText( ui->labelTol->text() + ui->labelTolUnit->text());
     unit += " ";
     ui->unitX->setText(unit);
     ui->unitY->setText(unit);
@@ -2295,33 +2382,53 @@ void MainWindow::setUnitsAll (bool mm )
         unit = tr("mm");
 
     ui->unitFourth->setText(unit);
+    // slider
+    int step = ui->sliderStep->value();
+    ui->sliderStep->setValue(0);
+    ui->sliderStep->setValue(step);
+// Grbl
+    if (useMm) {
+
+    }
+    else {
+
+    }
 }
+
 /// T4
 void MainWindow::enableManualControl(bool v)
 {
     ui->chkRestoreAbsolute->setEnabled(v);
     // step
-  //  ui->labelStep->setEnabled(v);
     ui->sliderStep->setEnabled(v);
     ui->lcdStep->setEnabled(v);
     // dZ
-  //  ui->labelDz->setEnabled(v);
     ui->verticalSliderZJog->setEnabled(v);
     ui->currentZJogSliderDelta->setEnabled(v);
     ui->resultingZJogSliderPosition->setEnabled(v);
     // axes buttons
-    ui->DecXBtn->setEnabled(v); ui->IncXBtn->setEnabled(v);
-    ui->DecYBtn->setEnabled(v); ui->IncYBtn->setEnabled(v);
-    ui->DecZBtn->setEnabled(v); ui->IncZBtn->setEnabled(v);
-    ui->DecFourthBtn->setEnabled(v); ui->IncFourthBtn->setEnabled(v);
+    ui->DecXBtn->setEnabled(v); ui->IncXBtn->setEnabled(v); ui->HomeXBtn->setEnabled(v) ;
+    if (ui->lcdWorkNumberX->value()==0)
+        ui->HomeXBtn->setEnabled(false) ;
+    ui->DecYBtn->setEnabled(v); ui->IncYBtn->setEnabled(v);ui->HomeYBtn->setEnabled(v);
+    if (ui->lcdWorkNumberY->value()==0)
+        ui->HomeYBtn->setEnabled(false);
+    ui->DecZBtn->setEnabled(v); ui->IncZBtn->setEnabled(v); ui->HomeZBtn->setEnabled(v) ;
+    if (ui->lcdWorkNumberZ->value()==0)
+        ui->HomeZBtn->setEnabled(false) ;
+    if (controlParams.useFourAxis ) {
+        ui->DecFourthBtn->setEnabled(v); ui->IncFourthBtn->setEnabled(v);
+        ui->HomeFourthBtn->setEnabled(v) ;
+        if (ui->lcdWorkNumberFourth->value()==0)
+            ui->HomeFourthBtn->setEnabled(false) ;
+    }
     // spindle
-  //  ui->SpindleOn->setEnabled(v);
     ui->spindleButton->setEnabled(v);
 }
 
 void MainWindow::enableTabVisuControls(bool v)
 {
-    // animation eriod
+    // animation period
     ui->lcdPeriodAnim->setEnabled(v);
     ui->labelPeriod->setEnabled(v);
     ui->dialPeriodRepeat->setEnabled(v);
@@ -2342,4 +2449,93 @@ void MainWindow::enableTabVisuControls(bool v)
     ui->pauseButton->setEnabled(v);
     ui->visualButton->setEnabled(v);
 }
-///-----------------------------------------------------------------------------
+
+// Grbl commands
+void MainWindow::enableButtonGrblControls(bool v)
+{
+    ui->btnHelp->setEnabled(v);
+    ui->btnParameters->setEnabled(v);
+    ui->btnParserState->setEnabled(v);
+    ui->btnBuildInfo->setEnabled(v);
+    ui->btnStartupBlocks->setEnabled(v);
+    ui->btnCheck->setEnabled(v);
+    ui->btnGrblSettings->setEnabled(v);
+    ui->btnUnlockGrbl->setEnabled(v);
+    ui->btnHomingCycle->setEnabled(v);
+ //   ui->btnCycleStart->setEnabled(v);
+ //   ui->btnFeedHold->setEnabled(v);
+    ui->btnStatus->setEnabled(v);
+    ui->btnResetGrbl->setEnabled(v);
+
+    ui->btnSetHome->setEnabled(v);
+    ui->btnGoHomeSafe->setEnabled(v);
+    // = 'btnStatus'
+  //  ui->pushButtonRefreshPos->setEnabled(v);
+}
+
+// calls : 'ui->btnClearStatusList'
+void MainWindow::toClearSatusList()
+{
+    if (ui->statusList->textCursor().hasSelection())   {
+         ui->statusList->textCursor().removeSelectedText();
+    }
+}
+
+// calls : 'ui->btnPrintStatusList'
+void MainWindow::toPrintStatusList()
+{
+    QPrinter printer;
+    QString txt = GRBL_CONTROLLER_NAME_AND_VERSION VERSION_BUILD;
+    txt += "\n\n";
+    // file title
+    txt += ui->filePath->text();
+    txt += "\n\n";
+    QPrintDialog *dialog = new QPrintDialog(&printer, this);
+    if (ui->statusList->textCursor().hasSelection())   {
+         dialog->addEnabledOption(QAbstractPrintDialog::PrintSelection);
+         printer.setPrintRange(QPrinter::Selection);
+         txt += ui->statusList->textCursor().selectedText();
+    }
+    else {
+        txt += ui->statusList->document()->toPlainText();
+    }
+    if (dialog->exec() == QDialog::Accepted)      {
+       QTextDocument  doc(txt);
+       doc.print(&printer);
+    }
+}
+
+// calls : 'ui->btnPrintVisual'
+void MainWindow::toPrintVisual()
+{
+    QPrinter printer;
+    QString txt = GRBL_CONTROLLER_NAME_AND_VERSION VERSION_BUILD;
+    txt += "\n\n";
+    // file title
+    txt += ui->filePath->text();
+    txt += "\n\n";
+    QPrintDialog *dialog = new QPrintDialog(&printer, this);
+    if (ui->visuGcode->textCursor().hasSelection())  {
+         dialog->addEnabledOption(QAbstractPrintDialog::PrintSelection);
+         printer.setPrintRange(QPrinter::Selection);
+         txt += ui->visuGcode->textCursor().selectedText();
+    }
+    else {
+        txt += ui->visuGcode->document()->toPlainText();
+    }
+    if (dialog->exec() == QDialog::Accepted)  {
+       QTextDocument  doc(txt);
+       doc.print(&printer);
+    }
+}
+
+// calls : 'processGCode(...)':1,
+void MainWindow::setUseMm(bool useMm)
+{
+    /// acces to "Options::checkBoxUseMmManualCmds"
+    if (opt.getUseMm() != useMm ) {
+//diag("MainWindow::setUseMm(..) ...");
+        opt.setUseMm(useMm);
+    }
+}
+//------------------------------------------------------------------------------

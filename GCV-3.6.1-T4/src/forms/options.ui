@@ -12,8 +12,8 @@
   </property>
   <property name="sizePolicy">
    <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-    <horstretch>1</horstretch>
-    <verstretch>1</verstretch>
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
    </sizepolicy>
   </property>
   <property name="windowTitle">
@@ -35,7 +35,7 @@
     </sizepolicy>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab_general">
     <attribute name="title">
@@ -54,7 +54,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="labelZJogRate">
         <property name="text">
-         <string>Z-Jog Rate (inches or mm/min)</string>
+         <string>Z-Jog Rate (mm/min)</string>
         </property>
        </widget>
       </item>
@@ -262,7 +262,7 @@
           <double>1.000000000000000</double>
          </property>
          <property name="value">
-          <double>100.000000000000000</double>
+          <double>1000.000000000000000</double>
          </property>
         </widget>
        </item>

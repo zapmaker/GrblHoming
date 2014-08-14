@@ -141,6 +141,19 @@ void Tools3D::gdraw3D() const
 			gluCylinder(temp, R, R, L, 64, 1);
 			// the top disc
 			gluDisk (temp, 0.0, R, 64, 1);
+
+		/*	reversing the direction of the tool
+			//3- sharp milling cutter
+			glTranslated (0, 0, H);
+			// lower cone , radius base, radius top, length,  number of sides, number of section
+			gluCylinder (temp, 0, R, H, 64, 1);
+			// vertical cylinder axis Z on
+			glTranslated (0, 0, H);
+			// cylinder
+			gluCylinder(temp, R, R, L, 64, 1);
+			// the top disc
+			gluDisk (temp, 0.0, R, 64, 1);
+		*/
 		}
 		else
 		if (type == _SHARP_SHORT)	 {
@@ -162,8 +175,9 @@ void Tools3D::gdraw3D() const
 			gluSphere (temp, R/3, 24, 12 );
 		}
 		// for the light reflection
-		gluQuadricOrientation(temp, GLU_INSIDE);
+		gluQuadricOrientation(temp, GLU_OUTSIDE);
 	}
+
 	glPopMatrix();
 	gluDeleteQuadric(temp);
 }

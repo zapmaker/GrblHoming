@@ -70,10 +70,19 @@ class Options : public QDialog
 public:
     explicit Options(QWidget *parent = 0);
     ~Options();
+/// T4
+    void init();
+    void setUseMm(bool);
+    bool getUseMm();
+    double getZJogRate();
+    double getzRateLimit();
+    double getXYRate();
+/// <--
     void accept();
 
 signals:
-    void setSettings();
+    void setSettingsOptions();
+    void setSettingsOptionsUseMm();
     void setPosReqKind(int);
 
 private slots:
@@ -93,6 +102,7 @@ private:
     Ui::Options *ui;
     //variables
     int settings;
+    bool externUseMm;
 
 };
 

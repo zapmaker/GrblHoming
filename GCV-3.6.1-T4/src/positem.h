@@ -38,7 +38,7 @@ public:
           p(0), arc(false), cw(true),
           mm(true), g(0),
           plane(PLANE_XY_G17), helix(false),
-          index(0)   /// ?
+          index(0), feedrate(0)
     {}
     /// constructeur 3 axes
     PosItem(double x1, double y1, double z1)
@@ -60,7 +60,7 @@ public:
           i(i1), j(j1), k(k1) ,
           p(pr1), arc(arc1), cw(cw1),
           mm(mm1), g(g1),
-          plane(pl), helix(hel), index(index1), speed(f) {}
+          plane(pl), helix(hel), index(index1) , feedrate(f) {}
     /// + line gcode
     PosItem(QString linecode,
             double x1, double y1, double z1,
@@ -74,7 +74,7 @@ public:
           i(i1), j(j1), k(k1) ,
           p(pr1), arc(arc1), cw(cw1),
           mm(mm1), g(g1),
-          plane(pl), helix(hel), index(index1), speed(f) {}
+          plane(pl), helix(hel), index(index1), feedrate(f) {}
 
 
     /// constructeur 3 axes with Vector
@@ -83,13 +83,13 @@ public:
             int pr1, bool arc1, bool cw1,
             bool mm1, int g1,
             int pl, bool hel,
-            int index1, double f
+            int index1, double f1, double s1
             )
         : x(xyz.x()), y(xyz.y()), z(xyz.z()),
           i(ijk.x()), j(ijk.y()), k(ijk.z()),
           p(pr1), arc(arc1), cw(cw1),
           mm(mm1), g(g1),
-          plane(pl), helix(hel), index(index1), speed(f) {}
+          plane(pl), helix(hel), index(index1) , feedrate (f1), speedspindle(s1) {}
 
     /// constructeur 3 axes with Vector + line gcode
     PosItem( QString linecode,
@@ -98,14 +98,14 @@ public:
             int pr1, bool arc1, bool cw1,
             bool mm1, int g1,
             int pl, bool hel,
-            int index1 , double f
+            int index1 , double f1, double s1
             )
         : line(linecode),
           x(xyz.x()), y(xyz.y()), z(xyz.z()),
           i(ijk.x()), j(ijk.y()), k(ijk.z()),
           p(pr1), arc(arc1), cw(cw1),
           mm(mm1), g(g1),
-          plane(pl), helix(hel), index(index1), speed(f) {}
+          plane(pl), helix(hel), index(index1) , feedrate(f1), speedspindle(s1) {}
 
     void setCoords(double x1, double y1, double z1, double i1, double j1, double k1);
     void setCoords(QVector3D xyz1, QVector3D ijk1);
@@ -124,13 +124,14 @@ public:
     bool arc ;
     bool cw;
     bool mm;
-    int g;     // in [-1;0..3; ...] for Gx
+    int g;     // in [0..3] for Gx
 /// T4
     int plane;
     bool helix;
      // ligne GCode
     int index;
-    double speed;
+    double feedrate;
+    double speedspindle ;
 };
 
 Q_DECLARE_METATYPE ( PosItem )

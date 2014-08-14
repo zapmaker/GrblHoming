@@ -15,11 +15,20 @@ Options::Options(QWidget *parent) :
     ui(new Ui::Options)
 {
     ui->setupUi(this);
+}
 
+Options::~Options()
+{
+
+}
+/// T4
+void Options::init()
+{
     connect(ui->checkBoxUseMmManualCmds,SIGNAL(toggled(bool)),this,SLOT(toggleUseMm(bool)));
     connect(ui->chkLimitZRate,SIGNAL(toggled(bool)),this,SLOT(toggleLimitZRate(bool)));
     connect(ui->checkBoxFourAxis,SIGNAL(toggled(bool)),this,SLOT(toggleFourAxis(bool)));
     connect(ui->checkBoxPositionReportEnabled,SIGNAL(toggled(bool)),this,SLOT(togglePosReporting(bool)));
+    connect(this, SIGNAL(setSettingsOptionsUseMm()), parentWidget(), SLOT(setSettingsOptionsUseMm()));
 
     QSettings settings;
 
@@ -150,11 +159,6 @@ Options::Options(QWidget *parent) :
 
 }
 
-Options::~Options()
-{
-    delete ui;
-}
-
 void Options::accept()
 {
     QSettings settings;
@@ -195,31 +199,70 @@ void Options::accept()
     int posreq = getPosReqKind();
     settings.setValue(SETTINGS_POS_REQ_KIND, posreq);
     connect(this, SIGNAL(setPosReqKind(int)), parentWidget(), SLOT(setPosReqKind(int) ));
-    // -> 'Mainwindow::setSettings()'
-    connect(this, SIGNAL(setSettings()), parentWidget(), SLOT(setSettings()));
+    // -> 'Mainwindow::setSettingsOptions()'
+    connect(this, SIGNAL(setSettingsOptions()), parentWidget(), SLOT(setSettingsOptions()));
 
-    emit setSettings();
+    emit setSettingsOptions();
+
     this->close();
 }
 
+/// T4
+void Options::setUseMm(bool mm)
+{
+//diag("Options::setUseMm = %s", mm==true?"true":"false");
+    externUseMm = mm;
+// update gcode thread with latest values
+   //ui->checkBoxUseMmManualCmds->setEnabled(ui->checkBoxUseMmManualCmds->isChecked() == mm );
+    ui->checkBoxUseMmManualCmds->setChecked(mm);
+}
+bool Options::getUseMm()
+{
+//diag("Options::checkBoxUseMmManualCmds->isChecked() = %s", ui->checkBoxUseMmManualCmds->isChecked()==true?"true":"false");
+    return ui->checkBoxUseMmManualCmds->isChecked();
+}
+double Options::getZJogRate()
+{
+    return ui->doubleSpinZJogRate->value();
+}
+double Options::getzRateLimit()
+{
+//diag("Options::getzRateLimit() = %0.2f", ui->doubleSpinZRateLimit->value());
+    return ui->doubleSpinZRateLimit->value();
+}
+double Options::getXYRate()
+{
+    return ui->doubleSpinXYRate->value();
+}
+/// <--
+
 void Options::toggleUseMm(bool useMm)
 {
+//diag("Options::toggleUseMm() ...");
     double zJogRate = ui->doubleSpinZJogRate->value();
     double zRateLimit = ui->doubleSpinZRateLimit->value();
     double xyRate = ui->doubleSpinXYRate->value();
-
+/// T4
+    QString txt = "Z-Jog Rate ";
     if (useMm)
     {
-        ui->doubleSpinZJogRate->setValue(zJogRate * MM_IN_AN_INCH);
-        ui->doubleSpinZRateLimit->setValue(zRateLimit * MM_IN_AN_INCH);
-        ui->doubleSpinXYRate->setValue(xyRate * MM_IN_AN_INCH);
+        txt += "(mm/min)";
+        zJogRate *= MM_IN_AN_INCH ;   //  zJogRate = int(zJogRate*100 + 0.5)/100.0 ;
+        zRateLimit *= MM_IN_AN_INCH ; //  zRateLimit = int(zRateLimit*100 + 0.5)/100.0 ;
+        xyRate *= MM_IN_AN_INCH ;     //  xyRate  = int(xyRate *100 + 0.5)/100.0 ;
     }
     else
-    {
-        ui->doubleSpinZJogRate->setValue(zJogRate / MM_IN_AN_INCH);
-        ui->doubleSpinZRateLimit->setValue(zRateLimit / MM_IN_AN_INCH);
-        ui->doubleSpinXYRate->setValue(xyRate / MM_IN_AN_INCH);
+    {   txt += "(inches/min)";
+        zJogRate /= MM_IN_AN_INCH ;
+        zRateLimit /= MM_IN_AN_INCH ;
+        xyRate /= MM_IN_AN_INCH ;
     }
+    ui->labelZJogRate->setText(txt);
+    ui->doubleSpinZJogRate->setValue(zJogRate);
+    ui->doubleSpinZRateLimit->setValue(zRateLimit);
+    ui->doubleSpinXYRate->setValue(xyRate);
+/// <--
+    emit setSettingsOptionsUseMm();
 }
 
 void Options::toggleLimitZRate(bool limitZ)
@@ -268,6 +311,7 @@ bool Options::getFourthAxisRotate()
 
 char Options::getFourthAxisName()
 {
+// update gcode thread with latest values
     char type = FOURTH_AXIS_A;
 
     if (ui->radioButtonFourthAxisA->isChecked())
@@ -308,6 +352,7 @@ int Options::getPosReqKind()
     int choice = POS_REQ ;
     if (ui->checkBoxPositionReportEnabled->isChecked() )
         choice = POS_REQ ;
+// update gcode thread with latest values
     else
     if (ui->checkBoxSynchronousSimulation->isChecked())
         choice = POS_SYNC;

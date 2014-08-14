@@ -16,8 +16,10 @@ About::About(QWidget *parent) :
     ui(new Ui::About)
 {
     ui->setupUi(this);
-
-    ui->labelProductAndVersion->setText(GRBL_CONTROLLER_NAME_AND_VERSION);
+    QString title = GRBL_CONTROLLER_NAME_AND_VERSION ;
+    title += "\n";
+    title += VERSION_BUILD ;
+    ui->labelProductAndVersion->setText(title);
 }
 
 About::~About()

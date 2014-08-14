@@ -1,4 +1,4 @@
-rem mw.bat
+rem makeWin.bat
 rem by LETARTARE
 
 rem Change with your paths

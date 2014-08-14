@@ -15,8 +15,17 @@
     </message>
     <message>
         <location filename="../forms/about.ui" line="84"/>
+        <source>Grbl Controller Visualizer</source>
+        <translation>Grbl Controleur Visualisateur</translation>
+    </message>
+    <message>
+        <location filename="../forms/about.ui" line="121"/>
+        <source>LETARTARE</source>
+        <translation>LETARTARE</translation>
+    </message>
+    <message>
         <source>Grbl Controller</source>
-        <translation>Controleur Grbl</translation>
+        <translation type="obsolete">Controleur Grbl</translation>
     </message>
     <message>
         <source>Grbl Controller 4</source>
@@ -26,34 +35,34 @@
 <context>
     <name>GCode</name>
     <message>
-        <location filename="../gcode.cpp" line="47"/>
+        <location filename="../gcode.cpp" line="48"/>
         <source>Can&apos;t open COM port </source>
         <translation>Impossible d&apos;ouvrir le port série  </translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="52"/>
+        <location filename="../gcode.cpp" line="53"/>
         <source>-Is hardware connected to USB?</source>
         <translation>- le périphérique est-il bien connecté sur un port USB ?</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="53"/>
+        <location filename="../gcode.cpp" line="54"/>
         <source>-Is correct port chosen?</source>
         <translation>- le port choisi est-il correct ?</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="54"/>
+        <location filename="../gcode.cpp" line="55"/>
         <source>-Does current user have sufficient permissions?</source>
         <translation>- l&apos;utilisateur a-t-il les droits d&apos;utilisation suffisants ?</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="197"/>
+        <location filename="../gcode.cpp" line="300"/>
         <source>SENDING: 0x%02X (CTRL-X) to check presence of Grbl
 </source>
         <translation>Emis : 0x%02X (CTRL-X) pour verifier la presence de Grbl</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="200"/>
-        <location filename="../gcode.cpp" line="491"/>
+        <location filename="../gcode.cpp" line="604"/>
+        <location filename="../gcode.cpp" line="2282"/>
         <source>Sending to port failed</source>
         <translation>L&apos;émission vers le port a échouée</translation>
     </message>
@@ -63,47 +72,47 @@
         <translation type="obsolete">Vous avez la version Grbl (analyse)  %d.%d%c ($$=%d)\n</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="393"/>
+        <location filename="../gcode.cpp" line="503"/>
         <source>Port not available yet</source>
         <translation>Le port n&apos;est plus disponible</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="456"/>
+        <location filename="../gcode.cpp" line="566"/>
         <source>Buffer size too small</source>
         <translation>Le tampon est trop petit</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="466"/>
+        <location filename="../gcode.cpp" line="579"/>
         <source>SENDING[%d]: 0x%02X (CTRL-X)
 </source>
         <translation>EMIS[%d]: 0x%02X (CTRL-X)\n</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="468"/>
+        <location filename="../gcode.cpp" line="581"/>
         <source>SENDING[%d]: %s
 </source>
         <translation>EMIS[%d]: %s\n</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="502"/>
+        <location filename="../gcode.cpp" line="618"/>
         <source>WAITFOROK FAILED
 </source>
         <translation>Echec lors de l&apos;attente de Ok </translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="508"/>
+        <location filename="../gcode.cpp" line="624"/>
         <source>Wait for ok failed</source>
         <translation>L&apos;attente d&apos;un bon déroulement a échouée</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="627"/>
-        <location filename="../gcode.cpp" line="845"/>
+        <location filename="../gcode.cpp" line="745"/>
+        <location filename="../gcode.cpp" line="949"/>
         <source>Error reading data from COM port
 </source>
         <translation>Erreur de lecture des données sur le port série</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="649"/>
+        <location filename="../gcode.cpp" line="767"/>
         <source>Unexpected: list is empty (o)!</source>
         <translation>Liste attendue vide (o) </translation>
     </message>
@@ -113,39 +122,39 @@
         <translation type="obsolete">Obtenu [%d]:%s pour %s\n</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="666"/>
+        <location filename="../gcode.cpp" line="783"/>
         <source>Error?</source>
         <translation>Erreur non répertoriée</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="668"/>
+        <location filename="../gcode.cpp" line="785"/>
         <source>Unexpected: list is empty (e)!</source>
         <translation>Liste attendue vide (e) </translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="727"/>
-        <location filename="../gcode.cpp" line="856"/>
+        <location filename="../gcode.cpp" line="841"/>
+        <location filename="../gcode.cpp" line="960"/>
         <source>GOT:%s
 </source>
         <translation>Obtenu : %s\n</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="795"/>
+        <location filename="../gcode.cpp" line="897"/>
         <source>Wait interrupted by user</source>
         <translation>Attente d&apos;interuption par l&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="864"/>
+        <location filename="../gcode.cpp" line="968"/>
         <source>Expecting Grbl version string. Unable to parse response.</source>
         <translation>Attente de la version Grbl, impossible d&apos;analyser la réponse</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="888"/>
+        <location filename="../gcode.cpp" line="995"/>
         <source>No data from COM port after connect. Expecting Grbl version string.</source>
         <translation>Aucune données depuis le port série après la connexion, en attente de la version Grbl</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="909"/>
+        <location filename="../gcode.cpp" line="1018"/>
         <source>Wait interrupted by user (startup)</source>
         <translation>Attente d&apos;interuption par l&apos;utilisateur (démarrage)</translation>
     </message>
@@ -187,164 +196,197 @@
         <translation type="obsolete">Erreur de décodage des données de position\n</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="371"/>
+        <location filename="../gcode.cpp" line="431"/>
         <source>Got Grbl Version (Parsed:) %d.%d%c%c ($$=%d)
 </source>
         <translation>Vous avez la version Grbl (analyse)  %d.%d%c ($$=%d)\n</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="654"/>
-        <location filename="../gcode.cpp" line="673"/>
+        <location filename="../gcode.cpp" line="772"/>
+        <location filename="../gcode.cpp" line="790"/>
         <source>GOT[%d]: &apos;%s&apos; for &apos;%s&apos; (aggressive)
 </source>
         <translation>Obtenu :[%d]: &apos;%s&apos; pour &apos;%s&apos; (offensif)</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="688"/>
+        <location filename="../gcode.cpp" line="804"/>
         <source>GOT: &apos;%s&apos; (aggressive)
 </source>
         <translation>Obtenu : &apos;%s&apos; (offensif)</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1018"/>
+        <location filename="../gcode.cpp" line="1127"/>
         <source>Incorrect - extra axis present in hardware but options set for only 3 axes. Please fix options.</source>
         <translation>L&apos;axe supplémentaire existe matériellement. Veuillez corriger les options en cochant 4 ème axe.</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1027"/>
+        <location filename="../gcode.cpp" line="1136"/>
         <source>Incorrect - extra axis not present in hardware but options set for &gt; 3 axes. Please fix options.</source>
         <translation>L&apos;axe supplémentaire n&apos;existe pas matériellement. Veuillez corriger les options  en décochant 4 ème axe.</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1059"/>
+        <location filename="../gcode.cpp" line="1173"/>
         <source>Decoded: State:%s</source>
         <translation>Decodage : Etat :%s</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1061"/>
+        <location filename="../gcode.cpp" line="1175"/>
         <source>Decoded: MPos: %f,%f,%f WPos: %f,%f,%f
 </source>
         <translation>Decodage : MPos: %f,%f,%f,%f WPos: %f,%f,%f,%f
 </translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1066"/>
+        <location filename="../gcode.cpp" line="1180"/>
         <source>Decoded: MPos: %f,%f,%f,%f WPos: %f,%f,%f,%f
 </source>
         <translation>Decodage : MPos: %f,%f,%f,%f WPos: %f,%f,%f,%f
 </translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1125"/>
+        <location filename="../gcode.cpp" line="1239"/>
         <source>GOT-TE:%s
 </source>
         <translation>Obtenu evenement temporel :%s\n</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1147"/>
+        <location filename="../gcode.cpp" line="1261"/>
         <source>Sending file &apos;%1&apos;</source>
         <translation>Emission du fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1308"/>
+        <location filename="../gcode.cpp" line="1398"/>
+        <source>Pause program Grbl ...</source>
+        <translation>Pause du programme &apos;Grbl&apos; ...</translation>
+    </message>
+    <message>
+        <location filename="../gcode.cpp" line="1400"/>
+        <source>Pause for sending &apos;Gcode&apos; lines to &apos;Grbl&apos; ...</source>
+        <translation>Pause dans l&apos;envoi des lignes de&apos; Gcode&apos; vers &apos;Grbl&apos;</translation>
+    </message>
+    <message>
+        <location filename="../gcode.cpp" line="1410"/>
+        <source>Resume program Grbl ...</source>
+        <translation>Reprise du programme &apos;Grbl&apos;</translation>
+    </message>
+    <message>
+        <location filename="../gcode.cpp" line="1412"/>
+        <source>Resume sending &apos;Gcode&apos; lines to &apos;Grbl&apos;</source>
+        <translation>Reprise de l&apos;envoi des lignes de&apos; Gcode&apos; vers &apos;Grbl&apos;</translation>
+    </message>
+    <message>
+        <location filename="../gcode.cpp" line="1446"/>
         <source>Gave up waiting for OK
 </source>
         <translation>Fin d&apos;attente Ok\n</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1328"/>
+        <location filename="../gcode.cpp" line="1466"/>
         <source>Code sent successfully with %1 error(s):</source>
         <translation>Code émis correctement avec %1 erreur(s)</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1340"/>
+        <location filename="../gcode.cpp" line="1478"/>
         <source>Code sent successfully with no errors.</source>
         <translation>Code émis correctement sans erreur</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1347"/>
+        <location filename="../gcode.cpp" line="1485"/>
         <source>Filtered %1 commands:</source>
         <translation>Commande filtrée %1</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1360"/>
+        <location filename="../gcode.cpp" line="1498"/>
         <source>Process interrupted.</source>
         <translation>Processus interrompu</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1394"/>
+        <location filename="../gcode.cpp" line="1533"/>
         <source>Removed unsupported command &apos;%1&apos; part of &apos;%2&apos;</source>
         <translation>Suppression de la commande &apos;%1&apos; portion de &apos;%2 ( non supportée)</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1410"/>
+        <location filename="../gcode.cpp" line="1549"/>
         <source>Removed unsupported G command &apos;%1&apos;</source>
         <translation>Suppression de la commande G  &apos;%1&apos;  non supportée</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1423"/>
+        <location filename="../gcode.cpp" line="1562"/>
         <source>Removed unsupported M command &apos;%1&apos;</source>
         <translation>Suppression de la commande M  &apos;%1&apos;  non supportée</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1443"/>
+        <location filename="../gcode.cpp" line="1582"/>
         <source>Removed unsupported command &apos;%1&apos;</source>
         <translation>Suppression de la commande &apos;%1&apos;  non supportée</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1577"/>
+        <location filename="../gcode.cpp" line="1715"/>
         <source>Unable to remove enough decimal places for command (will be truncated): %s</source>
         <translation>Impossible de supprimer assez de decimales pour la commande (sera tronquee) %s</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1581"/>
+        <location filename="../gcode.cpp" line="1719"/>
         <source>Error, insufficent reduction &apos;%1&apos;</source>
         <translation>Erreur : réduction insuffisante  &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1583"/>
+        <location filename="../gcode.cpp" line="1721"/>
         <source>Precision reduced &apos;%1&apos;</source>
         <translation>Précision réduite  &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1780"/>
+        <location filename="../gcode.cpp" line="1918"/>
         <source>Z-Rate Limit: [%1]=&gt;[%2]</source>
         <translation>Limite de vitesse Z  [%1]=&gt;[%2]</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1785"/>
+        <location filename="../gcode.cpp" line="1923"/>
         <source>Z-Rate Limit: [%1]=&gt;[%2,%3]</source>
         <translation>Limite de vitesse Z :  [%1]=&gt;[%2,%3]</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1830"/>
+        <location filename="../gcode.cpp" line="1968"/>
         <source>XY-Rate Limit FIX: [%1]=&gt;[%2]</source>
         <translation>Correction de la limite de vitesse XY : [%1]=&gt;[%2]</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1889"/>
+        <location filename="../gcode.cpp" line="2188"/>
+        <source>GCV use &apos;inches&apos; but Grbl parser set for &apos;mm&apos;</source>
+        <translation>GCV utilise les &apos;pouces&apos; alors que Grbl indique des &apos;mm&apos;.</translation>
+    </message>
+    <message>
+        <location filename="../gcode.cpp" line="2189"/>
+        <location filename="../gcode.cpp" line="2207"/>
+        <source>Correction Grbl ended.</source>
+        <translation>Fin de la modification de &apos;Grbl&apos;</translation>
+    </message>
+    <message>
+        <location filename="../gcode.cpp" line="2206"/>
+        <source>GCV use &apos;mm&apos; but Grbl parser set for &apos;inches&apos;</source>
+        <translation>GCV utilise les &apos;mm&apos; alors que Grbl indique des &apos;pouces&apos;.</translation>
+    </message>
+    <message>
+        <location filename="../gcode.cpp" line="266"/>
+        <location filename="../gcode.cpp" line="2030"/>
         <source>Bad command: %1</source>
         <translation>Commande erronee : %1</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="2000"/>
         <source>Options specify use mm but Grbl parser set for inches. Fixing.</source>
-        <translation>Vous utiliser des &apos;mm&apos; alors que l&apos;analyse indique des &apos;pouces&apos;.  Corriger dans la configuration</translation>
+        <translation type="obsolete">Vous utiliser des &apos;mm&apos; alors que l&apos;analyse indique des &apos;pouces&apos;.  Corriger dans la configuration</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="2005"/>
         <source>Options specify use inches but Grbl parser set for mm. Fixing.</source>
-        <translation>Vous utiliser les &apos;pouces&apos; alors que l&apos;analyse indique des &apos;mm&apos;. Corriger dans la configuration</translation>
+        <translation type="obsolete">Vous utiliser les &apos;pouces&apos; alors que l&apos;analyse indique des &apos;mm&apos;. Corriger dans la configuration</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="2021"/>
         <source>Options specify use mm but Grbl reporting set for inches. Fixing.</source>
-        <translation>Vous utiliser les mm alors que Grbl donne des pouces. Corriger dans la configuration</translation>
+        <translation type="obsolete">Vous utiliser les mm alors que Grbl donne des pouces. Corriger dans la configuration</translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="2026"/>
         <source>Options specify use inches but Grbl reporting set for mm. Fixing.</source>
-        <translation>Vous utiliser les &apos;pouce&apos;s alors que Grbl donne des &apos;mm&apos;. Corriger dans la configuration</translation>
+        <translation type="obsolete">Vous utiliser les &apos;pouce&apos;s alors que Grbl donne des &apos;mm&apos;. Corriger dans la configuration</translation>
     </message>
     <message>
         <source>(mm)</source>
@@ -363,24 +405,33 @@
         <translation>Configuration GRBL</translation>
     </message>
     <message>
-        <location filename="../forms/grbldialog.ui" line="68"/>
+        <location filename="../forms/grbldialog.ui" line="72"/>
         <source>Apply</source>
         <translation>Appliquer</translation>
     </message>
     <message>
-        <location filename="../forms/grbldialog.ui" line="75"/>
+        <location filename="../forms/grbldialog.ui" line="79"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../grbldialog.cpp" line="29"/>
+        <location filename="../grbldialog.cpp" line="30"/>
+        <source>Rank</source>
+        <translation>Rang</translation>
+    </message>
+    <message>
+        <location filename="../grbldialog.cpp" line="31"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../grbldialog.cpp" line="29"/>
+        <location filename="../grbldialog.cpp" line="31"/>
+        <source>Description</source>
+        <translation>Description</translation>
+    </message>
+    <message>
         <source>Item</source>
-        <translation>Elément</translation>
+        <translation type="obsolete">Elément</translation>
     </message>
 </context>
 <context>
@@ -593,83 +644,81 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../forms/mainwindow.ui" line="32"/>
         <source>Grbl Controller</source>
-        <translation>Contrôleur Grbl</translation>
+        <translation type="obsolete">Contrôleur Grbl</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="72"/>
+        <location filename="../forms/mainwindow.ui" line="75"/>
         <source>attempts to connect to the card containing &apos;Grbl&apos; or terminates the connection</source>
         <translation>Essai de connexion à la carte contenant &apos;Grbl&apos; ou arréter la connexion</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="126"/>
+        <location filename="../forms/mainwindow.ui" line="129"/>
         <source>Port selection in those detected by the system</source>
         <translation>Sélection du port détecté par le système</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="158"/>
+        <location filename="../forms/mainwindow.ui" line="161"/>
         <source>connection speed to card (bauds)</source>
         <translation>Vitesse de connexion à la carte (bauds)</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="180"/>
+        <location filename="../forms/mainwindow.ui" line="189"/>
         <source>stops sending the contents of the file &apos;Gcode&apos;</source>
         <translation>Arréter l&apos;émission du contenu du fichier &apos;Gcode&apos;</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="203"/>
         <source>load a file for animation or send to Grbl</source>
-        <translation>Chager un fichier &apos;Gcode&apos; pour animation ou émission vers &apos;Grbl&apos;</translation>
+        <translation type="obsolete">Chager un fichier &apos;Gcode&apos; pour animation ou émission vers &apos;Grbl&apos;</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="213"/>
+        <location filename="../forms/mainwindow.ui" line="210"/>
         <source>sending line by line the contents of the file &apos;Gcode&apos;</source>
         <translation>Emet ligne par ligne le cotenu du fichier (Gcode&apos;</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="223"/>
+        <location filename="../forms/mainwindow.ui" line="220"/>
         <source>shows the full name of the loaded file</source>
         <translation>Montre le nom complet du fichier chargé</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="230"/>
+        <location filename="../forms/mainwindow.ui" line="639"/>
         <source>commands are sent to &apos;Grbl&apos; simply control without executing</source>
         <translation>Les commandes sontsimplement  transmise à &apos;Grbl&apos;pour vérification sans exécution</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="233"/>
-        <location filename="../mainwindow.cpp" line="2122"/>
+        <location filename="../forms/mainwindow.ui" line="642"/>
+        <location filename="../mainwindow.cpp" line="627"/>
         <source>Check</source>
         <translation>Vérifier</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="334"/>
+        <location filename="../forms/mainwindow.ui" line="350"/>
         <source>time to send a file to &apos;Grbl&apos;</source>
         <translation>Durée pour envoyer un fichier vers &apos;Grbl&apos;</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="337"/>
+        <location filename="../forms/mainwindow.ui" line="353"/>
         <source>00:00:00</source>
         <translation>00:00:00</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="382"/>
+        <location filename="../forms/mainwindow.ui" line="402"/>
         <source>indicates the last release state Grbl</source>
         <translation>Indique le dernier état de Grbl</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="385"/>
+        <location filename="../forms/mainwindow.ui" line="405"/>
         <source>no state</source>
-        <translation>Acun état</translation>
+        <translation>aucun</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="405"/>
+        <location filename="../forms/mainwindow.ui" line="434"/>
         <source>Lines:</source>
         <translation>Lignes</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="476"/>
+        <location filename="../forms/mainwindow.ui" line="517"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
@@ -682,87 +731,92 @@
         <translation type="obsolete">Simulation</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2197"/>
+        <location filename="../forms/mainwindow.ui" line="233"/>
+        <location filename="../mainwindow.cpp" line="574"/>
+        <location filename="../mainwindow.cpp" line="2279"/>
         <source>Pause</source>
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="834"/>
+        <location filename="../forms/mainwindow.ui" line="1108"/>
         <source>Line :</source>
         <translation>Ligne</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="1048"/>
         <source>Speed rate</source>
-        <translation>Vitesse de travail</translation>
+        <translation type="obsolete">Avance axes</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="1103"/>
+        <location filename="../forms/mainwindow.ui" line="1477"/>
         <source>Speed rate gcode (mm or inches per minute)</source>
         <translation>Vitesse de travail gcode (mm ou pouces par minute)</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="1169"/>
+        <location filename="../forms/mainwindow.ui" line="3704"/>
         <source>Spindle control: running -&gt; yellow</source>
         <translation>Commande de broche : fonctionne -&gt; jaune</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="1300"/>
+        <location filename="../forms/mainwindow.ui" line="1687"/>
         <source>Pass in absolute coordinates after moving it occurs in relative displacement</source>
         <translation>Passe en coordonnées absolues après les commandes manuelles qui sont en déplacement relatif</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="1303"/>
+        <source>Starter blocks</source>
+        <translation type="obsolete">Blocs départ</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="1690"/>
         <source>G90 after adjust</source>
         <translation>G90 après l&apos;ajustement</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="1338"/>
+        <location filename="../forms/mainwindow.ui" line="1725"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="1439"/>
+        <location filename="../forms/mainwindow.ui" line="1826"/>
         <source>Unit X axis</source>
         <translation>Unité de l&apos;axe X</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="1592"/>
+        <location filename="../forms/mainwindow.ui" line="2005"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="1692"/>
+        <location filename="../forms/mainwindow.ui" line="2105"/>
         <source>Unit Y axis</source>
         <translation>Unité de l&apos;axe Y</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="1844"/>
+        <location filename="../forms/mainwindow.ui" line="2283"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="172"/>
+        <location filename="../forms/mainwindow.ui" line="181"/>
         <source>Send File</source>
         <translation>Envoi d&apos;un fichier</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="216"/>
+        <location filename="../forms/mainwindow.ui" line="213"/>
         <source>Begin</source>
         <translation>Démarrer</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="183"/>
+        <location filename="../forms/mainwindow.ui" line="192"/>
         <source>Stop</source>
         <translation>Arrêter</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="206"/>
+        <location filename="../forms/mainwindow.ui" line="203"/>
         <source>Choose file</source>
         <translation>Choisir un fichier</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="318"/>
+        <location filename="../forms/mainwindow.ui" line="334"/>
         <source>Runtime:</source>
         <translation>Exécution</translation>
     </message>
@@ -771,12 +825,12 @@
         <translation type="obsolete">Commande directe en GCode</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="438"/>
+        <location filename="../forms/mainwindow.ui" line="473"/>
         <source>Command</source>
         <translation>Commande</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="75"/>
+        <location filename="../forms/mainwindow.ui" line="78"/>
         <location filename="../mainwindow.cpp" line="20"/>
         <source>Open</source>
         <translation>Ouvrir</translation>
@@ -792,12 +846,12 @@ settings</source>
 GRBL</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="107"/>
+        <location filename="../forms/mainwindow.ui" line="110"/>
         <source>Port name</source>
         <translation>Nom du port</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="505"/>
+        <location filename="../forms/mainwindow.ui" line="722"/>
         <source>Visual</source>
         <translation>Visuel</translation>
     </message>
@@ -806,106 +860,100 @@ GRBL</translation>
         <translation type="obsolete">Animation de la scène 3D</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="543"/>
-        <location filename="../mainwindow.cpp" line="2150"/>
+        <location filename="../forms/mainwindow.ui" line="777"/>
+        <location filename="../mainwindow.cpp" line="2235"/>
         <source>Animate</source>
         <translation>Animation</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="561"/>
+        <location filename="../forms/mainwindow.ui" line="805"/>
         <source>Starting and stopping the animation</source>
         <translation>Démarre et arrête l&apos;animation 3D</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="623"/>
-        <location filename="../forms/mainwindow.ui" line="663"/>
+        <location filename="../forms/mainwindow.ui" line="867"/>
+        <location filename="../forms/mainwindow.ui" line="913"/>
         <source>interpolation tolerance for viewer 3D</source>
         <translation>Tolérance d&apos;interpolation du visualisateur 3D</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="697"/>
-        <location filename="../forms/mainwindow.ui" line="1442"/>
-        <location filename="../forms/mainwindow.ui" line="1695"/>
-        <location filename="../forms/mainwindow.ui" line="1947"/>
-        <location filename="../mainwindow.cpp" line="2260"/>
-        <location filename="../mainwindow.cpp" line="2295"/>
+        <location filename="../forms/mainwindow.ui" line="953"/>
+        <location filename="../forms/mainwindow.ui" line="1829"/>
+        <location filename="../forms/mainwindow.ui" line="2108"/>
+        <location filename="../forms/mainwindow.ui" line="2386"/>
+        <location filename="../mainwindow.cpp" line="2345"/>
+        <location filename="../mainwindow.cpp" line="2377"/>
         <source>mm</source>
         <translation>mm</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="715"/>
-        <source>Arc segments</source>
-        <translatorcomment>Segments d&apos;arc</translatorcomment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../forms/mainwindow.ui" line="771"/>
+        <location filename="../forms/mainwindow.ui" line="1027"/>
         <source>interpolation number of segments for 3D</source>
         <translation>Nombre de segment d&apos;interpolation pour la 3D</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="803"/>
+        <location filename="../forms/mainwindow.ui" line="1071"/>
         <source>Up one line in the gcode</source>
         <translation>Remonte d&apos;une ligne dans le Gcode</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="847"/>
+        <location filename="../forms/mainwindow.ui" line="1127"/>
         <source>Current line gcode</source>
         <translation>Ligne courante du Gcode</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="865"/>
+        <location filename="../forms/mainwindow.ui" line="1157"/>
         <source>Down one line in the gcode</source>
         <translation>Descend d&apos;une ligne dans le Gcode</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="915"/>
+        <location filename="../forms/mainwindow.ui" line="1275"/>
         <source>Animation period mS</source>
         <translation>Période de l&apos;animation en mS</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="967"/>
+        <location filename="../forms/mainwindow.ui" line="1207"/>
         <source>Period mS</source>
         <translation>Période mS</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="992"/>
+        <location filename="../forms/mainwindow.ui" line="1238"/>
         <source>Value of the period</source>
         <translation>Valeur de la période</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="519"/>
+        <location filename="../forms/mainwindow.ui" line="736"/>
         <source>Monitoring the progress of the animation gcode</source>
         <translation>Montre l&apos;avancement de l&apos;animation du Gcode</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="540"/>
+        <location filename="../forms/mainwindow.ui" line="774"/>
         <source>animation of the scene 3D</source>
         <translation>Animation de la scène en 3D</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="1944"/>
+        <location filename="../forms/mainwindow.ui" line="2383"/>
         <source>Unit Z axis</source>
         <translation>Unité de l&apos;axe Z</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="2270"/>
+        <location filename="../forms/mainwindow.ui" line="2735"/>
         <source>Unit of the fourth axis</source>
         <translation>Unité du quatrième axe</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="2273"/>
+        <location filename="../forms/mainwindow.ui" line="2738"/>
         <source>deg</source>
         <translation>deg</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="2248"/>
+        <location filename="../forms/mainwindow.ui" line="2713"/>
         <source>T</source>
         <translation>T
 </translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="1140"/>
+        <location filename="../forms/mainwindow.ui" line="1514"/>
         <source>mm/mn</source>
         <translation>mm/mn</translation>
     </message>
@@ -926,37 +974,35 @@ GRBL</translation>
         <translation type="obsolete">Valeur du pas</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="2847"/>
         <source>T Jog</source>
-        <translation>Commande T</translation>
+        <translation type="obsolete">Commande T</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3178"/>
         <source>Reset Control</source>
-        <translation>Commande RAZ</translation>
+        <translation type="obsolete">Commande RAZ</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3192"/>
+        <location filename="../forms/mainwindow.ui" line="710"/>
         <source>Soft Reset Grbl</source>
         <translation>RAZ logiciel de Grbl</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3205"/>
+        <location filename="../forms/mainwindow.ui" line="674"/>
         <source>Unlock Grbl</source>
         <translation>Débloquer Grbl</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="1260"/>
+        <location filename="../forms/mainwindow.ui" line="1647"/>
         <source>Machine Coordinates</source>
         <translation>Coordonnées machine</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="1280"/>
+        <location filename="../forms/mainwindow.ui" line="1667"/>
         <source>Work Coordinates</source>
         <translation>Coordonnées de travail</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="363"/>
+        <location filename="../forms/mainwindow.ui" line="379"/>
         <source>Last State:</source>
         <translation>Dernier état</translation>
     </message>
@@ -965,7 +1011,7 @@ GRBL</translation>
         <translation type="obsolete">Nombre de segments d&apos;interpolation</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="648"/>
+        <location filename="../forms/mainwindow.ui" line="892"/>
         <source>Tolerance</source>
         <translation>Tolérance</translation>
     </message>
@@ -974,115 +1020,106 @@ GRBL</translation>
         <translation type="obsolete">Tolérance d&apos;interpolation</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3468"/>
+        <location filename="../forms/mainwindow.ui" line="3565"/>
         <source>tool selection</source>
         <translation>Choix de l&apos;outil</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3493"/>
+        <location filename="../forms/mainwindow.ui" line="3590"/>
         <source>With or without bounding box</source>
         <translation>Visualisation ou non de l&apos;enveloppe</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3496"/>
+        <location filename="../forms/mainwindow.ui" line="3593"/>
         <source>Bbox</source>
         <translation>Eboite</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3506"/>
+        <location filename="../forms/mainwindow.ui" line="3603"/>
         <source>with or without rapid movements</source>
         <translation>Visualise ou non les mouvements rapides</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3576"/>
         <source>Zero Position</source>
-        <translation>= Position zéro</translation>
+        <translation type="obsolete">= Position zéro</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3589"/>
         <source>Go Home</source>
-        <translation>Aller position repos</translation>
+        <translation type="obsolete">Aller position repos</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="2706"/>
         <source>Axis Control</source>
-        <translation>Commandes d&apos;axes</translation>
+        <translation type="obsolete">Commandes d&apos;axes</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="2466"/>
+        <location filename="../forms/mainwindow.ui" line="2971"/>
         <source>Step size, accept cursors keyboard commands</source>
         <translation>Valeur du pas, accepte les commandes des curseurs clavier</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="2582"/>
+        <location filename="../forms/mainwindow.ui" line="3087"/>
         <source>Small movements of the Z axis</source>
         <translation>Petits déplcements de l&apos;axe Z</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="2678"/>
+        <location filename="../forms/mainwindow.ui" line="3183"/>
         <source>Step value for the relative movements (G91)</source>
         <translation>Valeur du pas pour les déplacements relatifs</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="2965"/>
-        <location filename="../mainwindow.cpp" line="1500"/>
+        <location filename="../mainwindow.cpp" line="1708"/>
         <source>Z Jog</source>
         <translation>pilote Z</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3051"/>
         <source>Step Size           </source>
-        <translation>Valeur du pas</translation>
+        <translation type="obsolete">Valeur du pas</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3006"/>
         <source>Absolute coordinates after adjust</source>
-        <translation>Coordonnées absolues après ajustement</translation>
+        <translation type="obsolete">Coordonnées absolues après ajustement</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="1172"/>
-        <location filename="../forms/mainwindow.ui" line="3019"/>
-        <location filename="../mainwindow.cpp" line="1788"/>
+        <location filename="../forms/mainwindow.ui" line="3707"/>
+        <location filename="../mainwindow.cpp" line="1882"/>
         <source>Spindle On</source>
         <translation>Départ broche</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="421"/>
-        <location filename="../forms/mainwindow.ui" line="850"/>
-        <location filename="../forms/mainwindow.ui" line="2502"/>
-        <location filename="../forms/mainwindow.ui" line="2610"/>
-        <location filename="../forms/mainwindow.ui" line="2911"/>
-        <location filename="../forms/mainwindow.ui" line="2921"/>
+        <location filename="../forms/mainwindow.ui" line="456"/>
+        <location filename="../forms/mainwindow.ui" line="1130"/>
+        <location filename="../forms/mainwindow.ui" line="3007"/>
+        <location filename="../forms/mainwindow.ui" line="3115"/>
         <source>0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1511"/>
+        <location filename="../mainwindow.cpp" line="1717"/>
         <source>C Jog</source>
         <translation>pilote C</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3073"/>
+        <location filename="../forms/mainwindow.ui" line="3238"/>
         <source>Visualizer</source>
         <translation>Visualisateur</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="145"/>
+        <location filename="../forms/mainwindow.ui" line="148"/>
         <source>Baud Rate</source>
         <translation>Vitesse du port</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="272"/>
+        <location filename="../forms/mainwindow.ui" line="288"/>
         <source>%v</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="285"/>
+        <location filename="../forms/mainwindow.ui" line="301"/>
         <source>File progress</source>
         <translation>Avancement</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="298"/>
+        <location filename="../forms/mainwindow.ui" line="314"/>
         <source>Queued Commands</source>
         <translation>Ordres en attente</translation>
     </message>
@@ -1091,67 +1128,235 @@ GRBL</translation>
         <translation type="obsolete">Lignes</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3166"/>
         <source>Advanced</source>
-        <translation>Avancé</translation>
+        <translation type="obsolete">Avancé</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3234"/>
+        <location filename="../forms/mainwindow.ui" line="589"/>
         <source>GRBL Settings</source>
         <translation>Configuratiion
 GRBL</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3240"/>
+        <location filename="../forms/mainwindow.ui" line="549"/>
+        <source>Grbl commands</source>
+        <translation>Commandes Grbl
+</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="568"/>
+        <source>Help</source>
+        <translation>Aide</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="619"/>
+        <source>Build info</source>
+        <translation>Information</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="599"/>
+        <source>Parameters</source>
+        <translation>Paramètres</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="32"/>
+        <source>Grbl Controller Visualizer</source>
+        <translation>Grbl Controleur Visualisateur</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="199"/>
+        <source>load a file for animation
+ or send to Grbl</source>
+        <translation>Charge un fichier pour animation ou pour envoyer à &apos;Grbl&apos;</translation>
+    </message>
+    <message>
+        <source>Not yet implemented !!</source>
+        <translation type="obsolete">pas encore implémenté</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="565"/>
+        <source>Shows the commands available in Grbl</source>
+        <translation>Liste les commandes disponibles de &apos;Grbl&apos;</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="609"/>
+        <source>Parser state</source>
+        <translation>Etat analyseur</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="629"/>
+        <source>Startup blocks</source>
+        <translation>Blocs départ</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="684"/>
+        <source>Homing Cycle</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Cycle start</source>
+        <translation type="obsolete">Départ</translation>
+    </message>
+    <message>
+        <source>Feed hold</source>
+        <translation type="obsolete">Maintien</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation type="obsolete">Etat</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="971"/>
+        <source>Item segments</source>
+        <translation>Segments élement</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="1340"/>
+        <source>Removes the selected text lines</source>
+        <translation>Supprime les lignes de texte sélectionnées</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="1343"/>
+        <source>Clear selection</source>
+        <translation>Enlève le choix</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="1359"/>
+        <location filename="../forms/mainwindow.ui" line="1386"/>
+        <source>Prints lines of text selected
+otherwise all text</source>
+        <translation>Imprime les lignes de texte sélectionnées
+sinon tout le texte</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="1363"/>
+        <source>Print selection</source>
+        <translation>Imprimer le choix</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="1390"/>
+        <source>Print visual</source>
+        <translation>Imprimer</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="1422"/>
+        <source>Feed rate</source>
+        <translation>Avance</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="1543"/>
+        <source>Speed spindle</source>
+        <translation>Broche</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="1593"/>
+        <source>Last spindle speed read in the Gcode</source>
+        <translation>La dernière vitesse de broche lue dans le Gcode</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="1627"/>
+        <source>rpm</source>
+        <translation>tours/mn</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="1926"/>
+        <location filename="../forms/mainwindow.ui" line="2204"/>
+        <location filename="../forms/mainwindow.ui" line="2479"/>
+        <location filename="../forms/mainwindow.ui" line="2753"/>
+        <source>Moves the axis at zero</source>
+        <translation>Déplace l&apos;axe en position zéro</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="1946"/>
+        <location filename="../forms/mainwindow.ui" line="2224"/>
+        <location filename="../forms/mainwindow.ui" line="2563"/>
+        <source>Move the axis to negative values</source>
+        <translation>Déplace l&apos;axe vers les valeurs négatives</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="1966"/>
+        <location filename="../forms/mainwindow.ui" line="2244"/>
+        <location filename="../forms/mainwindow.ui" line="2674"/>
+        <source>Move the axis to the positive values</source>
+        <translation>Déplace l&apos;axe vers les valeurs positives</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="2773"/>
+        <source>Axis moves clockwise
+Move the axis to negative values</source>
+        <translation>Déplace l&apos;axe en sens horaire
+Déplace l&apos;axe vers les valeurs négatives</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="2794"/>
+        <source>Moves the axis in the counterclockwise
+Move the axis to the positive values</source>
+        <translation>Déplace l&apos;axe en sens anti-horaire
+Déplace l&apos;axe vers les valeurs positives</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="3205"/>
+        <source>Go Home :first moves the Z axis
+ then all axes synchronously at zero</source>
+        <translation>Déplace d&apos;abord l&apos;axe Z
+puis en synchronisme déplace tous les axes vers zéro</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="3337"/>
         <source>Viewer3D</source>
         <translation>Visu 3D</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3340"/>
+        <location filename="../forms/mainwindow.ui" line="3437"/>
         <source>Perspective view</source>
         <translation>Vue en perspective</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3357"/>
+        <location filename="../forms/mainwindow.ui" line="3454"/>
         <source>Front view</source>
         <translation>Vue de face</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3371"/>
+        <location filename="../forms/mainwindow.ui" line="3468"/>
         <source>Back view</source>
         <translation>Vue arrière</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3385"/>
+        <location filename="../forms/mainwindow.ui" line="3482"/>
         <source>Left view</source>
         <translation>Vue de gauche</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3399"/>
+        <location filename="../forms/mainwindow.ui" line="3496"/>
         <source>Right view </source>
         <translation>Vue de droite</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3413"/>
+        <location filename="../forms/mainwindow.ui" line="3510"/>
         <source>Bottom view</source>
         <translation>Vue de dessous</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3427"/>
+        <location filename="../forms/mainwindow.ui" line="3524"/>
         <source>Top view</source>
         <translation>Vue de dessus</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3441"/>
+        <location filename="../forms/mainwindow.ui" line="3538"/>
         <source>Vector up along Y axis </source>
         <translation>Veceur d&apos;alignement vertical selon l&apos;axe Y</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="3750"/>
+        <source>= Zero Position</source>
+        <translation>= Position zéro</translation>
     </message>
     <message>
         <source>With or not tool</source>
         <translation type="obsolete">Avec ou sans outil</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3474"/>
+        <location filename="../forms/mainwindow.ui" line="3571"/>
         <source>Tool</source>
         <translation>Outil</translation>
     </message>
@@ -1160,59 +1365,84 @@ GRBL</translation>
         <translation type="obsolete">Avec ous sans la boite enveloppante</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3509"/>
+        <location filename="../forms/mainwindow.ui" line="3606"/>
         <source>G0</source>
         <translation>G0</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3541"/>
-        <location filename="../forms/mainwindow.ui" line="3544"/>
+        <location filename="../forms/mainwindow.ui" line="3638"/>
+        <location filename="../forms/mainwindow.ui" line="3641"/>
         <source>Help 3D</source>
         <translation>Aide 3D</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3596"/>
+        <location filename="../forms/mainwindow.ui" line="694"/>
         <source>Refresh Pos</source>
         <translation>Actualiser position</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3616"/>
+        <location filename="../forms/mainwindow.ui" line="3659"/>
         <source>Firmware :</source>
         <translation>Micrologiciel :</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3632"/>
-        <location filename="../mainwindow.cpp" line="698"/>
+        <location filename="../forms/mainwindow.ui" line="230"/>
+        <source>Suspend the issuance of the file &apos;Gcode to the end of the current line</source>
+        <translation>Suspend l&apos;émission du fichier &apos;Gcode&apos; à la fin de la ligne courante</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="3672"/>
+        <source>Grbl version</source>
+        <translation>Version de &apos;Grbl&apos;</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="3678"/>
+        <location filename="../mainwindow.cpp" line="824"/>
         <source>none</source>
         <translation>aucun</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3653"/>
+        <location filename="../forms/mainwindow.ui" line="3744"/>
+        <source>The current position will be the new zero position</source>
+        <translation>La position actuelle devient la nouvelle position zéro</translation>
+    </message>
+    <message>
+        <source>First moves the Z axis
+ then all axes synchronously at zero</source>
+        <translation type="obsolete">Déplce d&apos;abord l&apos;axe Z
+puis en synchronisme déplce tous les axes vers zéro</translation>
+    </message>
+    <message>
+        <source>Asks &apos;Grbl&apos; provide current positions</source>
+        <translation type="obsolete">Demande à &apos;Grbl&apos; de fournir la position actuelle</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="3771"/>
         <source>&amp;Help</source>
         <translation>&amp;Aide</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3659"/>
+        <location filename="../forms/mainwindow.ui" line="3777"/>
         <source>&amp;Tools</source>
         <translation>&amp;Outils</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3665"/>
+        <location filename="../forms/mainwindow.ui" line="3783"/>
         <source>&amp;File</source>
         <translation>&amp;Fichiers</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3676"/>
+        <location filename="../forms/mainwindow.ui" line="3794"/>
         <source>&amp;About</source>
         <translation>&amp;A propos</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3681"/>
+        <location filename="../forms/mainwindow.ui" line="3799"/>
         <source>&amp;Options</source>
         <translation>&amp;Options</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3686"/>
+        <location filename="../forms/mainwindow.ui" line="3804"/>
         <source>E&amp;xit</source>
         <translation>&amp;Quitter</translation>
     </message>
@@ -1222,7 +1452,7 @@ GRBL</translation>
         <translation>Fermer / Raz</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="351"/>
+        <location filename="../mainwindow.cpp" line="365"/>
         <source>You appear to have upgraded to the latest version of Grbl Controller. Please be aware that as of version 3.4 the default behavior of sending commands to Grbl has been changed to send them as fast as possible (Aggressive preload mode).
 
 Your settings have been changed to enable this mode. Why? Because it provides the most optimal use of Grbl and greatly reduces the time to finish a typical job.
@@ -1237,97 +1467,102 @@ Vos paramètres ont été modifiés pour permettre ce mode. Pourquoi? Parce qu&a
         <translation type="obsolete">Voulez-vous allez en postion zéro avant de démarrer ?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="612"/>
+        <location filename="../mainwindow.cpp" line="736"/>
         <source>User clicked Port Open/Close</source>
         <translation>L&apos;utilisateur a clique Ouverture/Fermeture du port</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="758"/>
+        <location filename="../mainwindow.cpp" line="885"/>
         <source>Resetting port to restart controller</source>
         <translation>L&apos;initialisation du port initialise le contrôleur</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="479"/>
+        <location filename="../mainwindow.cpp" line="487"/>
         <source>Do you want to zero the displayed position before proceeding?</source>
         <translation>Voulez-vous afficher la postion zéro avant de démarrer ?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="50"/>
+        <location filename="../mainwindow.cpp" line="51"/>
         <source>%s has started</source>
         <translation>Lancement de %s</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="370"/>
+        <location filename="../mainwindow.cpp" line="384"/>
         <source>No tool</source>
         <translation>Sans outil</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="372"/>
+        <location filename="../mainwindow.cpp" line="386"/>
         <source>Mini 1 mm</source>
         <translation>Mini 1mm</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="374"/>
+        <location filename="../mainwindow.cpp" line="388"/>
         <source>Hemi 3 mm</source>
         <translation>Hémi 3mm</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="376"/>
+        <location filename="../mainwindow.cpp" line="390"/>
         <source>Right 3 mm</source>
         <translation>Droit 3mm</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="378"/>
+        <location filename="../mainwindow.cpp" line="392"/>
         <source>Sharp 3 mm</source>
         <translation>Pointu 3mm</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="380"/>
+        <location filename="../mainwindow.cpp" line="394"/>
         <source>Short 3 mm</source>
         <translation>Court 3 mm</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="419"/>
+        <location filename="../mainwindow.cpp" line="430"/>
         <source>%s has stopped</source>
         <translation>Fin de %s</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="985"/>
+        <location filename="../mainwindow.cpp" line="578"/>
+        <source>Resume</source>
+        <translation>Reprise</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="1177"/>
         <source>Open File</source>
         <translation>Charger un fichier</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="987"/>
+        <location filename="../mainwindow.cpp" line="1179"/>
         <source>NC (*.nc);;All Files (*.*)</source>
         <translation>NC (*.nc);;Tous fichiers (*.*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1503"/>
+        <location filename="../mainwindow.cpp" line="1711"/>
         <source>A Jog</source>
         <translation>pilote A</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1507"/>
+        <location filename="../mainwindow.cpp" line="1714"/>
         <source>B Jog</source>
         <translation>pilote B</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1515"/>
+        <location filename="../mainwindow.cpp" line="1720"/>
         <source>U Jog</source>
         <translation>pilote U</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1519"/>
+        <location filename="../mainwindow.cpp" line="1723"/>
         <source>V Jog</source>
         <translation>pilote V</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1523"/>
+        <location filename="../mainwindow.cpp" line="1726"/>
         <source>W Jog</source>
         <translation>pilote W</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1788"/>
+        <location filename="../mainwindow.cpp" line="1882"/>
         <source>Spindle Off</source>
         <translation>Arrêt broche</translation>
     </message>
@@ -1340,75 +1575,90 @@ Vos paramètres ont été modifiés pour permettre ce mode. Pourquoi? Parce qu&a
         <translation type="obsolete">Arrêt de la broche</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1939"/>
+        <location filename="../mainwindow.cpp" line="2045"/>
         <source>Usr chg: pos=%d new=%d
 </source>
         <translation>Changement de position : %d -&gt; =%d</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1941"/>
+        <location filename="../mainwindow.cpp" line="2047"/>
         <source>Usr chg: pos=%.1f new=%.1f
 </source>
         <translation>Changement de position : %.1f -&gt; =%.1f</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1948"/>
+        <location filename="../mainwindow.cpp" line="2054"/>
         <source>Usr chg no slider: %d
 </source>
         <translation>Utilisation du coulisseau :  %d</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1950"/>
+        <location filename="../mainwindow.cpp" line="2056"/>
         <source>Usr chg no slider: %.1f
 </source>
         <translation>Utilisation du coulisseau :  %.1f</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1959"/>
+        <location filename="../mainwindow.cpp" line="2065"/>
         <source>Pressed and stopped
 </source>
         <translation>Actionne et stoppe</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1964"/>
+        <location filename="../mainwindow.cpp" line="2070"/>
         <source>Pressed not stopped
 </source>
         <translation>Actionne sans stop</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1970"/>
+        <location filename="../mainwindow.cpp" line="2076"/>
         <source>Released
 </source>
         <translation>Relache</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2120"/>
+        <location filename="../mainwindow.cpp" line="614"/>
+        <source>During the mode &apos;Check &apos;does not use the command &apos;$C&apos; please</source>
+        <translation>Pendant la durée du mode &apos;Vérification&apos; ne pas utiliser la commande &apos;$C&apos; !</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="624"/>
         <source>No check</source>
         <translation>Fin vérifier</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2148"/>
+        <location filename="../mainwindow.cpp" line="654"/>
+        <source>With &apos;Grbl Settings&apos; you must validate the homing cycle</source>
+        <translation>Avec &apos;Grbl Settings&apos; vous devez valider le cycle de mise en référence</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="1993"/>
+        <source>Unexpected type %c</source>
+        <translation>Type attendu %c</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2233"/>
         <source>No animate</source>
         <translation>Fin animation</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2276"/>
+        <location filename="../mainwindow.cpp" line="2360"/>
         <source>in</source>
         <translation>pou</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2285"/>
+        <location filename="../mainwindow.cpp" line="2368"/>
         <source>mn</source>
         <translation>mm</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2293"/>
+        <location filename="../mainwindow.cpp" line="2375"/>
         <source>deg.</source>
         <translation>deg</translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="564"/>
-        <location filename="../mainwindow.cpp" line="2191"/>
+        <location filename="../forms/mainwindow.ui" line="808"/>
+        <location filename="../mainwindow.cpp" line="2273"/>
         <source>Run</source>
         <translation>Marche</translation>
     </message>
@@ -1455,9 +1705,8 @@ Vos paramètres ont été modifiés pour permettre ce mode. Pourquoi? Parce qu&a
         <translation>Secondes d&apos;attente lors d&apos;une réponse</translation>
     </message>
     <message>
-        <location filename="../forms/options.ui" line="57"/>
         <source>Z-Jog Rate (inches or mm/min)</source>
-        <translation>Vitesse manuelle Z  (pouces ou mmm/min)</translation>
+        <translation type="obsolete">Vitesse manuelle Z  (pouces ou mmm/min)</translation>
     </message>
     <message>
         <source>Main</source>
@@ -1502,6 +1751,11 @@ Vos paramètres ont été modifiés pour permettre ce mode. Pourquoi? Parce qu&a
         <location filename="../forms/options.ui" line="42"/>
         <source>General</source>
         <translation>Général</translation>
+    </message>
+    <message>
+        <location filename="../forms/options.ui" line="57"/>
+        <source>Z-Jog Rate (mm/min)</source>
+        <translation>Vitesse manuelle Z  (mm/min)</translation>
     </message>
     <message>
         <location filename="../forms/options.ui" line="122"/>
@@ -1794,27 +2048,27 @@ Vos paramètres ont été modifiés pour permettre ce mode. Pourquoi? Parce qu&a
 <context>
     <name>Viewer</name>
     <message>
-        <location filename="../visu3D/viewer3D.cpp" line="353"/>
+        <location filename="../visu3D/viewer3D.cpp" line="382"/>
         <source>&lt;h3&gt;Version %1&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Version %1&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../visu3D/viewer3D.cpp" line="354"/>
+        <location filename="../visu3D/viewer3D.cpp" line="383"/>
         <source>&lt;code&gt;by LETARTARE  %1&lt;/code&gt;</source>
         <translation>&lt;code&gt;par LETARTARE  %1&lt;/code&gt;</translation>
     </message>
     <message>
-        <location filename="../visu3D/viewer3D.cpp" line="355"/>
+        <location filename="../visu3D/viewer3D.cpp" line="384"/>
         <source>&lt;br&gt;&lt;br&gt; for  &lt;h2&gt; %1&lt;/h2&gt;</source>
         <translation>&lt;br&gt;&lt;br&gt; pour  &lt;h2&gt; %1&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../visu3D/viewer3D.cpp" line="358"/>
+        <location filename="../visu3D/viewer3D.cpp" line="387"/>
         <source>&lt;br&gt;Displays the &lt;b&gt;Path&lt;/b&gt; GCode using &apos;OpenGL&apos;.</source>
         <translation>&lt;br&gt;Montre les &lt;b&gt;Chemins&lt;/b&gt; GCodeen utilisant &apos;OpenGL&apos;.</translation>
     </message>
     <message>
-        <location filename="../visu3D/viewer3D.cpp" line="359"/>
+        <location filename="../visu3D/viewer3D.cpp" line="388"/>
         <source>&lt;br&gt;&lt;br&gt;&lt;i&gt;Move the camera using the mouse.&lt;/i&gt;</source>
         <translation>&lt;br&gt;&lt;br&gt;&lt;i&gt;Déplacer la caméra grace à la souris.&lt;/i&gt;</translation>
     </message>

@@ -12,7 +12,7 @@
 #include <QGLViewer/qglviewer.h>
 /// T4
 #include <QtOpenGL>
-#include <QThread>
+//#include <QThread>
 #include <stdint.h>
 #include "Tools3D.h"
 
@@ -31,7 +31,8 @@ protected :
 
 	virtual void draw();
 
-	double getSpeed(int nl);
+	double getFeedRate(int nl);
+	double getSpeedSpindle(int nl);
 	uint32_t getSeg(int nl);
 
 signals:
@@ -39,7 +40,8 @@ signals:
 	void setActiveLineVisuGcode(int, bool);
 	void setPauseVisual(bool);
 	void setLineNum(QString);
-	void setSpeedGcode(double);
+	void setFeedRateGcode(double);
+	void setSpeedSpindleGcode(double);
 	void setSegments(int);
 
 public Q_SLOTS:
@@ -58,7 +60,8 @@ public Q_SLOTS:
     void setItems(QList<PosItem>);
 
 /// T4
-    void setLivePoint(QVector3D xyz, int nl=0);
+    void setLivePoint(QVector3D xyz, bool useMm=true, int nl=0);
+    void setLiveRelPoint(QVector3D dxyz, int nl=0);
 ///<-
 	void setTool(bool=false);
 	void setBbox(bool=false);
@@ -71,7 +74,8 @@ public Q_SLOTS:
 	void setVisualAuto();
 	void setNumLine(QString);
 	void setTotalNumLine(QString);
-	void setSpeedToLine(QList<double>);
+	void setFeedRateToLine(QList<double>);
+	void setSpeedSpindleToLine(QList<double>);
 	void runCode(bool, int) ;
 
 	void  drawItem() ;
@@ -116,7 +120,7 @@ private:
     // scene size max
     uint16_t vmax ;
     // vectors
-    QVector3D  vecBanned;
+    QVector3D  vecBanned, phome;
     QVector3D pmax, pmin, pcurr, pprev, ptemp, pp;
 	qglviewer::Vec pvmax, pvmin, pvcenter;
 	Tools3D Tool;
@@ -130,9 +134,11 @@ private:
     QList<QVector3D> pathItem, pointsItem;
     QList<QVector3D> pathComplete;
     QList<int>	pointToLine;
-    QList<double> speedToLine;
+    QList<double> feedRateToLine;
+    QList<double> speedSpindleToLine;
     QMap<int, int> segToLineValid;
-    QMap<int, float> speedByLineValid;
+    QMap<int, float> feedRateByLineValid;
+    QMap<int, float> speedSpindleByLineValid;
 
 	/// line -> pathComplete
 	int posPath ;
@@ -148,9 +154,8 @@ private:
 	QTimer * repeatVisu;
 	QTimer * repeatPoint;
     // from PosItem
-	float speed, prevspeed ;  /// mm per mn
-	// from grbl $$? depending on version  ?
-//	uint16_t stepsPerMm  ;  /// steps per mm
+	float feedrate, prevfeedrate ;  // mm per mn
+	float speedspindle, prevspeedspindle; 	// turn per minute
 	// mode request display
 	int posReqKind ;
 };

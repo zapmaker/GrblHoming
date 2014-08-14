@@ -29,22 +29,29 @@
 
 #define REQUEST_CURRENT_POS             "?"
 /// T4
+#define PAUSE_COMMAND_V08c              "M1"
 //#define SETTINGS_COMMAND_V08a           "$"
-//#define SETTINGS_COMMAND_V08c           "$$"
+#define HELP_COMMAND_V08c               "$"
+#define SETTINGS_COMMAND_V08c           "$$"
 #define SETTINGS_COMMAND_V$           	"$"
 #define SETTINGS_COMMAND_V$$           	"$$"
+#define HOMING_CYCLE_COMMAND			"$H"
+#define CYCLE_START_COMMAND				"~"
+#define FEED_FOLD_COMMAND				"!"
+
 /// T3
 #define REQUEST_MODE_CHECK       		"$C"
 /// T4
-//#define REQUEST_PARSER_STATE_V08c       "$G"
-//#define SET_UNLOCK_STATE_V08c           "$X"
-#define REQUEST_PARSER_STATE_V$$       "$G"
-#define SET_UNLOCK_STATE_V$$           "$X"
+#define REQUEST_PARSER_STATE_V08c       "$G"
+#define REQUEST_PARAMETERS_V08c			"$#"
+#define REQUEST_INFO_V09g				"$I"
+#define REQUEST_STARTUP_BLOCKS			"$N"
+
+#define SET_UNLOCK_STATE_V08c           "$X"
+#define REQUEST_PARSER_STATE_V$$       	"$G"
+#define SET_UNLOCK_STATE_V$$           	"$X"
 
 #define REGEXP_SETTINGS_LINE    "(\\d+)\\s*=\\s*([\\w\\.]+)\\s*\\(([^\\)]*)\\)"
-
-//#define OPEN_BUTTON_TEXT                "Open"
-//#define CLOSE_BUTTON_TEXT               "Close / Reset"
 
 #define LOG_MSG_TYPE_DIAG       "DIAG"
 #define LOG_MSG_TYPE_STATUS     "STATUS"
@@ -62,7 +69,7 @@
 #define PLANE_XY_G17	0   // G17
 #define PLANE_YZ_G18	2   // G18
 #define PLANE_ZX_G19	1   // G19
-/// T4 speed
+/// T4 feedrate
 #define SPEED_DEFAULT	0	// mm per mn
 #define SPEED_MIN		0
 #define SPEED_MAX		24000.0
@@ -76,7 +83,13 @@
 #define TOL_IN_STEP		0.0004
 #define TOL_IN_MIN		0.0004
 #define TOL_IN_MAX		0.04
-
+/// TA min, max X, Y, Z   mm
+#define MIN_X	0.0
+#define MIN_Y	0.0
+#define MIN_Z	0.0
+#define MAX_X	1000.0   // 0.5 m
+#define MAX_Y	1000.0
+#define MAX_Z	200.0
 
 #define PREQ_ALWAYS           "always"
 #define PREQ_ALWAYS_NO_IDLE_CHK     "alwaysWithoutIdleChk"

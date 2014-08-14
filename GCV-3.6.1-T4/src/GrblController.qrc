@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
+	<file>img/home.png</file>
+        <file>img/homeAll.png</file>
         <file>img/down.PNG</file>
         <file>img/left.PNG</file>
         <file>img/logotiny.PNG</file>
@@ -7,7 +9,7 @@
         <file>img/up.PNG</file>
         <file>img/zapmaker-logo-130.png</file>
         <file>img/gaia2.jpg</file>
-       <file>img/frontview.png</file>
+        <file>img/frontview.png</file>
         <file>img/backview.png</file>
         <file>img/leftview.png</file>
         <file>img/rightview.png</file>

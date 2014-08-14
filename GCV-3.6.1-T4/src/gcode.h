@@ -69,6 +69,8 @@ class GCode : public QObject
 
 public:
     GCode();
+/// T4
+    void setPause(bool);
     void setAbort();
     void setReset();
     void setShutdown();
@@ -81,7 +83,7 @@ signals:
     void addList(QString line);
     void addListFull(QStringList list);
     void addListOut(QString line);
-    void sendMsg(QString msg);
+    void sendMsgSatusBar(QString msg);
     void stopSending();
     void portIsClosed(bool reopen);
     void portIsOpen(bool sendCode);
@@ -94,8 +96,6 @@ signals:
     void enableGrblDialogButton();
     void updateCoordinates(Coord3D maposReqKindchineCoord, Coord3D workCoord);
     void setLastState(QString state);
-  //  void setUnitsWork(QString value);
-  //  void setUnitsMachine(QString value);
     void setLivePoint(double x, double y, bool isMM, bool isLiveCP);
 /// T4
     void setLivePoint(QVector3D);
@@ -109,7 +109,9 @@ signals:
 /// T3
     void setLinesFile(QString  nbline, bool check);
 /// T4
-    void setUnitsAll(bool usemm);
+    void setUnitMmAll(bool usemm);
+
+    void endHomeAxis();
 
 public slots:
     void openPort(QString commPortStr, QString baudRate);
@@ -122,13 +124,26 @@ public slots:
     void axisAdj(char axis, float coord, bool inv, bool absoluteAfterAxisAdj, int sliderZCount);
     void setResponseWait(ControlParams controlParams);
     void grblSetHome();
-    void sendGrblReset();
-    void sendGrblUnlock();
-/// T3
+/// T4
+  //  void sendGrblPause(bool);
+    void sendGrblHelp();
+    void sendGrblParameters() ;
+    void sendGrblParserState();
+    void sendGrblBuildInfo();
+    void sendGrblStartupBlocks();
     void sendGrblCheck(bool);
+    void sendGrblUnlock();
+    void sendGrblHomingCycle();
+    void sendGrblCycleStart();
+    void sendGrblFeedHold() ;
+    void sendGrblStatus();
+    void sendGrblReset();
+
+/// T3
     void setPosReqKind(int);
 
     void goToHome();
+    void goToHomeAxis(char axis);
 
     QString removeUnsupportedCommands(QString line);
 
@@ -145,10 +160,12 @@ private:
     };
 private:
     bool sendGcodeLocal(QString line, bool recordResponseOnFail = false, int waitSec = -1, bool aggressive = false, int currLine = 0);
-    bool waitForOk(QString& result, int waitCount, bool sentReqForLocation, bool sentReqForParserState, bool aggressive, bool finalize);
+/// T4
+    bool waitForOk(QString& result, int waitCount, bool sentReqForLocation,
+                    bool sentRequestForSettings, bool sentReqForParserState,
+                    bool aggressive, bool finalize);
     bool waitForStartupBanner(QString& result, int waitSec, bool failOnNoFound);
     bool sendGcodeInternal(QString line, QString& result, bool recordResponseOnFail, int waitSec, bool aggressive, int currLine = 0);
- //   QString removeUnsupportedCommands(QString line);
     QString reducePrecision(QString line);
     bool isGCommandValid(float value, bool& toEndOfLine);
     bool isMCommandValid(float value);
@@ -159,7 +176,6 @@ private:
     void pollPosWaitForIdle(bool checkMeasurementUnits);
     void checkAndSetCorrectMeasurementUnits();
     void setOldFormatMeasurementUnitControl();
- //   void setUnitsTypeDisplay(bool millimeters);
     void setConfigureMmMode(bool setGrblUnits);
     void setConfigureInchesMode(bool setGrblUnits);
     QStringList doZRateLimit(QString strline, QString& msg, bool& xyRateSet);
@@ -171,12 +187,16 @@ private:
     void setLivenessState(bool valid);
 /// T4
     QString getNumGrblUnit();
+    bool sendToPort(const char *buf, QString txt=QString());
 
 private:
     RS232 port;
     AtomicIntBool abortState;
     AtomicIntBool resetState;
     AtomicIntBool shutdownState;
+/// T4
+    AtomicIntBool pauseState;
+
     ControlParams controlParams;
     int errorCount;
     QString currComPort;

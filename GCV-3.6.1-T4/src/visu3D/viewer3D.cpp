@@ -18,11 +18,13 @@
 // Constructor must call the base class constructor.
 Viewer::Viewer(QWidget *parent1)
 	: QGLViewer(parent1),  parent(parent1),
-	radius(100.0), tol(0.005), // mm
+	radius(MAX_X), tol(TOL_MM_STEP), // mm
+	mm(true),
 	plane(PLANE_XY_G17),
 	withtool(true), withbbox(true), withg0(true), created(false), first(true),
-	vmax(10000),   // mm  -> 10 m
-	vecBanned(vmax, vmax, vmax)
+	vmax(MAX_X),   // mm
+	vecBanned(MAX_X, MAX_Y, MAX_Z), phome(MIN_X, MIN_Y, MAX_Z),
+	pvcenter(25, 25, 50 )   /// oups ?
 {
 	restoreStateFromFile();
 }
@@ -33,10 +35,12 @@ void Viewer::init()
 	setBackgroundColor(QColor(244, 237, 187));
 	setForegroundColor(Qt::black);
 	setSceneRadius(radius);
+	setSceneCenter(pvcenter);
+	setAxisIsDrawn(true);
 	/// front view
 	setFrontView() ;
 	/// create one tool
-	Tool = Tools3D( 0, QVector3D() );
+	Tool = Tools3D( 0, phome );
 	///
 	visu = false;
 	pause = true;
@@ -45,7 +49,10 @@ void Viewer::init()
 	npoint = -1;
 	linecodeText = linecodeTextmax = 0;
 	posPath = 0;
-	pcurr = pprev = QVector3D();
+	pmin = QVector3D( MIN_X, MIN_Y, MIN_Z);
+	pmin = QVector3D( MAX_X, MAX_Y, MAX_Z);
+	pcurr = pprev = phome;
+
 	// timer animator
 	repeatVisu = new QTimer(this);
 	//setPeriod(250);
@@ -53,6 +60,7 @@ void Viewer::init()
 	// timer for points
 	repeatPoint = new QTimer(this);
 	connect(repeatPoint, SIGNAL(timeout()), this, SLOT(drawItem()));
+	//itemrec = true;
 }
 
 /// called by 'MainWindow::preProcessFile(...)' with 'emit setItems(posList)'
@@ -85,6 +93,7 @@ void Viewer::setItems(QList<PosItem> itemsRcvd)
     first = true;
     itemrec  = true;
 }
+
 /// main routine
 void Viewer::draw()
 {
@@ -113,7 +122,7 @@ void Viewer::draw()
 void Viewer::drawDimBbox()
 {
 	glDisable(GL_LIGHTING);
-	color= Qt::red;
+	color= Qt::blue;
 	glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
 	QString unit;
 	QVector3D bpmin(pmin), bpmax(pmax);
@@ -124,7 +133,6 @@ void Viewer::drawDimBbox()
 	else  {
 		unit = " in"; n = 4;
 	}
-
 	drawText(10, height()-10 , "BoxMin : " + QString().setNum(bpmin.x(), 'f', n) + "/"
 							   + QString().setNum(bpmin.y(), 'f', n) + "/"
 							   + QString().setNum(bpmin.z(), 'f', n)  + unit
@@ -146,7 +154,7 @@ void Viewer::gcreateBbox()
 {
 	glNewList(_LBBOX, GL_COMPILE) ;
 	/// bounding box of items
-		Box3D box(pmin, pmax, mm, Qt::red);
+		Box3D box(pmin, pmax, mm, Qt::blue);
 		box.gdraw3D();
 	glEndList();
 }
@@ -169,13 +177,18 @@ void Viewer::setTolerance(double t)
 			update();
 		}
 	}
-//diag("viewer::tol %.3f", tol);
 }
 
-// slot called by 'MainWindow::::setSpeedToLine(QList<double>)'
-void Viewer::setSpeedToLine(QList<double> stl)
+// slot called by 'MainWindow::::setSpeedRateToLine(QList<double>)'
+void Viewer::setFeedRateToLine(QList<double> stl)
 {
-	speedToLine = stl ;
+	feedRateToLine = stl ;
+}
+
+// slot called by 'MainWindow::::setSpeedSpindleToLine(QList<double>)'
+void Viewer::setSpeedSpindleToLine(QList<double> stl)
+{
+	speedSpindleToLine = stl ;
 }
 
 // called for Gcode line valid
@@ -187,23 +200,20 @@ void Viewer::Scene(int nlColor){
 	QVector3D plast(items.at(0).x, items.at(0).y, items.at(0).z);
 	// min and max values
 	pmin = QVector3D(vmax, vmax, vmax);
-    pmax = QVector3D(-vmax,-vmax, -vmax);;
-
+    pmax = QVector3D(-vmax,-vmax, -vmax);
     uint8_t plane(NO_PLANE);
-
 	Arc3D arc;
 	Line3D line;
-    QVector3D pend, poffset, point;
-
+    QVector3D pend, poffset;
 	/// no path interpolated
 	posPath = 0;
 	pathComplete.clear();
 	pointToLine.clear();
-	speedByLineValid.clear();
+	feedRateByLineValid.clear();
 	segToLineValid.clear();
-	// speed
-	speed = prevspeed = 0; // SPEED_DEFAUL ?
-	bool element;
+	// feedrate
+	feedrate = prevfeedrate = 0; // SPEED_DEFAUL ?
+	bool motion;
 	uint32_t seg = 0;
 
 	/// all items
@@ -213,28 +223,42 @@ void Viewer::Scene(int nlColor){
     	mm = item.mm;
 //diag("Scene::mm = %s", mm==true?"true":"false");
     	pend = QVector3D(item.x, item.y, item.z);
-		element = item.g == 0 || item.g == 1 || item.g == 2 || item.g == 3 ;
+		motion = item.g == 0 || item.g == 1 || item.g == 2 || item.g == 3 ;
 		/// Fxxxx
-		if (!element) {
-			if (item.speed > 0) {
-				speed = item.speed;
-				/// QMap<int index, float speed>
-				speedByLineValid.insert(item.index, speed);
+		if (!motion) {
+		// feedrate
+			if (item.feedrate > 0) {
+				feedrate = item.feedrate;
+				/// QMap<int index, float feedrate>
+				feedRateByLineValid.insert(item.index, feedrate);
+//diag(" item.index %d -> feedtate %0.2f", item.index, feedrate);
 			}
 			else
-			if (prevspeed == 0)
-				speed = 0;
+			if (prevfeedrate == 0)
+				feedrate = 0;
 			else
-				speed = prevspeed;
+				feedrate = prevfeedrate;
+			// spindle speed
+			if (item.speedspindle > 0 ) {
+				speedspindle = item.speedspindle;
+				/// QMap<int index, float feedrate>
+				speedSpindleByLineValid.insert(item.index, speedspindle);
+//diag(" item.index %d -> speedspindle %0.2f", item.index, speedspindle);
+			}
+			else
+			if (prevspeedspindle == 0)
+				speedspindle = 0;
+			else
+				speedspindle = prevspeedspindle;
 
 			seg = 0;
 		}
 		/// Element
 		else {
-			if (item.speed > 0)
-				speed = item.speed;
+			if (item.feedrate > 0)
+				feedrate = item.feedrate;
 			else
-				speed = prevspeed;
+				feedrate = prevfeedrate;
 		/// line G0  fast
 			if (item.g == 0)  {
 				seg = 1;
@@ -251,8 +275,8 @@ void Viewer::Scene(int nlColor){
 					}
 					/// point min and max
 					line.MinMax(pmin, pmax);
-					// speed  max ??
-					line.setSpeed(speed);
+					// feedrate  max ??
+					line.setSpeed(feedrate);
 					/// fill list
 					line.gdraw3D() ;
 				}
@@ -273,8 +297,8 @@ void Viewer::Scene(int nlColor){
 				}
 				/// point min and max
 				line.MinMax(pmin, pmax);
-				// speed
-				line.setSpeed(speed);
+				// feedrate
+				line.setSpeed(feedrate);
 				/// fill list
 				line.gdraw3D() ;
 			}
@@ -296,8 +320,8 @@ void Viewer::Scene(int nlColor){
 					arc.setColor(Qt::red);
 					arc.setLineWidth(4);
 				}
-				/// speed
-				arc.setSpeed(speed);
+				/// feedrate
+				arc.setSpeed(feedrate);
 				/// fill list
 				arc.gdraw3D();
 			}
@@ -306,6 +330,7 @@ void Viewer::Scene(int nlColor){
 			//	spline G5, G5.1, G5.2  ...
 			}
 			/// path item
+			//if (motion)
 			pathItem.append(pend);
 			plast = pend;
 			/// fill list points
@@ -317,11 +342,15 @@ void Viewer::Scene(int nlColor){
 			}
 		}
 //diag(" item.index %d -> seg = %d", item.index, seg);
-		/// QMap<int index, float speed>
-		speedByLineValid.insert(item.index, speed);
+		/// QMap<int index, float feedrate>
+		feedRateByLineValid.insert(item.index, feedrate);
+		/// QMap<int index, float speedspindle>
+		speedSpindleByLineValid.insert(item.index, speedspindle);
+		//speedSpindleByLineValid.insert(item.index, 0);
 		/// QMap<int index, int seg>
 		segToLineValid.insert(item.index, seg);
-		prevspeed = speed ;
+		prevfeedrate = feedrate ;
+		prevspeedspindle = speedspindle;
     }
     /// last number point [0..npointmax]
 	npointmax = pathComplete.size()-1;
@@ -436,15 +465,16 @@ void Viewer::setVectorUp()
 }
 
 /// T4
-///  display a point
-void Viewer::setLivePoint(QVector3D xyz, int nl)   /// + bool mm  , bool isLiveCP ?
+///  display a point  mm
+void Viewer::setLivePoint(QVector3D xyz, bool /*useMm*/, int nl)   /// + bool mm  , bool isLiveCP ?
 {
 	/// tool
 	if (xyz != vecBanned) {
 		pprev = pcurr;
-//diag("setLivePoint::pprev = %0.2f/%.02f/%0.2f", pprev.x(), pprev.y(), pprev.z() );
+//diag("===========> setLivePoint::pprev = %0.2f/%.02f/%0.2f", pprev.x(), pprev.y(), pprev.z() );
 		pcurr = xyz;
-//diag("setLivePoint::pcurr = %0.2f/%0.2f/%0.2f", pcurr.x(), pcurr.y(), pcurr.z() );
+//diag("===========> setLivePoint::pcurr = %0.2f/%0.2f/%0.2f", pcurr.x(), pcurr.y(), pcurr.z() );
+		//Tool.setUnit(useMm);
 		Tool.setPos(pcurr);
 		gcreateTool();
 		/// scene
@@ -469,14 +499,25 @@ void Viewer::setTotalNumLine(QString str)
 }
 
 ///
-double Viewer::getSpeed(int nl)
+double Viewer::getFeedRate(int nl)
 {
 	double s(SPEED_FAST);
 	if (!mm)
 		s /= MM_IN_AN_INCH;
 	if (nl >= 0 && nl <= linecodeTextmax )  {
-		s = speedToLine.value(nl);
+		s = feedRateToLine.value(nl);
 	}
+	return s;
+}
+
+/// rpm
+double Viewer::getSpeedSpindle(int nl)
+{
+	double s(0);
+	if (nl >= 0 && nl <= linecodeTextmax )  {
+		s = speedSpindleToLine.value(nl);
+	}
+
 	return s;
 }
 
@@ -486,9 +527,10 @@ void Viewer::setNumLine(QString strline)
 {
 	int nl = strline.toUInt();
 	if (nl != linecodeText) {
-		speed = getSpeed(nl);
-		emit setSpeedGcode(speed);
-//diag("nl %d -> speed %0.2f", nl, speed);
+		feedrate = getFeedRate(nl);
+		emit setFeedRateGcode(feedrate);
+		speedspindle = getSpeedSpindle(nl);
+		emit setSpeedSpindleGcode(speedspindle);
 		linecodeText = nl;
 		if (!runcode) {
 			if (repeatPoint->isActive())  {
@@ -496,13 +538,14 @@ void Viewer::setNumLine(QString strline)
 			}
 			ptemp = getLastPoint(nl) ;
 			if (ptemp != vecBanned)  {
-				setLivePoint(ptemp, nl);	// item colored in red
+				setLivePoint(ptemp, mm, nl);	// item colored in red
 			}
 			else  {
-				setLivePoint(pcurr);		// item colored normally
+				setLivePoint(pcurr, mm);		// item colored normally
 			}
 			emit setSegments(getSeg(linecodeText));
 		}
+		/// execute Gcode
 		else {
 //diag("\n");
 			if (pointToLine.contains(nl)) {
@@ -514,7 +557,7 @@ void Viewer::setNumLine(QString strline)
 				nfirstpoint = pointToLine.indexOf(nl);
 				pointsItem  = pathComplete.mid( nfirstpoint, npmax);
 				np = 0;
-//diag("nl %d -> speed %0.2f", nl, speed);
+//diag("nl %d -> speed %0.2f", nl, feedrate);
 				/// first item point
 				ptemp = pointsItem.value(np);
 				QVector3D pc;
@@ -526,14 +569,14 @@ void Viewer::setNumLine(QString strline)
 					// total length mm
 					length =  (ptemp - pc).length();
 					// mm/S
-					speed = speed/60;
+					feedrate /= 60;
 					// total duration
-					msec = 1000*(length /speed);
-//diag("line->nl %d -> length : %5.2f / speed %5.2f -> msec %d", nl, length, speed, msec);
+					msec = 1000*(length /feedrate);
+//diag("line->nl %d -> length : %5.2f / feedrate %5.2f -> msec %d", nl, length, feedrate, msec);
 					/// time mini for one segment = 200 mS
 					float tmini = 200.0;
 					npmax = msec/tmini;
-//diag("npmax = %d", npmax);
+//diag("==>npmax = %d", npmax);
 					if (npmax > 1)  {
 						/// remplir poinstItem  ; firstp = pcur + dp, lastp = ptemp
 						pointsItem.clear();
@@ -541,7 +584,7 @@ void Viewer::setNumLine(QString strline)
 						for (int u = 1; u <= npmax; u++) {
 							ptemp = pc + u*dp ;
 							pointsItem.append(ptemp);
-//diag("line->ptemp = %0.2f/%0.2f/%0.2f", ptemp.x(), ptemp.y(), ptemp.z() );
+//diag("==> line->ptemp = %0.2f/%0.2f/%0.2f", ptemp.x(), ptemp.y(), ptemp.z() );
 						}
 						// !! coefficient !!
 						msec = tmini/5.0;
@@ -557,17 +600,17 @@ void Viewer::setNumLine(QString strline)
 				else {
 					pc = ptemp;
 					ptemp = pointsItem.value(np+1);
-//diag("pc = %0.2f/%0.2f/%0.2f", pc.x(), pc.y(), pc.z() );
-//diag("ptemp = %0.2f/%0.2f/%0.2f", ptemp.x(), ptemp.y(), ptemp.z() );
+//diag("===> pc = %0.2f/%0.2f/%0.2f", pc.x(), pc.y(), pc.z() );
+//diag("===> ptemp = %0.2f/%0.2f/%0.2f", ptemp.x(), ptemp.y(), ptemp.z() );
 					/// a segment length mm
 					length =  (ptemp - pc).length();
 					/// mm/S
-					speed = speed/60;
-					msec = 1000*(length /speed);
+					feedrate /= 60;
+					msec = 1000*(length /feedrate);
 					/// coefficient !!!
 					msec *= 1.5;
 					//int msec = timeItem(npmax, speed);
-//diag("arc->nl %d -> length : %5.2f / speed %5.2f -> msec %d", nl, length, speed, msec);
+//diag("arc->nl %d -> length : %5.2f / feedrate %5.2f -> msec %d", nl, length, feedrate msec);
 					emit setSegments(npmax);
 					/// repeat all msec
 					repeatPoint->start(msec);
@@ -585,14 +628,15 @@ void Viewer::drawItem()
 	else
 	if  (np < npmax) {
 		pp = pointsItem.value(np);
-		setLivePoint(pp, linecodeText);
+		setLivePoint(pp, mm, linecodeText);
+//diag("---> pp = %0.2f/%0.2f/%0.2f", pp.x(), pp.y(), pp.z() );
 		np++ ;
 		if (np >= npmax) {
 			repeatPoint->stop();
 		}
 	}
 }
-
+/// TODO ...
 float Viewer::timeItem(int np, float speed)
 {
 	/// path length between two points
@@ -630,7 +674,7 @@ void Viewer::setVisual(bool valid)
 		npoint = -1 ;
 		linecodeText = 1;
 		ptemp = getLastPoint(linecodeText);
-		setLivePoint(ptemp, linecodeText) ;
+		setLivePoint(ptemp, mm, linecodeText) ;
 	}
 }
 
@@ -638,6 +682,7 @@ void Viewer::setVisual(bool valid)
 void Viewer::setPause(bool valid)
 {
 	pause = valid;
+//diag("Viewer::setPause(%s)", valid==true ?"true":"false" );
 	if (visu) {
 		if (pause) {
 			repeatVisu->stop();
@@ -655,10 +700,11 @@ void Viewer::setPrev()
 			linecodeText--;
 		/// read  one vector
 			ptemp = getLastPoint(linecodeText) ;
-			emit setSpeedGcode(getSpeed(linecodeText)) ;
+			emit setFeedRateGcode(getFeedRate(linecodeText)) ;
+			emit setSpeedSpindleGcode(getSpeedSpindle(linecodeText)) ;
 			emit setLineNum(QString::number(linecodeText));
 			emit setSegments(getSeg(linecodeText));
-			setLivePoint(ptemp, linecodeText);
+			setLivePoint(ptemp, mm, linecodeText);
 		}
 		else
 		if (repeatVisu->isActive())  {
@@ -675,10 +721,11 @@ void Viewer::setNext()
 			linecodeText++;
 			/// read  one vector
 			ptemp = getLastPoint(linecodeText) ;
-			emit setSpeedGcode(getSpeed(linecodeText)) ;
+			emit setFeedRateGcode(getFeedRate(linecodeText)) ;
+			emit setSpeedSpindleGcode(getSpeedSpindle(linecodeText)) ;
 			emit setLineNum(QString::number(linecodeText)) ;
 			emit setSegments(getSeg(linecodeText));
-			setLivePoint(ptemp, linecodeText);
+			setLivePoint(ptemp, mm, linecodeText);
 		}
 		else
 		if (repeatVisu->isActive())  {
@@ -711,10 +758,11 @@ void Viewer::setVisualAuto()
 			/// read  one vector
 			ptemp = pathComplete.at(npoint) ;
 			linecodeText = pointToLine.at(npoint);
-			emit setSpeedGcode(getSpeed(linecodeText)) ;
+			emit setFeedRateGcode(getFeedRate(linecodeText)) ;
+			emit setSpeedSpindleGcode(getSpeedSpindle(linecodeText)) ;
 			emit setLineNum(QString::number(linecodeText)) ;
 			emit setSegments(getSeg(linecodeText));
-			setLivePoint(ptemp, linecodeText);
+			setLivePoint(ptemp, mm, linecodeText);
 		}
 		else
 		if (repeatVisu->isActive()) {
@@ -805,6 +853,33 @@ void Viewer::setG0(bool with)
 		gcreateScene();
 		update();
 	}
+}
+/// T4
+///  display a point, relative mode
+void Viewer::setLiveRelPoint(QVector3D dxyz, int nl)   /// + bool mm  , bool isLiveCP ?
+{
+	/// tool
+	if (dxyz != vecBanned) {
+		pprev = pcurr;
+//diag("setLiveRelPoint::pprev = %0.2f/%.02f/%0.2f", pprev.x(), pprev.y(), pprev.z() );
+		pcurr += dxyz;
+//diag("==============> setLiveRelPoint::pcurr = %0.2f/%0.2f/%0.2f", pcurr.x(), pcurr.y(), pcurr.z() );
+		Tool.setPos(pcurr);
+		gcreateTool();
+		/// scene
+		if (nl) {
+			gcreateScene(nl);
+		}
+		else   {
+			gcreateScene() ;
+		}
+		update();
+	}
+	// display colored line to 'visuGcode'
+	emit setActiveLineVisuGcode(nl, true);
+	// display xyz
+	if (visu || posReqKind == POS_SYNC)
+		emit updateLCD(pcurr);
 }
 
 ///-----------------------------------------------------------------------------

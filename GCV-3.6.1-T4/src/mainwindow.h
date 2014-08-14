@@ -18,7 +18,6 @@
 #include <QCloseEvent>
 #include <QItemDelegate>
 /// T4
-//#include <QScrollBar>
 #include <QListView>
 #include "about.h"
 #include "definitions.h"
@@ -34,11 +33,9 @@
 #define APPLICATION_NAME "GrblController"
 #define DOMAIN_NAME "org.zapmaker"
 
-#define TAB_AXIS_INDEX          0
-#define TAB_VISUALIZER_INDEX    1
-#define TAB_ADVANCED_INDEX      2
 /// T4
-#define TAB_VISU3D_INDEX        3
+#define TAB_VISUALIZER_INDEX    0
+#define TAB_VISU3D_INDEX        1
 
 #define TAB_CONSOLE_INDEX       0
 #define TAB_VISUGCODE_INDEX     1
@@ -46,42 +43,6 @@
 #define CENTER_POS              40
 
 #define MAX_STATUS_LINES_WHEN_ACTIVE        200
-
-/* testing optimizing scrollbar, doesn't work right
-class MyItemDelegate : public QItemDelegate
-{
-private:
-    int width;
-    QAbstractItemView *parentWidget;
-
-public:
-
-    MyItemDelegate(QAbstractItemView *p) : parentWidget(p) {}
-
-    void setWidth(int w)
-    {
-        width = w;
-    }
-
-    void drawDisplay(QPainter *painter,const
-    QStyleOptionViewItem &option,const QRect &rect,const QString &text) const{
-
-        QRect tempRect(rect);
-        tempRect.setWidth(parentWidget->width());
-        QItemDelegate::drawDisplay(painter,option,tempRect,text);
-
-    }
-
-    QSize sizeHint(const QStyleOptionViewItem & option, const
-    QModelIndex & index ) const  {
-
-        QListView *list = qobject_cast<QListView*>(parentWidget);
-        QSize newSize(QItemDelegate::sizeHint(option,index));
-        if( list ) newSize.setWidth( width );
-        return newSize;
-    }
-};
-*/
 
 namespace Ui {
 class MainWindow;
@@ -113,30 +74,60 @@ signals:
     void setProgress(int percent);
     void setRuntime(QString runtime);
     void sendSetHome();
-///  T3
+/// T3, T4
+  //  void sendGrblPause(bool);
+    void sendGrblHelp();
+    void sendGrblParserState();
+    void sendGrblParameters();
+    void sendGrblBuildInfo();
+    void sendGrblStartupBlocks();
     void sendGrblCheck(bool);
-
-    void sendGrblReset();
     void sendGrblUnlock();
+    void sendGrblHomingCycle();
+    void sendGrblCycleStart();
+    void sendGrblFeedHold() ;
+    void sendGrblStatus();
+    void sendGrblReset();
+
     void goToHome();
 /// T4
+    void goToHomeAxis(char axis);
     void setLineCode(QString) ;
     void setItems(QList<PosItem>);
     void setTotalNumLine(QString);
     void setNumLine(QString);
-    void setSpeedToLine(QList<double>) ;
+    void setLivePoint(QVector3D, bool) ;
+    void setLiveRelPoint(QVector3D) ;
+/// T4
+    void setFeedRateToLine(QList<double>) ;
+    void setSpeedSpindleToLine(QList<double>) ;
     void runCode(bool, int);
     void setVisual(bool);
     void setPause(bool);
     void setTol(double);
     void setPosReqKind(int);
-  //  void setUnits(QString);
 /// <-
 
 private slots:
+/// T4
+    void pauseSend(bool);   // suspend sendFile()
+    void grblHelp();
+    void grblSettings();
+    void grblParameters() ;
+    void grblParserState() ;
+    void grblBuildInfo();
+    void grblStartupBlocks();
+    void grblCheck(bool);
+    void grblUnlock();
+    void grblHomingCycle() ;
+// not used
+void grblCycleStart();
+void grblFeedHold();
+    void grblStatus();
+    void grblReset();
+
     //buttons
     void openPort();
-    void setGRBL();
     //Adjust
     void decX();
     void decY();
@@ -146,12 +137,18 @@ private slots:
     void incX();
     void incY();
     void incZ();
-    void setHome();
-     //manual
-    void gotoXYZFourth();
-        //send Gcode
-/// T3
+/// T5
+    void homeX();
+    void homeY();
+    void homeZ();
+    void homeFourth();
 
+    void endHomeAxis();
+    void setHome();
+     //manualhomeFourth()
+    void gotoXYZFourth();
+
+/// T3
     void begin();
     void openFile();
     void stop();
@@ -167,34 +164,29 @@ private slots:
 
     //communications
         //options
-    void setSettings();
+    void setSettingsOptions();
+    void setSettingsOptionsUseMm();
         //thread
     void receiveList(QString msg);
     void receiveListFull(QStringList list);
     void receiveListOut(QString msg);
-    void receiveMsg(QString msg);
+    void receiveMsgSatusBar(QString msg);
     //menu bar
     void getOptions();
     void showAbout();
     void enableGrblDialogButton();
 
-    void grblReset();
-    void grblUnlock();
     void updateCoordinates(Coord3D machineCoord, Coord3D workCoord);
+
     void goHomeSafe();
     void zJogSliderDisplay(int pos);
     void zJogSliderPressed();
     void zJogSliderReleased();
-/// T4
-/*
-    void doScroll();
-    void statusSliderPressed();
-    void statusSliderReleased();
-*/
+
     void setQueuedCommands(int commandCount, bool running);
     void setLcdState(bool valid);
-    void refreshPosition();
-//    void comboStepChanged(const QString& text);
+  //  void refreshPosition();
+
 /// T2
     void setLinesFile(QString linesFile, bool check);
 /// T4 3D
@@ -202,21 +194,26 @@ private slots:
 /// T4  for 'visuGcode'
     void toVisual(bool);
     void toPause(bool);
-    void toCheck(bool);
     void on_cursorVisuGcode();
     void setActiveLineVisuGcode(int, bool);
     void setLCDValue(int value);
     // change  text "mm" <=> "in"
-    void setUnitsAll(bool);
+    void setUnitMmAll(bool);
     void stepChanged(int);
     void enableManualControl(bool);
     void enableTabVisuControls(bool);
+    void enableButtonGrblControls(bool);
+
+    void toClearSatusList();
+    void toPrintStatusList();
+    void toPrintVisual();
 
 private:
     // enums
     enum
     {
-        NO_ITEM = 0, X_ITEM, Y_ITEM, Z_ITEM, I_ITEM, J_ITEM, K_ITEM, P_ITEM, F_ITEM
+        NO_ITEM = 0, X_ITEM, Y_ITEM, Z_ITEM, I_ITEM, J_ITEM, K_ITEM,
+        P_ITEM, F_ITEM, S_ITEM
     };
     enum
     {
@@ -231,6 +228,8 @@ private:
 
     Timer runtimeTimer;
     QThread runtimeTimerThread;
+
+    Options opt;
 
     //variables
     bool invX;
@@ -252,7 +251,6 @@ private:
     bool absoluteAfterAxisAdj;
     bool checkLogWrite;
 /// T4
-//    QTime scrollStatusTimer;
     QTime queuedCommandsEmptyTimer;
     QTime queuedCommandsRefreshTimer;
     QList<PosItem> posList;
@@ -261,35 +259,33 @@ private:
     int sliderZCount;
     bool promptedAggrPreload;
     ControlParams controlParams;
-/// T4
-/*
-    QTimer *scrollTimer;
-    bool scrollRequireMove;
-    bool scrollPressed;
-*/
+
     bool queuedCommandsStarved;
     int lastQueueCount;
     int queuedCommandState;
     QStringList fullStatus;
     bool lastLcdStateValid;
     float jogStep;
-    QString jogStepStr;
+   // QString jogStepStr;
 ///  T3
     bool checkState;
+    bool sendButtonCheck;
     bool openState;
     int totalLinesFile;
 /// T4 for 'visuGcode'
     int activeLine;
+    bool runFile, cmdMan;
     /// mode display request
     int posReqKind;
 
-    //methods
+// methods
+    void setUseMm(bool);
     int SendJog(QString strline);
     void readSettings();
     void writeSettings();
     void addToStatusList(bool in, QString msg);
     void addToStatusList(QStringList& list);
-    void disableAllButtons();void setUnits(bool);
+    void enableAllButtons(bool);
     void openPortCtl(bool reopen);
     void resetProgress();
     void refreshLcd();
@@ -302,17 +298,10 @@ private:
     bool processGCode(QString inputLine,
                         double& x, double& y, double& z,
                         double& i, double& j, double& k,
-                        int& p, bool& arc, bool& cw, bool& mm, int& g,
-                        int& plane, bool& helix, double& f
+                        int& p, bool& arc, bool& cw, bool& mm,
+                        int& g, int& plane, bool& helix, double& f, double& ss
                         );
-   /*
-    bool processGCode(QString inputLine,
-                        QVector3D& xyz,
-                        QVector3D& ijk,
-                        int& p, bool& arc, bool& cw, bool& mm, int& g,
-                        int& plane, bool& helix, double& f
-                        );
-    */
+
 /// <-
     double decodeLineItem(const QString& item, const int next, bool& valid, int& nextIsValue);
     double decodeDouble(QString value, bool& valid);
