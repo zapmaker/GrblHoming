@@ -164,7 +164,7 @@ int RS232::SendBuf(const char *buf, int size)
     char b[300] = {0};
     memcpy(b, buf, size);
 #ifdef DIAG
-    printf("Sending to port %s [%s]:", port->portName().toLocal8Bit().constData(), b);
+    printf("Sending to port %s [%s]:", qPrintable(port->portName()), b);
     for (int x= 0; x < size; x++)
     {
         printf("%02X ", buf[x]);

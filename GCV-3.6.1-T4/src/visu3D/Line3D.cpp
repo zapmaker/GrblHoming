@@ -15,7 +15,7 @@
 Line3D::Line3D() :
 	pstart(), pend(),
 	color (Qt::black),
-	speed(SPEED_DEFAULT)
+	feedrate(SPEED_DEFAULT)
 
 {
 }
@@ -24,7 +24,7 @@ Line3D::Line3D( const QVector3D s, const QVector3D e) :
         pstart(s),
         pend(e),
         color(Qt::blue), linewidth(1),
-        speed(SPEED_DEFAULT)
+        feedrate(SPEED_DEFAULT)
 {
 }
 
@@ -59,7 +59,7 @@ void Line3D::setLineWidth(int lw)
 void Line3D::setSpeed (double f)
 {
 	if (f > SPEED_MIN && f <= SPEED_MAX)
-		speed = f;
+		feedrate = f;
 }
 
 void Line3D::MinMax(QVector3D& pmin, QVector3D& pmax)

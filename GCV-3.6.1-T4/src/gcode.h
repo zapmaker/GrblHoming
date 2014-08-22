@@ -125,7 +125,6 @@ public slots:
     void setResponseWait(ControlParams controlParams);
     void grblSetHome();
 /// T4
-  //  void sendGrblPause(bool);
     void sendGrblHelp();
     void sendGrblParameters() ;
     void sendGrblParserState();
@@ -138,7 +137,6 @@ public slots:
     void sendGrblFeedHold() ;
     void sendGrblStatus();
     void sendGrblReset();
-
 /// T3
     void setPosReqKind(int);
 
@@ -188,6 +186,8 @@ private:
 /// T4
     QString getNumGrblUnit();
     bool sendToPort(const char *buf, QString txt=QString());
+
+    void gotoPause();
 
 private:
     RS232 port;

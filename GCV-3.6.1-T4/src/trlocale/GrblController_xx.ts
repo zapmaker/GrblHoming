@@ -47,271 +47,271 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="431"/>
+        <location filename="../gcode.cpp" line="436"/>
         <source>Got Grbl Version (Parsed:) %d.%d%c%c ($$=%d)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="604"/>
-        <location filename="../gcode.cpp" line="2282"/>
+        <location filename="../gcode.cpp" line="609"/>
+        <location filename="../gcode.cpp" line="2312"/>
         <source>Sending to port failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="300"/>
+        <location filename="../gcode.cpp" line="305"/>
         <source>SENDING: 0x%02X (CTRL-X) to check presence of Grbl
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="503"/>
+        <location filename="../gcode.cpp" line="508"/>
         <source>Port not available yet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="566"/>
+        <location filename="../gcode.cpp" line="571"/>
         <source>Buffer size too small</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="579"/>
+        <location filename="../gcode.cpp" line="584"/>
         <source>SENDING[%d]: 0x%02X (CTRL-X)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="581"/>
+        <location filename="../gcode.cpp" line="586"/>
         <source>SENDING[%d]: %s
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="618"/>
+        <location filename="../gcode.cpp" line="623"/>
         <source>WAITFOROK FAILED
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="624"/>
+        <location filename="../gcode.cpp" line="629"/>
         <source>Wait for ok failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="745"/>
-        <location filename="../gcode.cpp" line="949"/>
+        <location filename="../gcode.cpp" line="750"/>
+        <location filename="../gcode.cpp" line="954"/>
         <source>Error reading data from COM port
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="767"/>
+        <location filename="../gcode.cpp" line="772"/>
         <source>Unexpected: list is empty (o)!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="772"/>
-        <location filename="../gcode.cpp" line="790"/>
+        <location filename="../gcode.cpp" line="777"/>
+        <location filename="../gcode.cpp" line="795"/>
         <source>GOT[%d]: &apos;%s&apos; for &apos;%s&apos; (aggressive)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="783"/>
+        <location filename="../gcode.cpp" line="788"/>
         <source>Error?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="785"/>
+        <location filename="../gcode.cpp" line="790"/>
         <source>Unexpected: list is empty (e)!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="804"/>
+        <location filename="../gcode.cpp" line="809"/>
         <source>GOT: &apos;%s&apos; (aggressive)
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="841"/>
-        <location filename="../gcode.cpp" line="960"/>
+        <location filename="../gcode.cpp" line="846"/>
+        <location filename="../gcode.cpp" line="965"/>
         <source>GOT:%s
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="897"/>
+        <location filename="../gcode.cpp" line="902"/>
         <source>Wait interrupted by user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="968"/>
+        <location filename="../gcode.cpp" line="973"/>
         <source>Expecting Grbl version string. Unable to parse response.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="995"/>
+        <location filename="../gcode.cpp" line="1000"/>
         <source>No data from COM port after connect. Expecting Grbl version string.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1018"/>
+        <location filename="../gcode.cpp" line="1023"/>
         <source>Wait interrupted by user (startup)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1127"/>
+        <location filename="../gcode.cpp" line="1133"/>
         <source>Incorrect - extra axis present in hardware but options set for only 3 axes. Please fix options.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1136"/>
+        <location filename="../gcode.cpp" line="1142"/>
         <source>Incorrect - extra axis not present in hardware but options set for &gt; 3 axes. Please fix options.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1173"/>
+        <location filename="../gcode.cpp" line="1183"/>
         <source>Decoded: State:%s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1175"/>
+        <location filename="../gcode.cpp" line="1185"/>
         <source>Decoded: MPos: %f,%f,%f WPos: %f,%f,%f
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1180"/>
+        <location filename="../gcode.cpp" line="1190"/>
         <source>Decoded: MPos: %f,%f,%f,%f WPos: %f,%f,%f,%f
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1239"/>
+        <location filename="../gcode.cpp" line="1249"/>
         <source>GOT-TE:%s
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1261"/>
+        <location filename="../gcode.cpp" line="1271"/>
         <source>Sending file &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1398"/>
+        <location filename="../gcode.cpp" line="1518"/>
         <source>Pause program Grbl ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1400"/>
-        <source>Pause for sending &apos;Gcode&apos; lines to &apos;Grbl&apos; ...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../gcode.cpp" line="1410"/>
+        <location filename="../gcode.cpp" line="1537"/>
         <source>Resume program Grbl ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1412"/>
+        <location filename="../gcode.cpp" line="1539"/>
         <source>Resume sending &apos;Gcode&apos; lines to &apos;Grbl&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1446"/>
+        <location filename="../gcode.cpp" line="1442"/>
         <source>Gave up waiting for OK
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1466"/>
+        <location filename="../gcode.cpp" line="1462"/>
         <source>Code sent successfully with %1 error(s):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1478"/>
+        <location filename="../gcode.cpp" line="1474"/>
         <source>Code sent successfully with no errors.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1485"/>
+        <location filename="../gcode.cpp" line="1481"/>
         <source>Filtered %1 commands:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1498"/>
+        <location filename="../gcode.cpp" line="1494"/>
         <source>Process interrupted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1533"/>
+        <location filename="../gcode.cpp" line="1520"/>
+        <source>Pause for sending &apos;Gcode&apos; lines to &apos;Grbl&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../gcode.cpp" line="1563"/>
         <source>Removed unsupported command &apos;%1&apos; part of &apos;%2&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1549"/>
+        <location filename="../gcode.cpp" line="1579"/>
         <source>Removed unsupported G command &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1562"/>
+        <location filename="../gcode.cpp" line="1592"/>
         <source>Removed unsupported M command &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1582"/>
+        <location filename="../gcode.cpp" line="1612"/>
         <source>Removed unsupported command &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1715"/>
+        <location filename="../gcode.cpp" line="1745"/>
         <source>Unable to remove enough decimal places for command (will be truncated): %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1719"/>
+        <location filename="../gcode.cpp" line="1749"/>
         <source>Error, insufficent reduction &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1721"/>
+        <location filename="../gcode.cpp" line="1751"/>
         <source>Precision reduced &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1918"/>
+        <location filename="../gcode.cpp" line="1948"/>
         <source>Z-Rate Limit: [%1]=&gt;[%2]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1923"/>
+        <location filename="../gcode.cpp" line="1953"/>
         <source>Z-Rate Limit: [%1]=&gt;[%2,%3]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="1968"/>
+        <location filename="../gcode.cpp" line="1998"/>
         <source>XY-Rate Limit FIX: [%1]=&gt;[%2]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="2188"/>
+        <location filename="../gcode.cpp" line="2236"/>
         <source>GCV use &apos;inches&apos; but Grbl parser set for &apos;mm&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="2189"/>
-        <location filename="../gcode.cpp" line="2207"/>
+        <location filename="../gcode.cpp" line="2219"/>
+        <location filename="../gcode.cpp" line="2237"/>
         <source>Correction Grbl ended.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="2206"/>
+        <location filename="../gcode.cpp" line="2218"/>
         <source>GCV use &apos;mm&apos; but Grbl parser set for &apos;inches&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gcode.cpp" line="266"/>
-        <location filename="../gcode.cpp" line="2030"/>
+        <location filename="../gcode.cpp" line="271"/>
+        <location filename="../gcode.cpp" line="2060"/>
         <source>Bad command: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -552,7 +552,7 @@
     <name>MainWindow</name>
     <message>
         <location filename="../forms/mainwindow.ui" line="642"/>
-        <location filename="../mainwindow.cpp" line="627"/>
+        <location filename="../mainwindow.cpp" line="630"/>
         <source>Check</source>
         <translation type="unfinished"></translation>
     </message>
@@ -568,7 +568,7 @@
     </message>
     <message>
         <location filename="../forms/mainwindow.ui" line="777"/>
-        <location filename="../mainwindow.cpp" line="2235"/>
+        <location filename="../mainwindow.cpp" line="2238"/>
         <source>Animate</source>
         <translation type="unfinished"></translation>
     </message>
@@ -704,28 +704,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3590"/>
+        <location filename="../forms/mainwindow.ui" line="3604"/>
         <source>With or without bounding box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3593"/>
+        <location filename="../forms/mainwindow.ui" line="3607"/>
         <source>Bbox</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3603"/>
+        <location filename="../forms/mainwindow.ui" line="3617"/>
         <source>with or without rapid movements</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1708"/>
+        <location filename="../mainwindow.cpp" line="1701"/>
         <source>Z Jog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3707"/>
-        <location filename="../mainwindow.cpp" line="1882"/>
+        <location filename="../forms/mainwindow.ui" line="3721"/>
+        <location filename="../mainwindow.cpp" line="1875"/>
         <source>Spindle On</source>
         <translation type="unfinished"></translation>
     </message>
@@ -738,12 +738,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1717"/>
+        <location filename="../mainwindow.cpp" line="1710"/>
         <source>C Jog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3238"/>
+        <location filename="../forms/mainwindow.ui" line="3252"/>
         <source>Visualizer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -779,8 +779,8 @@
     </message>
     <message>
         <location filename="../forms/mainwindow.ui" line="233"/>
-        <location filename="../mainwindow.cpp" line="574"/>
-        <location filename="../mainwindow.cpp" line="2279"/>
+        <location filename="../mainwindow.cpp" line="577"/>
+        <location filename="../mainwindow.cpp" line="2282"/>
         <source>Pause</source>
         <translation type="unfinished"></translation>
     </message>
@@ -880,8 +880,8 @@
         <location filename="../forms/mainwindow.ui" line="1829"/>
         <location filename="../forms/mainwindow.ui" line="2108"/>
         <location filename="../forms/mainwindow.ui" line="2386"/>
-        <location filename="../mainwindow.cpp" line="2345"/>
-        <location filename="../mainwindow.cpp" line="2377"/>
+        <location filename="../mainwindow.cpp" line="2348"/>
+        <location filename="../mainwindow.cpp" line="2380"/>
         <source>mm</source>
         <translation type="unfinished"></translation>
     </message>
@@ -896,7 +896,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3704"/>
+        <location filename="../forms/mainwindow.ui" line="3718"/>
         <source>Spindle control: running -&gt; yellow</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1084,79 +1084,79 @@ Move the axis to the positive values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3337"/>
+        <location filename="../forms/mainwindow.ui" line="3220"/>
+        <source>The current position will be the new zero position :G92 x0 y0 z0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="3351"/>
         <source>Viewer3D</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3437"/>
+        <location filename="../forms/mainwindow.ui" line="3451"/>
         <source>Perspective view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3454"/>
+        <location filename="../forms/mainwindow.ui" line="3468"/>
         <source>Front view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3468"/>
+        <location filename="../forms/mainwindow.ui" line="3482"/>
         <source>Back view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3482"/>
+        <location filename="../forms/mainwindow.ui" line="3496"/>
         <source>Left view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3496"/>
+        <location filename="../forms/mainwindow.ui" line="3510"/>
         <source>Right view </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3510"/>
+        <location filename="../forms/mainwindow.ui" line="3524"/>
         <source>Bottom view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3524"/>
+        <location filename="../forms/mainwindow.ui" line="3538"/>
         <source>Top view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3538"/>
+        <location filename="../forms/mainwindow.ui" line="3552"/>
         <source>Vector up along Y axis </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3565"/>
+        <location filename="../forms/mainwindow.ui" line="3579"/>
         <source>tool selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3571"/>
+        <location filename="../forms/mainwindow.ui" line="3585"/>
         <source>Tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3606"/>
+        <location filename="../forms/mainwindow.ui" line="3620"/>
         <source>G0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3638"/>
-        <location filename="../forms/mainwindow.ui" line="3641"/>
+        <location filename="../forms/mainwindow.ui" line="3652"/>
+        <location filename="../forms/mainwindow.ui" line="3655"/>
         <source>Help 3D</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3672"/>
+        <location filename="../forms/mainwindow.ui" line="3686"/>
         <source>Grbl version</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../forms/mainwindow.ui" line="3744"/>
-        <source>The current position will be the new zero position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1165,53 +1165,63 @@ Move the axis to the positive values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3659"/>
+        <location filename="../forms/mainwindow.ui" line="3673"/>
         <source>Firmware :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3678"/>
-        <location filename="../mainwindow.cpp" line="824"/>
+        <location filename="../forms/mainwindow.ui" line="3692"/>
+        <location filename="../mainwindow.cpp" line="827"/>
         <source>none</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../forms/mainwindow.ui" line="3750"/>
-        <source>= Zero Position</source>
+        <source>Queue clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../forms/mainwindow.ui" line="3771"/>
-        <source>&amp;Help</source>
+        <source>The current position will be the new zero position  :G92 x0 y0 z0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../forms/mainwindow.ui" line="3777"/>
-        <source>&amp;Tools</source>
+        <source>= Zero Position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/mainwindow.ui" line="3783"/>
-        <source>&amp;File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../forms/mainwindow.ui" line="3794"/>
-        <source>&amp;About</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../forms/mainwindow.ui" line="3799"/>
-        <source>&amp;Options</source>
+        <location filename="../forms/mainwindow.ui" line="3798"/>
+        <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../forms/mainwindow.ui" line="3804"/>
+        <source>&amp;Tools</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="3810"/>
+        <source>&amp;File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="3821"/>
+        <source>&amp;About</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="3826"/>
+        <source>&amp;Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindow.ui" line="3831"/>
         <source>E&amp;xit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="365"/>
+        <location filename="../mainwindow.cpp" line="369"/>
         <source>You appear to have upgraded to the latest version of Grbl Controller. Please be aware that as of version 3.4 the default behavior of sending commands to Grbl has been changed to send them as fast as possible (Aggressive preload mode).
 
 Your settings have been changed to enable this mode. Why? Because it provides the most optimal use of Grbl and greatly reduces the time to finish a typical job.
@@ -1220,12 +1230,12 @@ What does this mean to you? Arc commands will now run smoother and faster than b
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="736"/>
+        <location filename="../mainwindow.cpp" line="739"/>
         <source>User clicked Port Open/Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="487"/>
+        <location filename="../mainwindow.cpp" line="490"/>
         <source>Do you want to zero the displayed position before proceeding?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1235,47 +1245,47 @@ What does this mean to you? Arc commands will now run smoother and faster than b
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="51"/>
+        <location filename="../mainwindow.cpp" line="53"/>
         <source>%s has started</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="384"/>
+        <location filename="../mainwindow.cpp" line="388"/>
         <source>No tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="386"/>
+        <location filename="../mainwindow.cpp" line="390"/>
         <source>Mini 1 mm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="388"/>
+        <location filename="../mainwindow.cpp" line="392"/>
         <source>Hemi 3 mm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="390"/>
+        <location filename="../mainwindow.cpp" line="394"/>
         <source>Right 3 mm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="392"/>
+        <location filename="../mainwindow.cpp" line="396"/>
         <source>Sharp 3 mm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="394"/>
+        <location filename="../mainwindow.cpp" line="398"/>
         <source>Short 3 mm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="430"/>
+        <location filename="../mainwindow.cpp" line="433"/>
         <source>%s has stopped</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="578"/>
+        <location filename="../mainwindow.cpp" line="581"/>
         <source>Resume</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1295,120 +1305,120 @@ What does this mean to you? Arc commands will now run smoother and faster than b
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1711"/>
+        <location filename="../mainwindow.cpp" line="1704"/>
         <source>A Jog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1714"/>
+        <location filename="../mainwindow.cpp" line="1707"/>
         <source>B Jog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1720"/>
+        <location filename="../mainwindow.cpp" line="1713"/>
         <source>U Jog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1723"/>
+        <location filename="../mainwindow.cpp" line="1716"/>
         <source>V Jog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1726"/>
+        <location filename="../mainwindow.cpp" line="1719"/>
         <source>W Jog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1882"/>
+        <location filename="../mainwindow.cpp" line="1875"/>
         <source>Spindle Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1993"/>
+        <location filename="../mainwindow.cpp" line="1985"/>
         <source>Unexpected type %c</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2045"/>
+        <location filename="../mainwindow.cpp" line="2037"/>
         <source>Usr chg: pos=%d new=%d
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2047"/>
+        <location filename="../mainwindow.cpp" line="2039"/>
         <source>Usr chg: pos=%.1f new=%.1f
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2054"/>
+        <location filename="../mainwindow.cpp" line="2046"/>
         <source>Usr chg no slider: %d
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2056"/>
+        <location filename="../mainwindow.cpp" line="2048"/>
         <source>Usr chg no slider: %.1f
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2065"/>
+        <location filename="../mainwindow.cpp" line="2057"/>
         <source>Pressed and stopped
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2070"/>
+        <location filename="../mainwindow.cpp" line="2062"/>
         <source>Pressed not stopped
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2076"/>
+        <location filename="../mainwindow.cpp" line="2068"/>
         <source>Released
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="614"/>
+        <location filename="../mainwindow.cpp" line="617"/>
         <source>During the mode &apos;Check &apos;does not use the command &apos;$C&apos; please</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="624"/>
+        <location filename="../mainwindow.cpp" line="627"/>
         <source>No check</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="654"/>
+        <location filename="../mainwindow.cpp" line="657"/>
         <source>With &apos;Grbl Settings&apos; you must validate the homing cycle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2233"/>
+        <location filename="../mainwindow.cpp" line="2236"/>
         <source>No animate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2360"/>
+        <location filename="../mainwindow.cpp" line="2363"/>
         <source>in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2368"/>
+        <location filename="../mainwindow.cpp" line="2371"/>
         <source>mn</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2375"/>
+        <location filename="../mainwindow.cpp" line="2378"/>
         <source>deg.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../forms/mainwindow.ui" line="808"/>
-        <location filename="../mainwindow.cpp" line="2273"/>
+        <location filename="../mainwindow.cpp" line="2276"/>
         <source>Run</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1766,27 +1776,27 @@ What does this mean to you? Arc commands will now run smoother and faster than b
 <context>
     <name>Viewer</name>
     <message>
-        <location filename="../visu3D/viewer3D.cpp" line="382"/>
+        <location filename="../visu3D/viewer3D.cpp" line="385"/>
         <source>&lt;h3&gt;Version %1&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../visu3D/viewer3D.cpp" line="383"/>
+        <location filename="../visu3D/viewer3D.cpp" line="386"/>
         <source>&lt;code&gt;by LETARTARE  %1&lt;/code&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../visu3D/viewer3D.cpp" line="384"/>
+        <location filename="../visu3D/viewer3D.cpp" line="387"/>
         <source>&lt;br&gt;&lt;br&gt; for  &lt;h2&gt; %1&lt;/h2&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../visu3D/viewer3D.cpp" line="387"/>
+        <location filename="../visu3D/viewer3D.cpp" line="390"/>
         <source>&lt;br&gt;Displays the &lt;b&gt;Path&lt;/b&gt; GCode using &apos;OpenGL&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../visu3D/viewer3D.cpp" line="388"/>
+        <location filename="../visu3D/viewer3D.cpp" line="391"/>
         <source>&lt;br&gt;&lt;br&gt;&lt;i&gt;Move the camera using the mouse.&lt;/i&gt;</source>
         <translation type="unfinished"></translation>
     </message>

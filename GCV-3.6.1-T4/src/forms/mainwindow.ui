@@ -273,7 +273,7 @@
            <item row="1" column="1">
             <widget class="QProgressBar" name="progressQueuedCommands">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -1074,7 +1074,7 @@
                    <string/>
                   </property>
                   <property name="icon">
-                   <iconset resource="../GrblController.qrc">
+                   <iconset>
                     <normaloff>:/img/up.PNG</normaloff>:/img/up.PNG</iconset>
                   </property>
                   <property name="checkable">
@@ -1160,7 +1160,7 @@
                    <string/>
                   </property>
                   <property name="icon">
-                   <iconset resource="../GrblController.qrc">
+                   <iconset>
                     <normaloff>:/img/down.PNG</normaloff>:/img/down.PNG</iconset>
                   </property>
                   <property name="checkable">
@@ -1950,7 +1950,7 @@ otherwise all text</string>
             </property>
             <property name="icon">
              <iconset resource="../GrblController.qrc">
-              <normaloff>:/img/left.PNG</normaloff>:/img/left.PNG</iconset>
+              <normaloff>:/img/left.png</normaloff>:/img/left.png</iconset>
             </property>
            </widget>
           </item>
@@ -1970,7 +1970,7 @@ otherwise all text</string>
             </property>
             <property name="icon">
              <iconset resource="../GrblController.qrc">
-              <normaloff>:/img/right.PNG</normaloff>:/img/right.PNG</iconset>
+              <normaloff>:/img/right.png</normaloff>:/img/right.png</iconset>
             </property>
            </widget>
           </item>
@@ -2228,7 +2228,7 @@ otherwise all text</string>
             </property>
             <property name="icon">
              <iconset resource="../GrblController.qrc">
-              <normaloff>:/img/down.PNG</normaloff>:/img/down.PNG</iconset>
+              <normaloff>:/img/down.png</normaloff>:/img/down.png</iconset>
             </property>
            </widget>
           </item>
@@ -2248,7 +2248,7 @@ otherwise all text</string>
             </property>
             <property name="icon">
              <iconset resource="../GrblController.qrc">
-              <normaloff>:/img/up.PNG</normaloff>:/img/up.PNG</iconset>
+              <normaloff>:/img/up.png</normaloff>:/img/up.png</iconset>
             </property>
            </widget>
           </item>
@@ -2567,7 +2567,7 @@ otherwise all text</string>
             </property>
             <property name="icon">
              <iconset resource="../GrblController.qrc">
-              <normaloff>:/img/down.PNG</normaloff>:/img/down.PNG</iconset>
+              <normaloff>:/img/down.png</normaloff>:/img/down.png</iconset>
             </property>
            </widget>
           </item>
@@ -2678,7 +2678,7 @@ otherwise all text</string>
             </property>
             <property name="icon">
              <iconset resource="../GrblController.qrc">
-              <normaloff>:/img/up.PNG</normaloff>:/img/up.PNG</iconset>
+              <normaloff>:/img/up.png</normaloff>:/img/up.png</iconset>
             </property>
            </widget>
           </item>
@@ -2778,7 +2778,7 @@ Move the axis to negative values</string>
             </property>
             <property name="icon">
              <iconset resource="../GrblController.qrc">
-              <normaloff>:/img/left.PNG</normaloff>:/img/left.PNG</iconset>
+              <normaloff>:/img/left.png</normaloff>:/img/left.png</iconset>
             </property>
            </widget>
           </item>
@@ -2799,7 +2799,7 @@ Move the axis to the positive values</string>
             </property>
             <property name="icon">
              <iconset resource="../GrblController.qrc">
-              <normaloff>:/img/right.PNG</normaloff>:/img/right.PNG</iconset>
+              <normaloff>:/img/right.png</normaloff>:/img/right.png</iconset>
             </property>
            </widget>
           </item>
@@ -3210,7 +3210,21 @@ Move the axis to the positive values</string>
           </property>
           <property name="icon">
            <iconset resource="../GrblController.qrc">
-            <normaloff>:/img/homeAll.png</normaloff>:/img/homeAll.png</iconset>
+            <normaloff>:/img/homeall.png</normaloff>:/img/homeall.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QPushButton" name="btnSetG92">
+          <property name="toolTip">
+           <string>The current position will be the new zero position :G92 x0 y0 z0</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../GrblController.qrc">
+            <normaloff>:/img/isoview1.png</normaloff>:/img/isoview1.png</iconset>
           </property>
          </widget>
         </item>
@@ -3728,7 +3742,20 @@ Move the axis to the positive values</string>
          </spacer>
         </item>
         <item>
+         <widget class="QPushButton" name="btnQueueClear">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Queue clear</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="btnSetHome">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
             <horstretch>0</horstretch>
@@ -3741,7 +3768,7 @@ Move the axis to the positive values</string>
            </font>
           </property>
           <property name="toolTip">
-           <string>The current position will be the new zero position</string>
+           <string>The current position will be the new zero position  :G92 x0 y0 z0</string>
           </property>
           <property name="autoFillBackground">
            <bool>false</bool>

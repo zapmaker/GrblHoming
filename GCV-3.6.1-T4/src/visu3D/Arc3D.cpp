@@ -21,7 +21,7 @@ Arc3D::Arc3D():
 	astart = aend = 0.0;
 	color = Qt::black;   /// noir
 	linewidth = 1;
-	speed = SPEED_DEFAULT;
+	feedrate = SPEED_DEFAULT;
 	// no paths
 	interpolated = false;
 	 path.clear();
@@ -42,7 +42,7 @@ Arc3D::Arc3D(uint8_t p, bool dir,  QVector3D s, QVector3D e, QVector3D o, uint8_
 	helix(h),
 	pcenter(pstart + poffset),
 	color(Qt::darkGreen),  /// green
-	linewidth(1), speed(SPEED_DEFAULT)
+	linewidth(1), feedrate(SPEED_DEFAULT)
 {
 	// no paths
 	interpolated = false;
@@ -115,16 +115,106 @@ void Arc3D::setLineWidth(int lw)
 void Arc3D::setSpeed (double f)
 {
 	if (f > SPEED_MIN && f <= SPEED_MAX)
-		speed = f;
+		feedrate = f;
 }
 
-uint32_t Arc3D::interpolate(const double tol)
+
+/// FOR TESTING ... it's correct
+uint32_t Arc3D::interpolateAng(const double tol, QList<QVector3D>& path1)
 {
 	if (interpolated)
 		return path.size()-1;
     // no paths
     path.clear();
-    // number of segments
+//diag("pstart = %f/%f/%f", pstart.x(), pstart.y(), pstart.z() );
+//diag("pend = %f/%f/%f", pend.x(), pend.y(), pend.z() );
+    // number of sectors
+    uint32_t nsec ;
+    if (radius) {
+    	double as = astart
+			  ,ae = aend
+	          ,da;
+	/// TO REWRITE !!
+			// radians
+		if (cw)
+			da = -positive(as - ae);
+		else
+			da = positive(ae - as);
+    /// <--
+//diag("as , ae , cw = %f, %f, %s ", astart, aend, cw==0 ? "horaire" : "anti");
+	// interpolation segments
+	/// -> an another way to ...
+		/// radians
+		double dda =  2*qAcos(1- (tol/radius));
+        nsec = qRound(qAbs(da/dda)+ 0.5);
+//diag("tol, radius, dda, seg  : %.3f, %.2f, %.2f, %d", tol, radius, dda, seg);
+	/// <--
+		// new increment dda
+         dda = da / double(nsec);
+//diag("dda : %f", dda);
+		// generate segments
+		if (nsec > 0 ) {
+			// with helix ?
+			double dx(0), dy(0), dz(0);
+			QVector3D pdh(0, 0, 0);
+			if (helix) {
+				switch (plane) {
+					case PLANE_XY_G17:
+						dz = (pend.z()-pstart.z())/(1.0*nsec);
+						pdh.setZ(dz);
+						break;
+					case PLANE_ZX_G19:
+						dy = (pend.y()-pstart.y())/(1.0*nsec);
+						pdh.setY(dy);
+						break;
+					case PLANE_YZ_G18:
+						dx = (pend.x()-pstart.x())/(1.0*nsec);
+						pdh.setX(dx);
+						break;
+				}
+			}
+
+			// generate sectors interpolation from 'astart'
+			double teta = astart;
+			QVector3D p ;
+			uint32_t npi = 0;
+			do {
+				p = pointArc(teta);
+				if (helix) {
+					p += npi*pdh;
+				}
+			    path.append(p);
+				teta += dda;
+			    npi++;
+			} while (npi <= nsec) ;
+			// 'path' contains the end points of the vectors
+			interpolated = true;
+		}
+		else {  /// one sectort
+			nsec = 1;
+			path.append(pstart);
+			path.append(pend);
+		}
+    }
+    else {
+		nsec = 0;
+    	path.append(pcenter);
+    }
+
+    path1 = path;
+
+	return nsec ;
+}
+
+uint32_t Arc3D::interpolateSeg(const double tol)
+{
+	if (interpolated)
+		return path.size()-1;
+    // no paths
+    path.clear();
+
+
+    // number of sectors
     uint32_t seg ;
     if (radius) {
     	double as = astart
@@ -197,92 +287,6 @@ uint32_t Arc3D::interpolate(const double tol)
     	path.append(pcenter);
     }
 //diag("seg  : %d", seg);
-	return seg ;
-}
-
-/// FOR TESTING ... it's correct
-uint32_t Arc3D::interpolateS(const double tol, QList<QVector3D>& path1)
-{
-	if (interpolated)
-		return path.size()-1;
-    // no paths
-    path.clear();
-//diag("pstart = %f/%f/%f", pstart.x(), pstart.y(), pstart.z() );
-//diag("pend = %f/%f/%f", pend.x(), pend.y(), pend.z() );
-    // number of segments
-    uint32_t seg ;
-    if (radius) {
-    	double as = astart
-			  ,ae = aend
-	          ,da;
-	/// TO REWRITE !!
-			// radians
-		if (cw)
-			da = -positive(as - ae);
-		else
-			da = positive(ae - as);
-    /// <--
-//diag("as , ae , cw = %f, %f, %s ", astart, aend, cw==0 ? "horaire" : "anti");
-	// interpolation segments
-	/// -> an another way to ...
-		/// radians
-		double dda =  2*qAcos(1- (tol/radius));
-        seg = qRound(qAbs(da/dda)+ 0.5);
-//diag("tol, radius, dda, seg  : %.3f, %.2f, %.2f, %d", tol, radius, dda, seg);
-	/// <--
-		// new increment dda
-         dda = da / double(seg);
-//diag("dda : %f", dda);
-		// generate segments
-		if (seg > 0 ) {
-			// with helix ?
-			double dx(0), dy(0), dz(0);
-			QVector3D pdh(0, 0, 0);
-			if (helix) {
-				switch (plane) {
-					case PLANE_XY_G17:
-						dz = (pend.z()-pstart.z())/(1.0*seg);
-						pdh.setZ(dz);
-						break;
-					case PLANE_ZX_G19:
-						dy = (pend.y()-pstart.y())/(1.0*seg);
-						pdh.setY(dy);
-						break;
-					case PLANE_YZ_G18:
-						dx = (pend.x()-pstart.x())/(1.0*seg);
-						pdh.setX(dx);
-						break;
-				}
-			}
-			// generate segments interpolation from 'astart'
-			double teta = astart;
-			QVector3D p ;
-			uint32_t npi = 0;
-			do {
-				p = pointArc(teta);
-				if (helix) {
-					p += npi*pdh;
-				}
-			    path.append(p);
-				teta += dda;
-			    npi++;
-			} while (npi <= seg) ;
-			// 'path' contains the end points of the vectors
-			interpolated = true;
-		}
-		else {  /// one segment
-			seg = 1;
-			path.append(pstart);
-			path.append(pend);
-		}
-    }
-    else {
-		seg = 0;
-    	path.append(pcenter);
-    }
-
-    path1 = path;
-
 	return seg ;
 }
 

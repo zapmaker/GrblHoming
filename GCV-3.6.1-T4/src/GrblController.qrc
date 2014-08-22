@@ -1,12 +1,12 @@
 <RCC>
     <qresource prefix="/">
 	<file>img/home.png</file>
-        <file>img/homeAll.png</file>
-        <file>img/down.PNG</file>
-        <file>img/left.PNG</file>
-        <file>img/logotiny.PNG</file>
-        <file>img/right.PNG</file>
-        <file>img/up.PNG</file>
+        <file>img/homeall.png</file>
+        <file>img/down.png</file>
+        <file>img/left.png</file>
+        <file>img/logotiny.png</file>
+        <file>img/right.png</file>
+        <file>img/up.png</file>
         <file>img/zapmaker-logo-130.png</file>
         <file>img/gaia2.jpg</file>
         <file>img/frontview.png</file>

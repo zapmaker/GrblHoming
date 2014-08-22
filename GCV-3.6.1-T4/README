@@ -13,7 +13,7 @@ http://zapmaker.org/
 GCV  : Grbl Controller Visualizer  is a 3D extension of GrblController-3.6.1
 --------------------------------------------------------------------------------
 
-GCV-3.6.1-T4  Grbl Controller Visualizer  (LETARTARE proposals August 14, 2014)
+GCV-3.6.1-T4  Grbl Controller Visualizer  (LETARTARE proposals August 22, 2014)
 
 An executable 'Win32' into 'winexe/GCV-3.6.1-T4-cb.jtgcv'.
 This is a file Win32 compressed, change the extension 'jtgcv -> 7z' to decompress.
@@ -22,7 +22,7 @@ This is a file Win32 compressed, change the extension 'jtgcv -> 7z' to decompres
 
 1- Analyzes the gcode with 4 axes X, Y, Z, T   ( fourth axis ),
 2- New display console ('Console') commands, with the ability to copy, delete
-	text part, delete the selected (or all) text, print the selected (or all) text
+	text part, delete the selected (or all)  text, print the selected (or all) text
 3- Display speed rate XYZ with 'Lcd', display last spindle speed,
 4- Visualizes the 'Gcode' XYZ 3D with motion mouse  :
 	- A help button to explain the multiple possible actions on the drawing,

@@ -12,7 +12,6 @@
 #include <QGLViewer/qglviewer.h>
 /// T4
 #include <QtOpenGL>
-//#include <QThread>
 #include <stdint.h>
 #include "Tools3D.h"
 
@@ -132,7 +131,7 @@ private:
 
     // paths
     QList<QVector3D> pathItem, pointsItem;
-    QList<QVector3D> pathComplete;
+    QList<QVector3D> pathDrawing;
     QList<int>	pointToLine;
     QList<double> feedRateToLine;
     QList<double> speedSpindleToLine;
@@ -140,7 +139,7 @@ private:
     QMap<int, float> feedRateByLineValid;
     QMap<int, float> speedSpindleByLineValid;
 
-	/// line -> pathComplete
+	/// line -> pathDrawing
 	int posPath ;
 	// motor steps
 	QList<QVector3D> stepsItem;

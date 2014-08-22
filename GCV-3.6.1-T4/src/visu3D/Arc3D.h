@@ -38,9 +38,9 @@ class Arc3D
 
 		void setSpeed (double);
 
-		uint32_t interpolate(const double tol );
+		uint32_t interpolateSeg(const double tol );
 
-		uint32_t interpolateS(const double tol, QList<QVector3D>& path1 );
+		uint32_t interpolateAng(const double tol, QList<QVector3D>& path1 );
 
 		 void MinMax(QVector3D&, QVector3D&);
 
@@ -76,7 +76,7 @@ class Arc3D
 		// The color with which this item should be displayed
 		QColor color;
 		int linewidth;
-		double  speed;
+		double feedrate;
 };
 
 

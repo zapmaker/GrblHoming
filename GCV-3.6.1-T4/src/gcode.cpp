@@ -207,11 +207,16 @@ void GCode::goToHome()
 
     QString zpos = QString::number(maxZOver);
 
-    gotoXYZFourth(QString("G0 z").append(zpos));
 /// T4
-    QString cmd = "G1 x0 y0 z0 ";
-    if (numaxis == MAX_AXIS_COUNT)
-        cmd.append(QString(controlParams.fourthAxisName)).toLower().append("0");
+    QString cmd = "G90 G0 z";
+    gotoXYZFourth(cmd.append(zpos));
+    cmd = "G90 G1 x0 y0 z0 ";
+    if (numaxis == MAX_AXIS_COUNT) {
+        QString fourth = QString(controlParams.fourthAxisName).toLower();
+        cmd.append(fourth.append("0"));
+    }
+
+//diag("=========> cmd = %s", qPrintable(cmd));
     //  TODO + feedrate for 0.9g !  the smallest ? -> 'controlParams.zRateLimitAmount'
     cmd.append(" F").append(QString::number(controlParams.zJogRate));
     gotoXYZFourth(cmd);
@@ -234,7 +239,7 @@ void GCode::goToHomeAxis(char axis)
     if (!ok)
         return;
 
-    QString cmd = "G0 ";
+    QString cmd = "G90 G0 ";
     if (controlParams.useFourAxis && axis == controlParams.fourthAxisName)
         cmd.append(QString(controlParams.fourthAxisName));
     else // X, Y, Z
@@ -313,7 +318,6 @@ void GCode::sendGcode(QString line)
                    emit sendMsgSatusBar("");
                 }
                 */
-
             }
 /// <--
             if (!waitForStartupBanner(result, SHORT_WAIT_SEC, true))
@@ -397,6 +401,7 @@ void GCode::pollPosWaitForIdle(bool checkMeasurementUnits)
         setLivenessState(false);
     }
 }
+
 // calls : 'GCode::sendGcodeLocal()':1, 'GCode::waitForStartupBanner()':1
 bool GCode::checkGrbl(const QString& result)
 {
@@ -1060,6 +1065,7 @@ bool GCode::waitForStartupBanner(QString& result, int waitSec, bool failOnNoFoun
 		received == "<State,MPos: ... ,WPos:...,Ln=..>"
 */
 
+/// TODO : with 0.9g -> <State,MPos:...,WPos:...,Buf:0,RX:0>  see Wiki
 void GCode::parseCoordinates(const QString& received, bool aggressive)
 {
     if (aggressive)
@@ -1150,6 +1156,8 @@ void GCode::parseCoordinates(const QString& received, bool aggressive)
                 return;
 		    }
 		}
+		lastState = state;
+		emit setLastState(state);
 
 		machineCoord.x = list.at(index++).toFloat();
 		machineCoord.y = list.at(index++).toFloat();
@@ -1162,11 +1170,13 @@ void GCode::parseCoordinates(const QString& received, bool aggressive)
 		workCoord.z = list.at(3).toFloat();
         if (numaxis == MAX_AXIS_COUNT)
             workCoord.fourth = list.at(4).toFloat();
+        /*
 		if (state != "Run")
 			workCoord.stoppedZ = true;
 		else
 			workCoord.stoppedZ = false;
-
+        */
+        workCoord.stoppedZ = state != "Run" ;
 		workCoord.sliderZIndex = sliderZCount;
 
         if (doubleDollarFormat)
@@ -1191,12 +1201,12 @@ void GCode::parseCoordinates(const QString& received, bool aggressive)
     //    else  {
       //  emit setLivePoint(QVector3D(workCoord.x, workCoord.y, workCoord.z)) ;
     //    }
-
+        // 2D
         emit setLivePoint(workCoord.x, workCoord.y, controlParams.useMm, positionValid);
 
-		emit setLastState(state);
+	//	emit setLastState(state);
 
-		lastState = state;
+
 		return;
 	}
     // TODO fix to print
@@ -1304,8 +1314,9 @@ void GCode::sendFile(QString path, bool checkfile)
         sentI = 0;
         rcvdI = 0;
         emit resetTimer(true);
-
-        parseCoordTimer.restart();
+/// T4
+       // parseCoordTimer.restart();
+       parseCoordTimer.start();
 
         int currLine = 0;
         bool xyRateSet = false;
@@ -1392,27 +1403,12 @@ void GCode::sendFile(QString path, bool checkfile)
 /// T3
             if (!checkfile)
                 positionUpdate();
-/// T4   here test if pause
+/// T4   here test if pause  ...
             if (pauseState.get() )
             {
-                QString msg(tr("Pause program Grbl ..."));
-                sendToPort(FEED_FOLD_COMMAND, msg) ;
-                msg = tr("Pause for sending 'Gcode' lines to 'Grbl' ...");
-                emit sendMsgSatusBar(msg);
-                addList(msg);
-            /// pause ...
-                while ( pauseState.get() )
-                {
-                    if (abortState.get())   break;
-                   // if (resetState.get())   return;  /// ?
-                };
-                msg
-                 = tr("Resume program Grbl ...") ;
-                sendToPort(CYCLE_START_COMMAND, msg) ;
-                msg = tr("Resume sending 'Gcode' lines to 'Grbl'");
-                emit sendMsgSatusBar(msg);
-                addList(msg);
+                gotoPause();
             }
+/// end pause
             if (!checkfile)
                 positionUpdate();
 /// <--
@@ -1510,6 +1506,40 @@ void GCode::sendFile(QString path, bool checkfile)
     }
 
     emit setQueuedCommands(0, false);
+}
+
+/// T4
+// calls : 'GCode::sendFile(..)':1,
+void GCode::gotoPause()
+{
+   // QString oldstate = lastState;
+    // virtual state !
+  //  emit setLastState("Hold");
+    QString msg(tr("Pause program Grbl ..."));
+    sendToPort(FEED_FOLD_COMMAND, msg) ;
+    msg = tr("Pause for sending 'Gcode' lines to 'Grbl'");
+    msg += " ... '!'";
+    emit sendMsgSatusBar(msg);
+    addList(msg);
+
+    sendGcodeLocal(REQUEST_CURRENT_POS) ;
+/// pause ...
+    while ( pauseState.get() )
+    {
+        if (abortState.get())   break;
+       // if (resetState.get())   return;  /// ?
+    };
+/// end pause
+    sendGcodeLocal(REQUEST_CURRENT_POS) ;
+
+    // old state
+   // emit setLastState(oldstate);
+    msg = tr("Resume program Grbl ...") ;
+    sendToPort(CYCLE_START_COMMAND, msg) ;
+    msg = tr("Resume sending 'Gcode' lines to 'Grbl'");
+    msg += "'~'";
+    emit sendMsgSatusBar(msg);
+    addList(msg);
 }
 
 void GCode::trimToEnd(QString& strline, QChar ch)

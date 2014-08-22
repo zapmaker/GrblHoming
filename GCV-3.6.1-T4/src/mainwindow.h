@@ -184,6 +184,8 @@ void grblFeedHold();
     void zJogSliderReleased();
 
     void setQueuedCommands(int commandCount, bool running);
+/// T4
+    void setQueueClear();
     void setLcdState(bool valid);
   //  void refreshPosition();
 
@@ -207,6 +209,8 @@ void grblFeedHold();
     void toClearSatusList();
     void toPrintStatusList();
     void toPrintVisual();
+
+    void setLastState(QString state);
 
 private:
     // enums
@@ -278,6 +282,7 @@ private:
     /// mode display request
     int posReqKind;
 
+private:
 // methods
     void setUseMm(bool);
     int SendJog(QString strline);
@@ -299,14 +304,12 @@ private:
                         double& x, double& y, double& z,
                         double& i, double& j, double& k,
                         int& p, bool& arc, bool& cw, bool& mm,
-                        int& g, int& plane, bool& helix, double& f, double& ss
+                        int& g, int& plane, bool& helix,
+                        double& f, double& ss
                         );
-
 /// <-
     double decodeLineItem(const QString& item, const int next, bool& valid, int& nextIsValue);
     double decodeDouble(QString value, bool& valid);
-
 };
-
 
 #endif // MAINWINDOW_H

@@ -45,11 +45,10 @@ MainWindow::MainWindow(QWidget *parent) :
     checkState = ui->btnCheck->isChecked() ;
 /// T4 to display the comma correctly : before read 'sliderStep->value'
     connect(ui->sliderStep, SIGNAL(valueChanged(int)), this, SLOT(stepChanged(int)) );
-    // 'Options'
+// 'Options'
     opt.init();
 
     readSettings();
-    
 
     info(qPrintable(tr("%s has started")), GRBL_CONTROLLER_NAME_AND_VERSION);
 
@@ -135,7 +134,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(goToHomeAxis(char)), &gcode, SLOT(goToHomeAxis(char) ));
     connect(&gcode, SIGNAL(endHomeAxis()), this, SLOT(endHomeAxis() ));
 
-    connect(ui->btnSetHome,SIGNAL(clicked()),this,SLOT(setHome()));
+   // connect(ui->btnSetHome,SIGNAL(clicked()),this,SLOT(setHome()));
+    connect(ui->btnSetG92,SIGNAL(clicked()),this,SLOT(setHome()));
     connect(ui->comboCommand->lineEdit(), SIGNAL(editingFinished()),this, SLOT(gotoXYZFourth()));
 /// T3
     connect(ui->Begin,SIGNAL(clicked()),this,SLOT(begin()));
@@ -205,7 +205,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&gcode, SIGNAL(updateCoordinates(Coord3D,Coord3D)), this, SLOT(updateCoordinates(Coord3D,Coord3D)));
 /// T4  3D animator
     connect(ui->visu3D, SIGNAL(updateLCD(QVector3D)), this, SLOT(updateLCD(QVector3D)));
-    connect(&gcode, SIGNAL(setLastState(QString)), ui->outputLastState, SLOT(setText(QString)));
+   // connect(&gcode, SIGNAL(setLastState(QString)), ui->outputLastState, SLOT(setText(QString)));
+    connect(&gcode, SIGNAL(setLastState(QString)), this, SLOT(setLastState(QString)));
     connect(&gcode, SIGNAL(setUnitMmAll(bool)), this, SLOT(setUnitMmAll(bool)));
 
     /// 2D
@@ -863,9 +864,6 @@ void MainWindow::portIsClosed(bool reopen)
     ui->outputRuntime->setEnabled(false);
     ui->labelRuntime->setEnabled(false);
     }
-/// T4
-    // Grbl commands
-    enableButtonGrblControls(false);
 
     styleSheet = ui->btnOpenPort->styleSheet();
     ui->statusList->setEnabled(true);
@@ -1202,9 +1200,6 @@ void MainWindow::openFile()
 
         resetProgress();
     }
-/// T4
-    else
-        return ;
 
     int slash = fileName.lastIndexOf('/');
     if (slash == -1)
@@ -1275,11 +1270,11 @@ void MainWindow::preProcessFile(QString filepath)
 /// T4
         ui->visuGcode->clear() ;
         int plane = NO_PLANE;
-        double x = 0, y = 0, z = 0;
-        double i = 0,  j = 0, k = 0;
+        double x, y, z, i,  j, k ;
+        x=y=z=i=j=k=0;
         QVector3D xyz, ijk;
-        int p =0;    // arc revolutions
-        int g;
+        int p = 0;    // arc revolutions
+        int g = 0;
         bool helix = false;
     // feedrate 'Fxxxx'
         double fr, prevfr = 0.0;
@@ -1293,10 +1288,7 @@ void MainWindow::preProcessFile(QString filepath)
 /// T4 animator
         QString codeText;
         QString line;
-
-        bool arc = false;
-        bool cw = false;
-        bool mm = true;
+        bool arc = false, cw = false, mm = true;
         int index = 0;
        // bool zeroInsert = false;  // ???
         bool zeroInsert = true;
@@ -1327,7 +1319,7 @@ void MainWindow::preProcessFile(QString filepath)
             GCode::trimToEnd(strline, '%');
 
             strline = strline.trimmed();
-            p = 0; fr=0.0; ss = 0.0;
+            g=0; p=0; fr=0.0; ss = 0.0;
             if (strline.size() == 0)
             {   // ignore the white lines
             }
@@ -1520,7 +1512,6 @@ bool MainWindow::processGCode(QString inputLine,
             case S_ITEM:
                 sp = decodeDouble(s, valid);
                 break;
-
             };
             nextIsValue = NO_ITEM;
         }
@@ -1835,7 +1826,6 @@ void MainWindow::addToStatusList(bool in, QString msg)
         nMsg = "> " + msg;
 
     ui->statusList->appendPlainText( nMsg );
-
 }
 
 void MainWindow::addToStatusList(QStringList& list)
@@ -1919,7 +1909,6 @@ void MainWindow::updateLCD(QVector3D coord)
     //
     machineCoordinates = Coord3D();
     workCoordinates = Coord3D(coord);
-
 // T4   !!!
     cmdMan = false;
     refreshLcd();
@@ -2097,6 +2086,7 @@ void MainWindow::zJogSliderReleased()
             else
                 sliderTo += (double)value/10;
             float setTo = value;
+            ui->lcdFeedRateGcode->display(controlParams.zJogRate);
             cmdMan = true;
             if(controlParams.useMm)
                 emit axisAdj('Z', setTo, invZ, absoluteAfterAxisAdj, sliderZCount++);
@@ -2166,6 +2156,12 @@ void MainWindow::setQueuedCommands(int commandCount, bool running)
     }
 
     lastQueueCount = commandCount;
+}
+/// T4
+// calls :
+void MainWindow::setQueueClear()
+{
+    resetProgress() ;
 }
 
 void MainWindow::setLcdState(bool valid)
@@ -2468,6 +2464,7 @@ void MainWindow::enableButtonGrblControls(bool v)
     ui->btnStatus->setEnabled(v);
     ui->btnResetGrbl->setEnabled(v);
 
+    ui->btnSetG92->setEnabled(v);
     ui->btnSetHome->setEnabled(v);
     ui->btnGoHomeSafe->setEnabled(v);
     // = 'btnStatus'
@@ -2538,5 +2535,36 @@ void MainWindow::setUseMm(bool useMm)
 //diag("MainWindow::setUseMm(..) ...");
         opt.setUseMm(useMm);
     }
+}
+// calls : 'GCode::parseCoordinates(..)':2,
+void MainWindow::setLastState(QString state)
+{
+    QPalette palette = ui->outputLastState->palette();
+    palette.setColor(ui->outputLastState->backgroundRole(), Qt::black);
+    if(state == "Idle")
+        palette.setColor(ui->outputLastState->foregroundRole(), Qt::black);
+    else
+    if(state == "Alarm")
+        palette.setColor(ui->outputLastState->foregroundRole(), Qt::red);
+    else
+    if(state == "Run")
+        palette.setColor(ui->outputLastState->foregroundRole(), Qt::darkGreen);
+    else
+    if(state == "Hold")
+        palette.setColor(ui->outputLastState->foregroundRole(), Qt::magenta);
+    else
+    if(state == "Check")
+        palette.setColor(ui->outputLastState->foregroundRole(), Qt::yellow);
+    else
+    if(state == "Home")
+        palette.setColor(ui->outputLastState->foregroundRole(), Qt::blue);
+    else
+    if(state == "Queue")
+        palette.setColor(ui->outputLastState->foregroundRole(), Qt::darkCyan);
+    else
+        palette.setColor(ui->outputLastState->backgroundRole(), Qt::black);
+
+    ui->outputLastState->setPalette(palette);
+    ui->outputLastState->setText(state);
 }
 //------------------------------------------------------------------------------

@@ -39,7 +39,7 @@ private:
     QVector3D pstart, pend;
     QColor color;
     int linewidth;
-    double speed;
+    double feedrate;
     bool mm;
 
 };

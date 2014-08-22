@@ -207,12 +207,14 @@ void Viewer::Scene(int nlColor){
     QVector3D pend, poffset;
 	/// no path interpolated
 	posPath = 0;
-	pathComplete.clear();
+	pathDrawing.clear();
 	pointToLine.clear();
 	feedRateByLineValid.clear();
 	segToLineValid.clear();
 	// feedrate
-	feedrate = prevfeedrate = 0; // SPEED_DEFAUL ?
+	feedrate = prevfeedrate = 0.0; // SPEED_DEFAUL ?
+	// speed spindle
+	speedspindle = prevspeedspindle = 0.0;
 	bool motion;
 	uint32_t seg = 0;
 
@@ -226,19 +228,7 @@ void Viewer::Scene(int nlColor){
 		motion = item.g == 0 || item.g == 1 || item.g == 2 || item.g == 3 ;
 		/// Fxxxx
 		if (!motion) {
-		// feedrate
-			if (item.feedrate > 0) {
-				feedrate = item.feedrate;
-				/// QMap<int index, float feedrate>
-				feedRateByLineValid.insert(item.index, feedrate);
-//diag(" item.index %d -> feedtate %0.2f", item.index, feedrate);
-			}
-			else
-			if (prevfeedrate == 0)
-				feedrate = 0;
-			else
-				feedrate = prevfeedrate;
-			// spindle speed
+		//1- spindle speed
 			if (item.speedspindle > 0 ) {
 				speedspindle = item.speedspindle;
 				/// QMap<int index, float feedrate>
@@ -246,10 +236,26 @@ void Viewer::Scene(int nlColor){
 //diag(" item.index %d -> speedspindle %0.2f", item.index, speedspindle);
 			}
 			else
-			if (prevspeedspindle == 0)
-				speedspindle = 0;
+			if (item.speedspindle == 0) {
+				if (prevspeedspindle == 0)
+					speedspindle = 0;
+				else
+					speedspindle = prevspeedspindle;
+			}
+		//2- feedrate
+			if (item.feedrate > 0) {
+				feedrate = item.feedrate;
+				/// QMap<int index, float feedrate>
+				feedRateByLineValid.insert(item.index, feedrate);
+//diag(" item.index %d -> feedtate %0.2f", item.index, feedrate);
+			}
 			else
-				speedspindle = prevspeedspindle;
+			if (item.feedrate == 0) {
+				if (prevfeedrate == 0)
+					feedrate = 0;
+				else
+					feedrate = prevfeedrate;
+			}
 
 			seg = 0;
 		}
@@ -310,9 +316,8 @@ void Viewer::Scene(int nlColor){
 				/// one arc
 				plane = item.plane;
 				arc = Arc3D(plane, item.cw, plast, pend, poffset, 2, item.helix);
-				/// interpolate with tolerance
-				//arc.interpolate(tol);
-				seg = arc.interpolateS(tol, pathItem);
+				/// interpolateSeg with tolerance
+				seg = arc.interpolateAng(tol, pathItem);
 				/// point min and max gcodeText.append(line);
 				arc.MinMax(pmin, pmax) ;
 				arc.setLineWidth(1);
@@ -338,7 +343,7 @@ void Viewer::Scene(int nlColor){
 				/// QList<int line>
 				pointToLine.append(item.index);
 				/// QList<QVector3D Point>
-				pathComplete.append(p);
+				pathDrawing.append(p);
 			}
 		}
 //diag(" item.index %d -> seg = %d", item.index, seg);
@@ -346,19 +351,17 @@ void Viewer::Scene(int nlColor){
 		feedRateByLineValid.insert(item.index, feedrate);
 		/// QMap<int index, float speedspindle>
 		speedSpindleByLineValid.insert(item.index, speedspindle);
-		//speedSpindleByLineValid.insert(item.index, 0);
 		/// QMap<int index, int seg>
 		segToLineValid.insert(item.index, seg);
 		prevfeedrate = feedrate ;
 		prevspeedspindle = speedspindle;
     }
     /// last number point [0..npointmax]
-	npointmax = pathComplete.size()-1;
+	npointmax = pathDrawing.size()-1;
 	/// for bounding box
     pvmin = qglviewer::Vec (pmin.x(), pmin.y(), pmin.z());
     pvmax = qglviewer::Vec (pmax.x(), pmax.y(), pmax.z());
     pvcenter = (pvmax - pvmin )/2.0;
-
 
     /// created scene
     created = true;
@@ -555,7 +558,7 @@ void Viewer::setNumLine(QString strline)
 				npmax = pointToLine.count(nl) ;
 //diag("nl : %d -> npmax = %d", nl, npmax);
 				nfirstpoint = pointToLine.indexOf(nl);
-				pointsItem  = pathComplete.mid( nfirstpoint, npmax);
+				pointsItem  = pathDrawing.mid( nfirstpoint, npmax);
 				np = 0;
 //diag("nl %d -> speed %0.2f", nl, feedrate);
 				/// first item point
@@ -656,7 +659,7 @@ QVector3D Viewer::getLastPoint(int nl)
 	/// verify nl
 	if (pointToLine.contains(nl)) {
 		npoint = pointToLine.lastIndexOf(nl);
-		ptemp = pathComplete.at(npoint);
+		ptemp = pathDrawing.at(npoint);
 	}
 	else  {
 		ptemp = vecBanned;
@@ -756,7 +759,7 @@ void Viewer::setVisualAuto()
 		if (npoint < npointmax) {
 			npoint++;
 			/// read  one vector
-			ptemp = pathComplete.at(npoint) ;
+			ptemp = pathDrawing.at(npoint) ;
 			linecodeText = pointToLine.at(npoint);
 			emit setFeedRateGcode(getFeedRate(linecodeText)) ;
 			emit setSpeedSpindleGcode(getSpeedSpindle(linecodeText)) ;
