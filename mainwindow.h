@@ -17,7 +17,6 @@
 #include <QSettings>
 #include <QCloseEvent>
 #include <QItemDelegate>
-#include <QScrollBar>
 #include <QListView>
 #include "about.h"
 #include "definitions.h"
@@ -41,41 +40,6 @@
 
 #define MAX_STATUS_LINES_WHEN_ACTIVE        200
 
-/* testing optimizing scrollbar, doesn't work right
-class MyItemDelegate : public QItemDelegate
-{
-private:
-    int width;
-    QAbstractItemView *parentWidget;
-
-public:
-
-    MyItemDelegate(QAbstractItemView *p) : parentWidget(p) {}
-
-    void setWidth(int w)
-    {
-        width = w;
-    }
-
-    void drawDisplay(QPainter *painter,const
-    QStyleOptionViewItem &option,const QRect &rect,const QString &text) const{
-
-        QRect tempRect(rect);
-        tempRect.setWidth(parentWidget->width());
-        QItemDelegate::drawDisplay(painter,option,tempRect,text);
-
-    }
-
-    QSize sizeHint(const QStyleOptionViewItem & option, const
-    QModelIndex & index ) const  {
-
-        QListView *list = qobject_cast<QListView*>(parentWidget);
-        QSize newSize(QItemDelegate::sizeHint(option,index));
-        if( list ) newSize.setWidth( width );
-        return newSize;
-    }
-};
-*/
 
 namespace Ui {
 class MainWindow;
@@ -160,9 +124,6 @@ private slots:
     void zJogSliderDisplay(int pos);
     void zJogSliderPressed();
     void zJogSliderReleased();
-    void doScroll();
-    void statusSliderPressed();
-    void statusSliderReleased();
     void setQueuedCommands(int commandCount, bool running);
     void setLcdState(bool valid);
     void refreshPosition();
@@ -212,7 +173,6 @@ private:
     Coord3D workCoordinates;
     bool absoluteAfterAxisAdj;
     bool checkLogWrite;
-    QTime scrollStatusTimer;
     QTime queuedCommandsEmptyTimer;
     QTime queuedCommandsRefreshTimer;
     QList<PosItem> posList;
@@ -221,9 +181,6 @@ private:
     int sliderZCount;
     bool promptedAggrPreload;
     ControlParams controlParams;
-    QTimer *scrollTimer;
-    bool scrollRequireMove;
-    bool scrollPressed;
     bool queuedCommandsStarved;
     int lastQueueCount;
     int queuedCommandState;
