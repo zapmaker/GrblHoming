@@ -182,7 +182,7 @@ void GCode::grblSetHome()
     QString  sethome("G92 x0 y0 z0 ");
     if (numaxis == MAX_AXIS_COUNT)
 /// T4
-       sethome.append(QString(controlParams.fourthAxisName)).toLower().append("0");
+       sethome.append(QString(controlParams.fourthAxisName).toLower()).append("0");
 
     gotoXYZFourth(sethome);
 }
