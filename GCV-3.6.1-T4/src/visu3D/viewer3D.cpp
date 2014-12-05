@@ -9,9 +9,9 @@
 
 #include "viewer3D.h"
 #include <math.h>
-#include "point3D.h"
-#include "line3D.h"
-#include "arc3d.h"
+#include "Point3D.h"
+#include "Line3D.h"
+#include "Arc3D.h"
 #include "box3D.h"
 #include "version.h"
 
