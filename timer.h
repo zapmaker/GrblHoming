@@ -11,6 +11,7 @@
 #define TIMER_H
 
 #include <QTime>
+#include <QTimer>
 
 class Timer : public QObject
 {
