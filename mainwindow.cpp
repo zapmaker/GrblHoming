@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow),
    // open_button_text(tr(OPEN_BUTTON_TEXT)),
    // close_button_text(tr(CLOSE_BUTTON_TEXT)),
-    open_button_text(tr("Open")),
+    open_button_text(tr("&Open")),
     close_button_text(tr("Close / Reset")),
     absoluteAfterAxisAdj(false),
     checkLogWrite(false),
