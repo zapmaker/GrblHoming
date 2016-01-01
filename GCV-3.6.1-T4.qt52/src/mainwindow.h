@@ -27,7 +27,7 @@
 #include "positem.h"
 #include "gcode.h"
 #include "renderarea.h"
-#include "visu3D\viewer3D.h"
+#include "visu3D/viewer3D.h"
 
 #define COMPANY_NAME "zapmaker"
 #define APPLICATION_NAME "GrblController"
