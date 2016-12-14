@@ -48,13 +48,17 @@ QT += xml opengl
 INCLUDEPATH += QGLViewer QGLWidget
 # srichy  November 17, 2014
 unix {
-    LIBS += -lQGLViewer
+    !macx {
+        LIBS += -lGLU
+        LIBS += -lQGLViewer
+    }
+    else
+    {
+        LIBS *= -framework QGLViewer
+    }
 }
 else {
     LIBS += -lQGlViewer2
-}
-unix:!macx {
-    LIBS += -lGLU
 }
 
 
