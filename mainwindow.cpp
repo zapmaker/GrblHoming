@@ -1435,7 +1435,7 @@ void MainWindow::lcdDisplay(char axis, bool workCoord, float floatVal)
     }
 }
 
-void MainWindow::zJogSliderDisplay(int pos)
+void MainWindow::zJogSliderDisplay(double pos)
 {
     QString str;
 
@@ -1445,12 +1445,12 @@ void MainWindow::zJogSliderDisplay(int pos)
         if(controlParams.useMm)
             str.sprintf("+%d", pos);
         else
-            str.sprintf("+%.1f",(double)pos/10);
+            str.sprintf("+%.1f",pos/10);
     else if (pos < 0)
         if(controlParams.useMm)
             str.sprintf("%d", pos);
         else
-            str.sprintf("%.1f", (double)pos/10);
+            str.sprintf("%.1f",pos/10);
     else
         str = "0";
 
@@ -1461,7 +1461,7 @@ void MainWindow::zJogSliderDisplay(int pos)
     if(controlParams.useMm)
         newPos = pos + sliderTo;
     else
-        newPos = (double)pos/10+sliderTo;
+        newPos = pos/10+sliderTo;
 
     if(controlParams.useMm)
         to.sprintf("%.1f", newPos);
@@ -1474,7 +1474,7 @@ void MainWindow::zJogSliderDisplay(int pos)
         if(controlParams.useMm)
             info("Usr chg: pos=%d new=%d\n", pos, newPos);
         else
-            info("Usr chg: pos=%.1f new=%.1f\n", (double)pos/10, newPos);
+            info("Usr chg: pos=%.1f new=%.1f\n", pos/10, newPos);
     }
     else
     {
@@ -1483,7 +1483,7 @@ void MainWindow::zJogSliderDisplay(int pos)
         if(controlParams.useMm)
             info("Usr chg no slider: %d\n", pos);
         else
-            info("Usr chg no slider: %.1f\n", (double) pos/10);
+            info("Usr chg no slider: %.1f\n", pos/10);
     }
 }
 
@@ -1507,7 +1507,8 @@ void MainWindow::zJogSliderReleased()
     if (sliderPressed)
     {
         sliderPressed = false;
-        int value = ui->verticalSliderZJog->value();
+        //int value = ui->verticalSliderZJog->value();
+        double value = (double)ui->verticalSliderZJog->value();
 
         ui->verticalSliderZJog->setSliderPosition(CENTER_POS);
         ui->currentZJogSliderDelta->setText("0");
@@ -1519,7 +1520,7 @@ void MainWindow::zJogSliderReleased()
             if(controlParams.useMm)
                 sliderTo += value;
             else
-                sliderTo += (double)value/10;
+                sliderTo += value/10;
             float setTo = value;
             if(controlParams.useMm)
                 emit axisAdj('Z', setTo, invZ, absoluteAfterAxisAdj, sliderZCount++);

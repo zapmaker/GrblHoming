@@ -157,7 +157,7 @@ private slots:
     void grblUnlock();
     void updateCoordinates(Coord3D machineCoord, Coord3D workCoord);
     void goHomeSafe();
-    void zJogSliderDisplay(int pos);
+    void zJogSliderDisplay(double pos);
     void zJogSliderPressed();
     void zJogSliderReleased();
     void doScroll();
