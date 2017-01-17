@@ -1723,15 +1723,28 @@ void GCode::gotoXYZFourth(QString line)
         QStringList list = line.split(QRegExp("[\\s]+"));
         for (int i = 0; i < list.size(); i++)
         {
-            QString item = getMoveAmountFromString("X", list.at(i));
-            moveDetected = item.length() > 0;
+            QString item;
 
+            if (!moveDetected)
+	    {
+                item = getMoveAmountFromString("X", list.at(i));
+            moveDetected = item.length() > 0;
+            }
+
+            if (!moveDetected)
+	    {
             item = getMoveAmountFromString("Y", list.at(i));
             moveDetected = item.length() > 0;
+            }
 
+            if (!moveDetected)
+	    {
             item = getMoveAmountFromString("Z", list.at(i));
             moveDetected = item.length() > 0 ;
-            if (numaxis == MAX_AXIS_COUNT)  {
+            }
+
+            if (!moveDetected && numaxis == MAX_AXIS_COUNT)
+	    {
                 item = getMoveAmountFromString(QString(controlParams.fourthAxisType), list.at(i));
 				moveDetected = item.length() > 0;
 			}
