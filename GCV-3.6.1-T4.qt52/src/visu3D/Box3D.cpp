@@ -7,7 +7,7 @@
  * License:   GPL
  **************************************************************/
 
-#include "box3D.h"
+#include "Box3D.h"
 #include <QtOpenGL>
 
 Box3D::Box3D(const QVector3D p1, const QVector3D p2, bool mm1, QColor c)
