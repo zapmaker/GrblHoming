@@ -45,16 +45,17 @@ else {
 
 # QGlViewer
 QT += xml opengl
-INCLUDEPATH += QGLViewer QGLWidget
+#INCLUDEPATH += QGLViewer QGLWidget
 # srichy  November 17, 2014
 unix {
     !macx {
         LIBS += -lGLU
         LIBS += -lQGLViewer
     }
-    else
-    {
-        LIBS *= -framework QGLViewer
+
+    linux-g++ {
+      LIBS += -lqglviewer2
+      message(Linux)
     }
 }
 else {
