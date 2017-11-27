@@ -50,7 +50,7 @@ void GCode::openPort(QString commPortStr, QString baudRate)
         addList(tr("-Is hardware connected to USB?") );
         addList(tr("-Is correct port chosen?") );
         addList(tr("-Does current user have sufficient permissions?") );
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
         addList("-Is current user in sudoers group?");
 #endif
         //QMessageBox(QMessageBox::Critical,"Error","Could not open port.",QMessageBox::Ok).exec();
